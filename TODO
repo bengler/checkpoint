@@ -1,0 +1,21 @@
+* territory
+    has one or more apps for implemented providers
+    each app is configured (provider, name, api_key, secret, endpoints, etc)
+
+* identity (a human or robot)
+    territories do not share these
+    has a <provider>_uid for each provider we have
+    has a (shadow) profile for each provider
+    has a byline (byline_name, byline_url, byline_image) which is synthetic
+    - defaults to first authenticated provider/application
+
+* profile
+    lives in redis
+    - refactor pieces that end up being used a lot.
+    - followers might need to be a separate entry in Redis, not directly on the Person
+
+* authentication
+    identities have zero or many authentications
+    - provider, token, secret
+
+
