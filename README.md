@@ -1,21 +1,21 @@
 Keeper of Gates
-Centralized identity store and authentication broker for territories against external providers such as facebook and twitter.
-Acts as a persistent atomic cache for territories through different web services, limited to what the individual gates need to operate responsive at the moment, and what the user allows.
+Centralized identity store and authentication broker for realms against external providers such as facebook and twitter.
+Acts as a persistent atomic cache for realms through different web services, limited to what the individual gates need to operate responsive at the moment, and what the user allows.
 
-When we think of an Identity within the Territory it's a real person somewhere, and not necessarily a user within our system (yet).
+When we think of an Identity within the Realm it's a real person somewhere, and not necessarily a user within our system (yet).
 
-An identity is all about authentications initiated by that person, on how exposed that person want's to be within the actual territory.
+An identity is all about authentications initiated by that person, on how exposed that person want's to be within the actual realm.
 
 If a person uses both Facebook and Twitter, it's still just one person (Identity), and this person will have a local profile for each of these providers, caching relevant data.
 
 There are different kinds of people (robots are people too!)
 
 ```
-KIND_ROBOT = -1
-KIND_USER_FRIEND = 0
-KIND_USER = 1
-KIND_ADMIN = 2
-KIND_SYSTEM_ADMIN = 9
+Species::Robot = -1
+Species::Stub = 0
+Species::User = 1
+Species::Admin = 2
+Species::God = 9
 ```
 
 ### It's more important to have an authentication with an access_token for that user...

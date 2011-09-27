@@ -12,17 +12,18 @@
 
 ActiveRecord::Schema.define(:version => 20110926230557) do
 
-  create_table "authentications", :force => true do |t|
-    t.integer  "identity_id",  :null => false
-    t.text     "provider",     :null => false
-    t.integer  "territory_id", :null => false
-    t.text     "token",        :null => false
+  create_table "accounts", :force => true do |t|
+    t.integer  "identity_id", :null => false
+    t.integer  "realm_id",    :null => false
+    t.text     "provider",    :null => false
+    t.text     "uid",         :null => false
+    t.text     "token"
     t.text     "secret"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "authentications", ["territory_id", "provider", "identity_id"], :name => "auth_uniqueness_index", :unique => true
+  add_index "accounts", ["realm_id", "provider", "identity_id", "uid"], :name => "account_uniqueness_index", :unique => true
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -40,18 +41,13 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "identities", :force => true do |t|
-    t.text     "byline_name",             :null => false
+    t.text     "byline_name"
     t.text     "byline_url"
     t.text     "byline_image"
     t.text     "email"
     t.text     "mobile"
-    t.integer  "territory_id"
-    t.text     "origo_uid"
-    t.text     "facebook_uid"
-    t.text     "twitter_uid"
-    t.text     "google_uid"
+    t.integer  "realm_id"
     t.text     "enrolled_by_provider"
-    t.integer  "enrolled_by_app_id"
     t.integer  "enrolled_by_identity_id"
     t.integer  "kind",                    :null => false
     t.datetime "active_at"
@@ -60,13 +56,9 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
     t.datetime "updated_at"
   end
 
-  add_index "identities", ["territory_id", "facebook_uid"], :name => "index_identities_on_territory_id_and_facebook_uid", :unique => true
-  add_index "identities", ["territory_id", "google_uid"], :name => "index_identities_on_territory_id_and_google_uid", :unique => true
-  add_index "identities", ["territory_id", "origo_uid"], :name => "index_identities_on_territory_id_and_origo_uid", :unique => true
-  add_index "identities", ["territory_id", "twitter_uid"], :name => "index_identities_on_territory_id_and_twitter_uid", :unique => true
-  add_index "identities", ["territory_id"], :name => "index_identities_on_territory_id"
+  add_index "identities", ["realm_id"], :name => "index_identities_on_realm_id"
 
-  create_table "territories", :force => true do |t|
+  create_table "realms", :force => true do |t|
     t.text     "title"
     t.text     "label",                      :null => false
     t.integer  "sandbox_id"
@@ -85,6 +77,6 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
     t.datetime "updated_at"
   end
 
-  add_index "territories", ["label"], :name => "index_territories_on_label", :unique => true
+  add_index "realms", ["label"], :name => "index_realms_on_label", :unique => true
 
 end

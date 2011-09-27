@@ -1,21 +1,37 @@
-* territory
-    has one or more apps for implemented providers
-    each app is configured (provider, name, api_key, secret, endpoints, etc)
+Up next:
+- talk to a provider (via client)
+- join realm (via each provider) - UI piece? controller?
+- connect identity to new account (with merging)
 
-* identity (a human or robot)
-    territories do not share these
-    has a <provider>_uid for each provider we have
-    has a (shadow) profile for each provider
-    has a byline (byline_name, byline_url, byline_image) which is synthetic
-    - defaults to first authenticated provider/application
+join realm via facebook
+join realm via twitter
+logged in as twitter identity, connect to facebook
+-> merge the two identities (which one becomes the main one? The one you are in?)
+-> how to handle all the related profiles?
+-> what about related stubs? a stub who was recruited by the facebook identity will need to be changed to be recruited by the new master identity.
 
-* profile
-    lives in redis
-    - refactor pieces that end up being used a lot.
-    - followers might need to be a separate entry in Redis, not directly on the Person
+join realm via facebook.
+all friends become stubs.
+a friend joins realm -> stub is found, identity is updated.
 
-* authentication
-    identities have zero or many authentications
-    - provider, token, secret
+someone joins realm via twitter
+they connect to facebook and it turns out they are a stub
+stub gets merged into the identity
+
+someone joins via facebook
+stub1 gets created
+someone else joins via facebook, has same friend
+stub1 does not get recreated, enrolled_by_identity_id does not get overwritten
+
+someone joins via facebook.
+they connect to a new facebook account
+-> what happens? old profile gets overwritten, old authentication gets updated? old friends...?
+
+add :email as an account type
+https://github.com/intridea/omniauth-identity ?
+-> invitation goes to an email address
+-> verification code?
+-> reset password?
+-> enrolled_by_provider :email
 
 

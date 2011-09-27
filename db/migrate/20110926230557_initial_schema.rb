@@ -1,7 +1,7 @@
 class InitialSchema < ActiveRecord::Migration
   def self.up
-    create_table(:identities) do |t|
-      t.text :byline_name, :null => false
+    create_table :identities do |t|
+      t.text :byline_name
       t.text :byline_url
       t.text :byline_image
 
@@ -9,14 +9,9 @@ class InitialSchema < ActiveRecord::Migration
       t.text :email, :unique => true
       t.text :mobile, :unique => true
 
-      t.integer :territory_id
-      t.text :origo_uid
-      t.text :facebook_uid
-      t.text :twitter_uid
-      t.text :google_uid
+      t.integer :realm_id
 
       t.text :enrolled_by_provider
-      t.integer :enrolled_by_app_id
       t.integer :enrolled_by_identity_id
 
       t.integer :kind, :null => false
@@ -25,13 +20,9 @@ class InitialSchema < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :identities, [:territory_id, :origo_uid], :unique => true
-    add_index :identities, [:territory_id, :twitter_uid], :unique => true
-    add_index :identities, [:territory_id, :facebook_uid], :unique => true
-    add_index :identities, [:territory_id, :google_uid], :unique => true
-    add_index :identities, :territory_id
+    add_index :identities, :realm_id
 
-    create_table :territories do |t|
+    create_table :realms do |t|
       t.text :title
       t.text :label, :null => false
       t.integer :sandbox_id
@@ -48,19 +39,20 @@ class InitialSchema < ActiveRecord::Migration
       t.integer :updated_by
       t.timestamps
     end
-    add_index :territories, :label, :unique => true
+    add_index :realms, :label, :unique => true
 
-    create_table :authentications do |t|
+    create_table :accounts do |t|
       t.integer :identity_id, :null => false
+      t.integer :realm_id, :null => false
       t.text :provider, :null => false
-      t.integer :territory_id, :null => false
-      t.text :token, :null => false
+      t.text :uid, :null => false
+      t.text :token
       t.text :secret
       t.timestamps
     end
-    add_index :authentications, [:territory_id, :provider, :identity_id], :unique => true, :name => 'auth_uniqueness_index'
+    add_index :accounts, [:realm_id, :provider, :identity_id, :uid], :unique => true, :name => 'account_uniqueness_index'
 
-    create_table :delayed_jobs, :force => true do |table|
+    create_table :delayed_jobs do |table|
       table.integer  :priority, :default => 0      # Allows some jobs to jump to the front of the queue
       table.integer  :attempts, :default => 0      # Provides for retries, but still fail eventually.
       table.text     :handler                      # YAML-encoded string of the object that will do work
@@ -77,8 +69,8 @@ class InitialSchema < ActiveRecord::Migration
 
   def self.down
     drop_table :delayed_jobs
-    drop_table :authentications
-    drop_table :territories
-    drop_table(:identities)
+    drop_table :accounts
+    drop_table :realms
+    drop_table :identities
   end
 end
