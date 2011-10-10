@@ -11,7 +11,6 @@ require './lib/realm'
 
 # Run all examples in a transaction
 RSpec.configure do |config|
-  config.mock_with :rspec
   config.around(:each) do |example|
     ActiveRecord::Base.connection.transaction do
       example.run 

@@ -1,10 +1,12 @@
-ENV['RAILS_ENV'] ||= "test"
-
 require 'simplecov'
 SimpleCov.add_filter 'vendor'
 SimpleCov.add_filter 'spec'
 
-require 'rspec'
+ENV['RAILS_ENV'] ||= "test"
+
+RSpec.configure do |config|
+  config.mock_with :rspec
+end
 
 unless defined? Rails
   module Rails

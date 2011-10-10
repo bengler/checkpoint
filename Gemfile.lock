@@ -129,14 +129,14 @@ GEM
     redis (2.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    rspec (2.6.0)
-      rspec-core (~> 2.6.0)
-      rspec-expectations (~> 2.6.0)
-      rspec-mocks (~> 2.6.0)
-    rspec-core (2.6.4)
-    rspec-expectations (2.6.0)
+    rspec (2.7.0.rc1)
+      rspec-core (= 2.7.0.rc1)
+      rspec-expectations (= 2.7.0.rc1)
+      rspec-mocks (= 2.7.0.rc1)
+    rspec-core (2.7.0.rc1)
+    rspec-expectations (2.7.0.rc1)
       diff-lcs (~> 1.1.2)
-    rspec-mocks (2.6.0)
+    rspec-mocks (2.7.0.rc1)
     ruby-openid (2.1.8)
     ruby-openid-apps-discovery (1.2.0)
       ruby-openid (>= 2.1.7)
@@ -190,7 +190,7 @@ DEPENDENCIES
   omniauth (~> 0.3.0)
   pg
   redis (= 2.2.2)
-  rspec
+  rspec (~> 2.7.0.rc1)
   simplecov
   sinatra
   sinatra-activerecord
