@@ -43,9 +43,15 @@ class Identity < ActiveRecord::Base
       end
 
       account.authorize(auth_data['credentials'])
+      account.identity.promote_to(Species::User)
+      account.identity.save!
 
       account.identity
     end
+  end
+
+  def promote_to(species)
+    self.kind = species if (kind < species)
   end
 
   def ensure_account(auth_data)

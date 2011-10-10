@@ -62,6 +62,36 @@ describe Identity do
     end
   end
 
+  describe "promotions" do
+    let(:bob) { Identity.new }
+    it "promotes to user" do
+      bob.promote_to(Species::User)
+      bob.should be_user
+    end
+
+    it "promotes to admin" do
+      bob.promote_to(Species::Admin)
+      bob.should be_admin
+    end
+
+    it "promotes admin to god" do
+      bob.promote_to(Species::God)
+      bob.should be_god
+    end
+
+    it "does not demote god" do
+      bob.kind = Species::God
+      bob.promote_to(Species::Admin)
+      bob.should be_god
+    end
+
+    it "does not demote admin" do
+      bob.kind = Species::Admin
+      bob.promote_to(Species::User)
+      bob.should be_admin
+    end
+  end
+
   context "Integration Specs" do
     describe "#establish with twitter" do
       let(:auth_data) do
@@ -91,10 +121,12 @@ describe Identity do
         Identity.establish(auth_data)
         account.reload
         account.credentials.should eq({:token => 'token', :secret => 'secret'})
+        account.identity.should be_user
       end
 
       it "creates new identity with account" do
         identity = Identity.establish(auth_data)
+        identity.should be_user
 
         account = identity.accounts.first
         account.provider.should eq('twitter')
