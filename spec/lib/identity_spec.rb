@@ -73,9 +73,7 @@ describe Identity do
     }
   }
 
-  # Do we /really/ want to create stubs for all of someone's friends?
-  # Also, if you were a stub, but now we have your data... are you now a user?
-  describe "#create_or_update" do
+  pending "we don't quite know what we want to do with #create_or_update yet" do
     it "creates missing identity" do
       person = Identity.create_or_update(account_data)
       person.enrolled_by_provider.should eq('facebook')
