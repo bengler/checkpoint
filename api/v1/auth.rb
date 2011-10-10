@@ -16,13 +16,10 @@ class CheckpointV1 < Sinatra::Base
     realm = Realm.find_by_label(session[:realm])
     service_keys = realm.keys_for(params[:provider].to_sym)
 
-    # OmniAuth Strategies are implemented either as consumers (oAuth) or
-    # as clients (Facebook etc.), so check what this strategy responds_to
-
-    if strategy.respond_to?(:consumer_key) # This is Oauth
+    if strategy.respond_to?(:consumer_key)
       strategy.consumer_key = service_keys.consumer_key
       strategy.consumer_secret = service_keys.consumer_secret
-    elsif strategy.respond_to?(:client_id) # This is a "client"
+    elsif strategy.respond_to?(:client_id)
       strategy.client_id = service_keys.client_id
       strategy.client_secret = service_keys.client_secret
     else
@@ -98,6 +95,6 @@ class CheckpointV1 < Sinatra::Base
 
 
     # do whatever you want with the information!
-    "realm: #{realm}! oh look: #{auth.inspect}"
+    "realm: #{realm.inspect}! oh look: #{auth.inspect}"
   end
 end
