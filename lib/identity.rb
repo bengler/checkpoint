@@ -32,6 +32,29 @@ class Identity < ActiveRecord::Base
     @clients[service]
   end
 
+  class << self
+    def establish(auth_data)
+      account = Account.find_by_realm_id_and_provider_and_uid(auth_data['realm_id'], auth_data['provider'], auth_data['uid'])
+
+      unless account
+        # we're probably going to want to have an adapter for auth_data so that we don't have to know about providers here
+        identity = Identity.create!(:realm_id => auth_data['realm_id'], :byline_name => auth_data['user_info']['name'])
+        account = identity.ensure_account(auth_data)
+      end
+
+      account.authorize(auth_data['credentials'])
+
+      account.identity
+    end
+  end
+
+  def ensure_account(auth_data)
+    account = Account.new(:identity_id => id, :provider => auth_data['provider'], :uid => auth_data['uid'], :realm_id => auth_data['realm_id'])
+    self.accounts << account
+    self.save!
+    account
+  end
+
   def update_from_accounts!
     self.accounts.each do |account|
       self.kind = Species::User if account.secret

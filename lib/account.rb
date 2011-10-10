@@ -35,4 +35,14 @@ class Account < ActiveRecord::Base
     self.identity = Identity.create!(:kind => Species::Stub)
   end
 
+  def authorize(credentials)
+    self.token = credentials['token']
+    self.secret = credentials['secret']
+    self.save
+  end
+
+  def credentials
+    {:token => token, :secret => secret}
+  end
+
 end

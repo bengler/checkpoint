@@ -53,4 +53,13 @@ describe Account do
     end
   end
 
+  describe "#authorize" do
+    it "sets token and secret from incoming hash" do
+      account = Account.create!(:identity_id => 1, :realm_id => 1, :provider => :twitter, :uid => '123')
+      account.authorize('token' => 'the_token', 'secret' => 'the_secret')
+      account.reload
+      account.credentials.should eq(:token => 'the_token', :secret => 'the_secret')
+    end
+  end
+
 end
