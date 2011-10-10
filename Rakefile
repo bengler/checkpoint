@@ -35,7 +35,6 @@ namespace :db do
     `dropdb checkpoint_development`
     `createdb -O checkpoint checkpoint_development`
     Rake::Task['db:migrate'].invoke
-    Rake::Task['db:test:prepare'].invoke
   end
 
   desc "add seed data to database"
