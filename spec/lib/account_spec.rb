@@ -26,6 +26,17 @@ describe Account do
       account.provider = :unknown_provider
       account.should_not be_valid
     end
+
+    it "accepts known providers as symbols" do
+      account.provider = :facebook
+      account.should be_valid
+    end
+
+    it "accepts known providers as strings" do
+      account.provider = 'facebook'
+      account.should be_valid
+    end
+
   end
 
   describe "#credentials_for" do

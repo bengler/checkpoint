@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   belongs_to :realm
 
   validates_presence_of :uid, :provider, :identity_id, :realm_id
-  validates_inclusion_of :provider, :in => PROVIDERS
+  validates_inclusion_of :provider, :in => PROVIDERS + PROVIDERS.map(&:to_s)
 
   class << self
     def credentials_for(identity, provider)
@@ -14,21 +14,25 @@ class Account < ActiveRecord::Base
     end
 
     def create_or_update(attributes)
-      account = self.find_by_realm_id_provider_and_uid(attributes['realm_id'],
-        attributes['provider'], attributes['uid'])
+      # these three come from twitter, and we don't have attributes for them
+      keys = attributes.delete('credentials')
+      profile_data_or_something = attributes.delete('extra')
+      more_profile_data = attributes.delete('user_info')
+
+      account = self.find_by_realm_id_and_provider_and_uid(attributes['realm_id'], attributes['provider'], attributes['uid'])
       account ||= Account.new(attributes)
       account.token = keys['token']
       account.secret = keys['secret']
+      account.ensure_identity
+
       account.save!
+      account
     end
   end
 
-  def ensure_identity!
-    return identity if identity 
+  def ensure_identity
+    return identity if identity
     self.identity = Identity.create!(:kind => Species::Stub)
-    self.save!
-    identity
   end
-
 
 end
