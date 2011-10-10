@@ -32,12 +32,19 @@ class Identity < ActiveRecord::Base
     @clients[service]
   end
 
-  # Who recruited this user from contacts somewhere?
-  def enrolled_by_user
-    if self.enrolled_by_user_id
-      return Identity.find(self.enrolled_by_user_id)
+  def update_from_accounts!
+    self.accounts.each do |account|
+      self.kind = Species::User if account.secret
+      self.b
     end
   end
+
+  # Who recruited this user from contacts somewhere?
+  # def enrolled_by_user
+  #   if self.enrolled_by_user_id
+  #     return Identity.find(self.enrolled_by_user_id)
+  #   end
+  # end
 
   #def person
   #  Person.find(:user_id => self.id).first
@@ -77,30 +84,30 @@ class Identity < ActiveRecord::Base
   # Method for creating or updating a user from authentication data
   # @auth_data => Omniauth auth data hash (OBS: stringified keys)
   # @user => Identity to update (optional), default is to create new user
-  def self.create_or_update(auth_data, identity=nil)
-    # Do in a transaction!
-    Identity.transaction do
-      auth = Account.where(:realm_id => auth_data['realm_id'], :provider => auth_data['provider'].to_sym, :uid => auth_data['uid']).first
-      unless identity
-        identity = auth.identity if auth
-        identity ||= Identity.new(
-          :enrolled_by_provider => auth_data['provider'],
-          :realm_id => auth_data['realm_id'],
-          :enrolled_by_identity_id => auth_data['enrolled_by_identity_id'],
-          :byline_name => auth_data['user_info']['name']
-        )
-      end
-      identity.kind = auth_data['kind'] if auth_data['kind']
-      identity.byline_name ||= auth_data['user_info']['name']
-      identity.email ||= auth_data['user_info']['email']
-      identity.mobile ||= auth_data['user_info']['mobile']
-      identity.save
-      auth ||= Account.create!(:realm_id => auth_data['realm_id'], :provider => auth_data['provider'].to_sym, :uid => auth_data['uid'], :identity => identity)
-      # user.person.set_user_data(auth_data['user_info'])
-      # user.person.save
-      identity
-    end
-  end
+  # def self.create_or_update(auth_data, identity=nil)
+  #   # Do in a transaction!
+  #   Identity.transaction do
+  #     auth = Account.where(:realm_id => auth_data['realm_id'], :provider => auth_data['provider'].to_sym, :uid => auth_data['uid']).first
+  #     unless identity
+  #       identity = auth.identity if auth
+  #       identity ||= Identity.new(
+  #         :enrolled_by_provider => auth_data['provider'],
+  #         :realm_id => auth_data['realm_id'],
+  #         :enrolled_by_identity_id => auth_data['enrolled_by_identity_id'],
+  #         :byline_name => auth_data['user_info']['name']
+  #       )
+  #     end
+  #     identity.kind = auth_data['kind'] if auth_data['kind']
+  #     identity.byline_name ||= auth_data['user_info']['name']
+  #     identity.email ||= auth_data['user_info']['email']
+  #     identity.mobile ||= auth_data['user_info']['mobile']
+  #     identity.save
+  #     auth ||= Account.create!(:realm_id => auth_data['realm_id'], :provider => auth_data['provider'].to_sym, :uid => auth_data['uid'], :identity => identity)
+  #     # user.person.set_user_data(auth_data['user_info'])
+  #     # user.person.save
+  #     identity
+  #   end
+  # end
 
   private
 
