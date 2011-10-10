@@ -5,9 +5,9 @@ $config = YAML::load(File.open("config/database.yml"))
 
 ActiveRecord::Base.establish_connection($config[ENV['RAILS_ENV']])
 
-require './app/models/identity'
-require './app/models/account'
-require './app/models/realm'
+require './lib/identity'
+require './lib/account'
+require './lib/realm'
 
 # Run all examples in a transaction
 RSpec.configure do |config|
