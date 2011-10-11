@@ -25,15 +25,3 @@ RSpec.configure do |c|
     end
   end
 end
-
-unless defined? Rails
-  module Rails
-    def self.env
-      ENV["RACK_ENV"]
-    end
-
-    def self.root
-      File.dirname(File.dirname(__FILE__))
-    end
-  end
-end
