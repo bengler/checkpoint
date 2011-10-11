@@ -1,4 +1,4 @@
-require 'activerecord_helper'
+require 'spec_helper'
 require 'client_helper'
 
 describe Identity do

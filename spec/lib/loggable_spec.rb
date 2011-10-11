@@ -39,7 +39,7 @@ describe TheThing do
 end
 
 describe Loggable::CheckpointLogger do
-  let(:path) { "#{Rails.root}/log" }
+  let(:path) { "#{Sinatra::Application.root}/log" }
 
   it "creates a named log file" do
     File.should_receive(:open).with("#{path}/dinosaur_test.log", 'a')

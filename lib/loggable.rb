@@ -10,7 +10,7 @@ module Loggable
 
     class << self
       def log_path
-        "#{Rails.root}/log"
+        "#{Sinatra::Application.root}/log"
       end
 
       def use(basename)
@@ -18,7 +18,7 @@ module Loggable
           FileUtils.mkdir_p(log_path)
         end
 
-        @@logs[basename] ||= self.new(File.open("#{log_path}/#{basename}_#{Rails.env}.log", 'a'))
+        @@logs[basename] ||= self.new(File.open("#{log_path}/#{basename}_#{ENV['RACK_ENV']}.log", 'a'))
         @@logs[basename]
       end
     end

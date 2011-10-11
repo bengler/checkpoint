@@ -126,6 +126,8 @@ GEM
       ruby-openid (>= 2.1.8)
     rack-protection (1.1.4)
       rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
     redis (2.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -189,6 +191,7 @@ DEPENDENCIES
   ohm
   omniauth (~> 0.3.0)
   pg
+  rack-test
   redis (= 2.2.2)
   rspec (~> 2.7.0.rc1)
   simplecov

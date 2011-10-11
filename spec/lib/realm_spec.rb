@@ -1,4 +1,4 @@
-require 'activerecord_helper'
+require 'spec_helper'
 
 describe Realm do
   it "grabs all the keys" do

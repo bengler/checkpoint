@@ -26,6 +26,7 @@ gem 'unicode_utils', '~> 1.0.0'
 
 group :development, :test do
   gem 'rspec', '~> 2.7.0.rc1'
+  gem 'rack-test'
   gem 'simplecov'
   gem 'capistrano', '=2.5.19'
   gem 'capistrano-ext', '=1.2.1'
