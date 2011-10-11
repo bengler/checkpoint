@@ -12,8 +12,6 @@ class Identity < ActiveRecord::Base
   has_many :accounts
   belongs_to :realm
 
-  USER_INFO_OUTDATES_IN = 1.week
-
   validates_inclusion_of :kind, :in => Species::KINDS, :allow_nil => true
 
   # realm.identities.from_provider('twitter')

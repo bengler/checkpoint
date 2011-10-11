@@ -9,7 +9,7 @@ class CheckpointV1 < Sinatra::Base
 
   # This is called directly by Omniauth to allow us to setup
   # the strategy. Unfortunately I did not find a way to
-  # provide the realm with the url, so this is passed through
+  # provide the realm with the url, so it is passed through
   # the session. Yuck!
   get '/auth/:provider/setup' do
     strategy = request.env['omniauth.strategy']
