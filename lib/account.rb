@@ -5,34 +5,33 @@ class Account < ActiveRecord::Base
   belongs_to :identity
   belongs_to :realm
 
-  validates_presence_of :uid, :provider, :identity_id, :realm_id
+  validates_presence_of :uid, :provider, :identity, :realm_id
   validates_inclusion_of :provider, :in => PROVIDERS + PROVIDERS.map(&:to_s)
+
+  before_validation :ensure_identity
+
+  attr_accessor :auth_data
 
   class << self
     def credentials_for(identity, provider)
       self.where(:identity_id => identity.id, :provider => provider).where('token IS NOT NULL and secret IS NOT NULL').first
     end
 
-    def create_or_update(attributes)
-      # these three come from twitter, and we don't have attributes for them
-      keys = attributes.delete('credentials')
-      profile_data_or_something = attributes.delete('extra')
-      more_profile_data = attributes.delete('user_info')
-
-      account = self.find_by_realm_id_and_provider_and_uid(attributes['realm_id'], attributes['provider'], attributes['uid'])
-      account ||= Account.new(attributes)
-      account.token = keys['token']
-      account.secret = keys['secret']
-      account.ensure_identity
-
-      account.save!
-      account
+    def find_or_create_with_auth_data(auth_data)
+      attributes = {
+        :provider => auth_data['provider'],
+        :uid => auth_data['uid'],
+        :realm_id => auth_data['realm_id'],
+        :token => auth_data['credentials']['token'],
+        :secret => auth_data['credentials']['secret'],
+        :auth_data => auth_data
+      }
+      find_or_create_by_provider_and_realm_id_and_uid(attributes)
     end
   end
 
-  def ensure_identity
-    return identity if identity
-    self.identity = Identity.create!(:kind => Species::Stub)
+  def promote_to(species)
+    identity.promote_to(species)
   end
 
   def authorize(credentials)
@@ -43,6 +42,10 @@ class Account < ActiveRecord::Base
 
   def credentials
     {:token => token, :secret => secret}
+  end
+
+  def ensure_identity
+    build_identity(:realm_id => realm_id) unless identity
   end
 
 end

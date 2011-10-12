@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Account do
 
-  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity_id => 2, :token => 'token', :secret => 'secret') }
+  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity => Identity.new, :token => 'token', :secret => 'secret') }
 
   describe 'required attributes' do
-    [:uid, :identity_id, :provider, :realm_id].each do |attribute|
+    [:uid, :provider, :realm_id].each do |attribute|
       specify "#{attribute} can't be nil" do
         account.attributes = {attribute => nil}
         account.should_not be_valid
@@ -15,6 +15,12 @@ describe Account do
         account.attributes = {attribute => ''}
         account.should_not be_valid
       end
+    end
+
+    specify "identity can't be nil" do
+      account.identity = nil
+      account.valid?
+      account.identity.class.should eq(Identity)
     end
 
     specify "uid can contain the usual for usernames" do
@@ -41,24 +47,14 @@ describe Account do
 
   describe "#credentials_for" do
     it "finds keys for a specific identity and provider" do
-      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity_id => 17, :token => 'token', :secret => 'secret')
-      identity = stub(:id => 17)
-      Account.credentials_for(identity, :facebook).should eq(keys)
+      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret')
+      Account.credentials_for(keys.identity, :facebook).should eq(keys)
     end
 
     it "ignores keys where token/secret are missing" do
       Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity_id => 17)
       identity = stub(:id => 17)
       Account.credentials_for(identity, :facebook).should be_nil
-    end
-  end
-
-  describe "#authorize" do
-    it "sets token and secret from incoming hash" do
-      account = Account.create!(:identity_id => 1, :realm_id => 1, :provider => :twitter, :uid => '123')
-      account.authorize('token' => 'the_token', 'secret' => 'the_secret')
-      account.reload
-      account.credentials.should eq(:token => 'the_token', :secret => 'the_secret')
     end
   end
 

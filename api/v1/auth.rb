@@ -69,8 +69,10 @@ class CheckpointV1 < Sinatra::Base
 
     # NOTE: only handling twitter, and not dealing with any merging
     # also, 'establish' might be the wrong name for this, and it's probably doing too much.
-    identity = Identity.establish(auth)
-    identity.touch(:active_at)
+    Account.find_or_create_with_auth_data(auth) do |account|
+      account.promote_to(Species::User)
+      account.identity.touch(:active_at)
+    end
 
     # Enque info update jobs for user
 
