@@ -17,7 +17,7 @@ describe Account do
       end
     end
 
-    specify "identity can't be nil" do
+    specify "identity is created before validating when missing" do
       account.identity = nil
       account.valid?
       account.identity.class.should eq(Identity)
@@ -43,6 +43,14 @@ describe Account do
       account.should be_valid
     end
 
+  end
+
+  describe "#ensure_identity" do
+    it "does not overwrite existing identity" do
+      account.identity = Identity.new(:byline_name => 'Hilda Rossignol')
+      account.valid?
+      account.identity.byline_name.should eq('Hilda Rossignol')
+    end
   end
 
   describe "#credentials_for" do
