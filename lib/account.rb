@@ -22,6 +22,7 @@ class Account < ActiveRecord::Base
         :provider => auth_data['provider'],
         :uid => auth_data['uid'],
         :realm_id => auth_data['realm_id'],
+        # do these get updated if record is found?
         :token => auth_data['credentials']['token'],
         :secret => auth_data['credentials']['secret'],
         :auth_data => auth_data
@@ -32,12 +33,6 @@ class Account < ActiveRecord::Base
 
   def promote_to(species)
     identity.promote_to(species)
-  end
-
-  def authorize(credentials)
-    self.token = credentials['token']
-    self.secret = credentials['secret']
-    self.save
   end
 
   def credentials
