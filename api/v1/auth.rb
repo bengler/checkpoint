@@ -7,10 +7,14 @@ class CheckpointV1 < Sinatra::Base
     redirect to("/auth/#{params[:provider]}")
   end
 
-  # This is called directly by Omniauth to allow us to setup
+  # This is called directly by Omniauth as a rack method
+  # (not HTTP, mkay?) to allow us to setup
   # the strategy. Unfortunately I did not find a way to
   # provide the realm with the url, so it is passed through
   # the session. Yuck!
+  #
+  # Oh, and by the way:
+  # OMNIAUTH SWALLOWS ALL HTTP ERRORS AND EXCEPTIONS.
   get '/auth/:provider/setup' do
     strategy = request.env['omniauth.strategy']
     realm = Realm.find_by_label(session[:realm])
@@ -68,7 +72,6 @@ class CheckpointV1 < Sinatra::Base
     # end
 
     # NOTE: only handling twitter, and not dealing with any merging
-    # also, 'establish' might be the wrong name for this, and it's probably doing too much.
     Account.find_or_create_with_auth_data(auth) do |account|
       account.promote_to(Species::User)
       account.identity.touch(:active_at)
