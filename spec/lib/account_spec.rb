@@ -147,8 +147,9 @@ describe Account do
       account2.identity.should_not eq old_identity
       # Check that a reference from the orphaned identity to the current identity has been stored
       OrphanedIdentity.find_by_old_id(old_identity.id).identity.should eq account3.identity
+      # Check that the account object was not reused when reattaching to a new identity
+      account1.id.should_not eq account3.id
     end
-
 
   end
 end

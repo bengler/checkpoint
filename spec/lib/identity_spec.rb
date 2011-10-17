@@ -4,27 +4,6 @@ require 'client_helper'
 describe Identity do
   let(:atle) { Identity.new }
 
-  describe "validations" do
-    it "is invalid if the kind is unknown" do
-      atle.kind = 42
-      atle.should_not be_valid
-    end
-  end
-
-  describe "integrates with species" do
-    it "recognizes god users" do
-      Identity.new(:kind => Species::God).should be_god
-    end
-
-    it "knows when a user is not divine" do
-      Identity.new.should_not be_god
-    end
-
-    it "defaults to 'stub'" do
-      Identity.new.should be_stub
-    end
-  end
-
   context "with missing credentials" do
     specify "facebook client is unavailable" do
       ->{atle.client_for(:facebook)}.should raise_error(Identity::NotAuthorized)
@@ -40,7 +19,7 @@ describe Identity do
   end
 
   context "with existing account" do
-    let(:user) { Identity.create(:kind => Species::User, :realm_id => 1) }
+    let(:user) { Identity.create(:realm_id => 1) }
     before :each do
       # get rid of incidental stuff in initializer
       TwitterClient.any_instance.stub(:configure)
@@ -62,33 +41,4 @@ describe Identity do
     end
   end
 
-  describe "promotions" do
-    let(:bob) { Identity.new }
-    it "promotes to user" do
-      bob.promote_to(Species::User)
-      bob.should be_user
-    end
-
-    it "promotes to admin" do
-      bob.promote_to(Species::Admin)
-      bob.should be_admin
-    end
-
-    it "promotes admin to god" do
-      bob.promote_to(Species::God)
-      bob.should be_god
-    end
-
-    it "does not demote god" do
-      bob.kind = Species::God
-      bob.promote_to(Species::Admin)
-      bob.should be_god
-    end
-
-    it "does not demote admin" do
-      bob.kind = Species::Admin
-      bob.promote_to(Species::User)
-      bob.should be_admin
-    end
-  end
 end
