@@ -4,8 +4,7 @@ class Realm < ActiveRecord::Base
   has_many :accounts
   has_many :identities
 
-  validates_presence_of :label, :api_key
-  validates_uniqueness_of :label
+  validates_uniqueness_of :label, :allow_nil => false
 
   def external_service_keys
     keys = YAML.load(self.service_keys)

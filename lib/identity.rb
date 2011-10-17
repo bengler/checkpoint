@@ -2,19 +2,13 @@ class Identity < ActiveRecord::Base
 
   class NotAuthorized < Exception; end
 
-  after_initialize :ensure_kind
-  # after_save :ensure_person!
-  # after_destroy :delete_person!
-
   has_many :accounts
   belongs_to :realm
-
-  validates_inclusion_of :kind, :in => Species::KINDS, :allow_nil => true
 
   # realm.identities.from_provider('twitter')
   # identities are unique to a realm
   scope :from_provider, lambda { |provider|
-    where("#{provider}_uid IS NOT NULL AND kind >= ?", Species::User)
+    where("#{provider}_uid IS NOT NULL")
   }
 
   def client_for(service)
@@ -31,12 +25,5 @@ class Identity < ActiveRecord::Base
     self.kind = species if (kind < species)
   end
 
-  private
-
-    def ensure_kind
-      if self.kind.nil?
-        self.kind = Species::Stub
-      end
-    end
 
 end
