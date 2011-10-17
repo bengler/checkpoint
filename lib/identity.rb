@@ -1,7 +1,4 @@
-require_relative 'species'
-
 class Identity < ActiveRecord::Base
-  include Species
 
   class NotAuthorized < Exception; end
 
