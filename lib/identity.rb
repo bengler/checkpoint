@@ -2,28 +2,24 @@ class Identity < ActiveRecord::Base
 
   class NotAuthorized < Exception; end
 
-  has_many :accounts
+  has_many :accounts, :dependent => :destroy
   belongs_to :realm
 
-  # realm.identities.from_provider('twitter')
-  # identities are unique to a realm
-  scope :from_provider, lambda { |provider|
-    where("#{provider}_uid IS NOT NULL")
-  }
+  validates_presence_of :realm_id
 
   def client_for(service)
     @clients ||= {}
     return @clients[service] if @clients[service]
-    auth = Account.credentials_for(self, service)
-    fail NotAuthorized.new("Identity #{id} is not authenticated for #{service.capitalize}") unless auth
+    account = Account.find_by_identity_id_and_provider(self, service)    
+    fail NotAuthorized.new("Identity #{id} is not authenticated for #{service.capitalize}") unless account.authorized?
     client_class = Object.const_get("#{service}_client".classify) # retrieve the client class, e.g. FacebookClient
-    @clients[service] = client_class.new(self, auth)
+    @clients[service] = client_class.new(self, account.credentials)
     @clients[service]
   end
 
-  def promote_to(species)
-    self.kind = species if (kind < species)
+  def orphanize!(new_identity)
+    OrphanedIdentity.create!(:old_id => self.id, :identity => new_identity)
+    self.destroy
   end
-
 
 end

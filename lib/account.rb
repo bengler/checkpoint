@@ -1,48 +1,61 @@
 class Account < ActiveRecord::Base
 
-  PROVIDERS = [:origo, :facebook, :twitter, :google]
-
   belongs_to :identity
   belongs_to :realm
 
   validates_presence_of :uid, :provider, :realm_id
-  validates_inclusion_of :provider, :in => PROVIDERS + PROVIDERS.map(&:to_s)
-
-  # after_save :ensure_identity ?? only if we have auth data
-
-  attr_accessor :auth_data
 
   class << self
-    def credentials_for(identity, provider)
-      self.where(:identity_id => identity.id, :provider => provider).where('token IS NOT NULL and secret IS NOT NULL').first
-    end
+    # Creates or updates an account from auth data as provided by 
+    # omniauth. An existing identity or a realm must be provided 
+    # in the options. E.g.: 
+    #     Account.declare_with_omniauth(auth, :realm => current_realm) # creates a new user
+    #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
+    # If the account was previously attached to an identity, it will be moved to this identity and the former identity
+    # will be scrapped along with any account it may have had. So there.
+    def declare_with_omniauth(auth_data, options = {})
+      identity = options[:identity] 
+      unless identity             
+        raise ArgumentError, "Identity or realm must be specified" unless options[:realm]
+        identity ||= Identity.create!(:realm => options[:realm])
+      end
 
-    def find_or_create_with_auth_data(auth_data)
       attributes = {
         :provider => auth_data['provider'],
         :uid => auth_data['uid'],
-        :realm_id => auth_data['realm_id'],
-        # do these get updated if record is found?
-        # No, attributes which should potentially update should be in the method name
-        # --> find_or_create_by_provider_and_realm_id_and_uid_and_token_and_secret_and_authdata(attributes)
-        # Thomas (not changing the code 'cause I'm unsure if this is what we want :-)
-        :token => auth_data['credentials']['token'],
-        :secret => auth_data['credentials']['secret'],
-        :auth_data => auth_data
+        :realm_id => identity.realm.id,
       }
-      find_or_create_by_provider_and_realm_id_and_uid(attributes)
+
+      account = find_by_provider_and_realm_id_and_uid(attributes[:provider], attributes[:realm_id], attributes[:uid])
+      if account && account.identity != identity
+        account.identity.orphanize!(identity)
+        account = nil
+      end
+
+      account ||= new(attributes)
+      account.attributes = {
+        :identity =>     identity,
+        :token =>        auth_data['credentials']['token'],
+        :secret =>       auth_data['credentials']['secret'],
+        :nickname =>     auth_data['user_info']['nickname'],
+        :name =>         auth_data['user_info']['name'],
+        :location =>     auth_data['user_info']['location'],
+        :image_url =>    auth_data['user_info']['image'],
+        :description =>  auth_data['user_info']['description'],
+        :profile_url =>  auth_data['user_info']['urls']['Twitter']
+      }
+      account.save!
+      account
     end
   end
 
-  def promote_to(species)
-    identity.promote_to(species)
+  def authorized?
+    !!credentials
   end
 
   def credentials
+    return nil unless token && secret
     {:token => token, :secret => secret}
-  end
-
-  def find_or_create_identity
   end
 
 end

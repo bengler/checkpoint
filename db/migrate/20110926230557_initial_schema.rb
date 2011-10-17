@@ -1,8 +1,8 @@
 class InitialSchema < ActiveRecord::Migration
   def self.up
     create_table :identities do |t|
-      t.integer :realm_id
-      t.boolean :god
+      t.integer :realm_id, :null => false
+      t.boolean :god, :default => false
       t.datetime :last_login_at
       t.timestamps
     end
@@ -26,10 +26,20 @@ class InitialSchema < ActiveRecord::Migration
 
     create_table :accounts do |t|
       t.integer :identity_id
+      t.integer :realm_id, :null => false
       t.text :provider, :null => false
       t.text :uid, :null => false
       t.text :token
       t.text :secret
+
+      t.text :nickname
+      t.text :name
+      t.text :location
+      t.text :description
+      t.text :profile_url
+      t.text :image_url
+      t.text :email
+
       t.datetime :synced_at
       t.timestamps
     end

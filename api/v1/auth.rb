@@ -55,47 +55,10 @@ class CheckpointV1 < Sinatra::Base
 
 
   get '/auth/:provider/callback' do
-    auth = request.env['omniauth.auth']
     realm = Realm.find_by_label(session[:realm])
-    return render_error unless realm
-
-    auth['realm_id'] = realm.id
-
-    # let's see what comes back so we can write some tests
-    # File.open('tmp/auth_data.txt', 'w') do |f|
-    #   f.write auth.inspect
-    # end
-
-    # NOTE: only handling twitter, and not dealing with any merging
-    account = Account.find_or_create_with_auth_data(auth) do |account|
-      account.promote_to(Species::User)
-      account.identity.touch(:active_at)
-    end
-    #identity = account.find_or_create_identity
-
-    # Enque info update jobs for user
-
-    # Reset temporary auth cookie
-    # session[:auth_app_id] = nil
-
-    # Set current user
-    # self.current_user = @user
-
-    # flash[:success] = t("auth.success",
-    #   :app_title => realm.title,
-    #   :provider => @auth_data['provider'].capitalize)
-
-    # @@logger.info(
-    #   "Authenticated user ##{@user.id}, " <<
-    #   "#{@user.name} for #{@provider}. " <<
-    #   "#{@user.enrolled_by_user ? "Enrolled by #{@user.enrolled_by_user.name}": ""}"
-    # )
-
-    # render_success
-
-
-
-    # do whatever you want with the information!
-    "realm: #{realm.inspect}! oh look: #{auth.inspect}"
+    return halt(500, "Realm not specified in session") unless realm
+    # TODO: Session!
+    account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm)
+    "realm: #{realm.inspect}! oh look: #{request.env['omniauth.auth'].inspect}"
   end
 end

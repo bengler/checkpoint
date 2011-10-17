@@ -15,10 +15,18 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "identity_id"
+    t.integer  "realm_id",    :null => false
     t.text     "provider",    :null => false
     t.text     "uid",         :null => false
     t.text     "token"
     t.text     "secret"
+    t.text     "nickname"
+    t.text     "name"
+    t.text     "location"
+    t.text     "description"
+    t.text     "profile_url"
+    t.text     "image_url"
+    t.text     "email"
     t.datetime "synced_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -27,8 +35,8 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
   add_index "accounts", ["provider", "identity_id", "uid"], :name => "account_uniqueness_index", :unique => true
 
   create_table "identities", :force => true do |t|
-    t.integer  "realm_id"
-    t.boolean  "god"
+    t.integer  "realm_id",                         :null => false
+    t.boolean  "god",           :default => false
     t.datetime "last_login_at"
     t.datetime "created_at"
     t.datetime "updated_at"
