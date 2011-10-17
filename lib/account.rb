@@ -39,8 +39,7 @@ class Account < ActiveRecord::Base
     {:token => token, :secret => secret}
   end
 
-  def ensure_identity
-    build_identity(:realm_id => realm_id) unless identity
+  def find_or_create_identity
   end
 
 end

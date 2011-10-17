@@ -32,11 +32,6 @@ class CheckpointV1 < Sinatra::Base
 
     strategy.options[:scope] = service_keys.scope if service_keys.scope
 
-    # NOTE: Additional params can be set here like this:
-    strategy.options[:realm] = realm.label
-
-    strategy.options[:callback] = api_path("/#{realm.label}/auth/#{params[:provider]}/callback")
-
     # TODO: Add detection of device to wisely choose whether we should ask for
     # touch interface from facebook.
     # strategy.options[:display] = "touch" if params[:provider] == "facebook"
@@ -76,7 +71,7 @@ class CheckpointV1 < Sinatra::Base
       account.promote_to(Species::User)
       account.identity.touch(:active_at)
     end
-    identity = account.find_or_create_identity
+    #identity = account.find_or_create_identity
 
     # Enque info update jobs for user
 
