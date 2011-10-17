@@ -59,6 +59,6 @@ class CheckpointV1 < Sinatra::Base
     return halt(500, "Realm not specified in session") unless realm
     # TODO: Session!
     account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm)
-    "realm: #{realm.inspect}! oh look: #{request.env['omniauth.auth'].inspect}"
+    "realm: #{realm.label}! oh look: #{request.env['omniauth.auth'].inspect}"
   end
 end
