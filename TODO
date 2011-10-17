@@ -1,37 +1,7 @@
-Up next:
-- talk to a provider (via client)
-- join realm (via each provider) - UI piece? controller?
-- connect identity to new account (with merging)
+You create an account, and pass in the identity it should be joined with.
+If no identity is passed in, you get a new one.
 
-join realm via facebook
-join realm via twitter
-logged in as twitter identity, connect to facebook
--> merge the two identities (which one becomes the main one? The one you are in?)
--> how to handle all the related profiles?
--> what about related stubs? a stub who was recruited by the facebook identity will need to be changed to be recruited by the new master identity.
+When you update an account, you can pass in a new identity.
+If there is an old identity, this one gets orphaned.
 
-join realm via facebook.
-all friends become stubs.
-a friend joins realm -> stub is found, identity is updated.
-
-someone joins realm via twitter
-they connect to facebook and it turns out they are a stub
-stub gets merged into the identity
-
-someone joins via facebook
-stub1 gets created
-someone else joins via facebook, has same friend
-stub1 does not get recreated, enrolled_by_identity_id does not get overwritten
-
-someone joins via facebook.
-they connect to a new facebook account
--> what happens? old profile gets overwritten, old authentication gets updated? old friends...?
-
-add :email as an account type
-https://github.com/intridea/omniauth-identity ?
--> invitation goes to an email address
--> verification code?
--> reset password?
--> enrolled_by_provider :email
-
-
+Identity knows how to orphan itself (create entry in orphan table, then nuke original)
