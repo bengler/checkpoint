@@ -9,7 +9,7 @@ class InitialSchema < ActiveRecord::Migration
     add_index :identities, :realm_id
 
     create_table :orphaned_identities do |t|
-      t.integer :deprecated_identity_id
+      t.integer :old_id
       t.integer :identity_id
       t.timestamps
     end
