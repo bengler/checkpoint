@@ -23,6 +23,9 @@ class Account < ActiveRecord::Base
         :uid => auth_data['uid'],
         :realm_id => auth_data['realm_id'],
         # do these get updated if record is found?
+        # No, attributes which should potentially update should be in the method name
+        # --> find_or_create_by_provider_and_realm_id_and_uid_and_token_and_secret_and_authdata(attributes)
+        # Thomas (not changing the code 'cause I'm unsure if this is what we want :-)
         :token => auth_data['credentials']['token'],
         :secret => auth_data['credentials']['secret'],
         :auth_data => auth_data
