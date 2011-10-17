@@ -42,12 +42,12 @@ class InitialSchema < ActiveRecord::Migration
     add_index :realms, :label, :unique => true
 
     create_table :accounts do |t|
-      t.integer :identity_id, :null => false
       t.integer :realm_id, :null => false
       t.text :provider, :null => false
       t.text :uid, :null => false
       t.text :token
       t.text :secret
+      t.integer :identity_id
       t.timestamps
     end
     add_index :accounts, [:realm_id, :provider, :identity_id, :uid], :unique => true, :name => 'account_uniqueness_index'

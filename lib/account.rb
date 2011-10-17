@@ -5,10 +5,10 @@ class Account < ActiveRecord::Base
   belongs_to :identity
   belongs_to :realm
 
-  validates_presence_of :uid, :provider, :identity, :realm_id
+  validates_presence_of :uid, :provider, :realm_id
   validates_inclusion_of :provider, :in => PROVIDERS + PROVIDERS.map(&:to_s)
 
-  before_validation :ensure_identity
+  # after_save :ensure_identity ?? only if we have auth data
 
   attr_accessor :auth_data
 

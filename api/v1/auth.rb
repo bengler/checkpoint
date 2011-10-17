@@ -61,7 +61,7 @@ class CheckpointV1 < Sinatra::Base
 
   get '/auth/:provider/callback' do
     auth = request.env['omniauth.auth']
-    realm = Realm.find_by_label(request.env['omniauth.strategy'].options[:realm])
+    realm = Realm.find_by_label(session[:realm])
     return render_error unless realm
 
     auth['realm_id'] = realm.id
@@ -72,10 +72,11 @@ class CheckpointV1 < Sinatra::Base
     # end
 
     # NOTE: only handling twitter, and not dealing with any merging
-    Account.find_or_create_with_auth_data(auth) do |account|
+    account = Account.find_or_create_with_auth_data(auth) do |account|
       account.promote_to(Species::User)
       account.identity.touch(:active_at)
     end
+    identity = account.find_or_create_identity
 
     # Enque info update jobs for user
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Account do
 
-  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity => Identity.new, :token => 'token', :secret => 'secret') }
+  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret') }
 
   describe 'required attributes' do
     [:uid, :provider, :realm_id].each do |attribute|
@@ -15,12 +15,6 @@ describe Account do
         account.attributes = {attribute => ''}
         account.should_not be_valid
       end
-    end
-
-    specify "identity is created before validating when missing" do
-      account.identity = nil
-      account.valid?
-      account.identity.class.should eq(Identity)
     end
 
     specify "uid can contain the usual for usernames" do
@@ -42,21 +36,13 @@ describe Account do
       account.provider = 'facebook'
       account.should be_valid
     end
-
-  end
-
-  describe "#ensure_identity" do
-    it "does not overwrite existing identity" do
-      account.identity = Identity.new(:byline_name => 'Hilda Rossignol')
-      account.valid?
-      account.identity.byline_name.should eq('Hilda Rossignol')
-    end
   end
 
   describe "#credentials_for" do
     it "finds keys for a specific identity and provider" do
-      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret')
-      Account.credentials_for(keys.identity, :facebook).should eq(keys)
+      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret', :identity_id => 37)
+      identity = stub(:id => 37)
+      Account.credentials_for(identity, :facebook).should eq(keys)
     end
 
     it "ignores keys where token/secret are missing" do
@@ -66,4 +52,8 @@ describe Account do
     end
   end
 
+  context "with credentials" do
+    it "creates identity if missing"
+    it "does not override existing identity"
+  end
 end

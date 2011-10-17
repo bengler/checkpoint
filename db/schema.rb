@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(:version => 20110926230557) do
 
   create_table "accounts", :force => true do |t|
-    t.integer  "identity_id", :null => false
     t.integer  "realm_id",    :null => false
     t.text     "provider",    :null => false
     t.text     "uid",         :null => false
     t.text     "token"
     t.text     "secret"
+    t.integer  "identity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
