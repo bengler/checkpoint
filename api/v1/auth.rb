@@ -39,21 +39,6 @@ class CheckpointV1 < Sinatra::Base
     "Setup complete."
   end
 
-  get "/auth/:provider/terminate" do
-    # TODO: Find realm through authentication
-    realm = Realm.find_by_label(params[:realm])
-
-    auth = current_identity.accounts.where(
-      :realm_id => realm.id, :provider => params[:provider])
-      return halt 404, "No such authentication found" if auth.empty?
-      auth.map(&:destroy)
-
-      logger.info("Terminated #{params[:provider]} authentication for identity #{current_identity.id} in realm #{realm.label}.")
-
-      "Authorization for provider #{params[:provider]} terminated."
-  end
-
-
   get '/auth/:provider/callback' do
     realm = Realm.find_by_label(session[:realm])
     return halt(500, "Realm not specified in session") unless realm
