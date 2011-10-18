@@ -50,6 +50,7 @@ GEM
     haml (3.1.1)
     hashie (1.1.0)
     highline (1.6.2)
+    hiredis (0.3.2)
     httpclient (2.2.1)
     i18n (0.6.0)
     json (1.6.1)
@@ -192,12 +193,13 @@ DEPENDENCIES
   compass
   fb_graph
   haml (= 3.1.1)
+  hiredis (~> 0.3.1)
   i18n
   ohm
   omniauth (~> 0.3.0)
   pg
   rack-test
-  redis (= 2.2.2)
+  redis (~> 2.2.2)
   rspec (~> 2.7.0.rc1)
   simplecov
   sinatra

@@ -3,6 +3,8 @@ class Account < ActiveRecord::Base
   belongs_to :identity
   belongs_to :realm
 
+  after_destroy :update_identity_primary_account
+
   validates_presence_of :uid, :provider, :realm_id
 
   class << self
@@ -45,6 +47,10 @@ class Account < ActiveRecord::Base
         :profile_url =>  auth_data['user_info']['urls']['Twitter']
       }
       account.save!
+
+      identity.ensure_primary_account
+      identity.save!
+
       account
     end
   end
@@ -56,6 +62,14 @@ class Account < ActiveRecord::Base
   def credentials
     return nil unless token && secret
     {:token => token, :secret => secret}
+  end
+
+  private
+
+  def update_identity_primary_account
+    self.identity.primary_account = nil
+    self.identity.ensure_primary_account
+    self.identity.save!
   end
 
 end

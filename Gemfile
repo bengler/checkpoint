@@ -5,7 +5,6 @@ gem 'sinatra-activerecord'
 gem 'activerecord', :require => 'active_record'
 gem 'pg'
 gem 'thin', '= 1.2.7'
-gem 'redis', '2.2.2'
 gem 'ohm'
 gem 'omniauth', '~> 0.3.0'
 gem 'compass'
@@ -17,6 +16,8 @@ gem 'twitter'
 gem 'yajl-ruby', :require => "yajl"
 gem 'i18n'
 gem 'unicode_utils', '~> 1.0.0'
+gem "hiredis", "~> 0.3.1"
+gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 
 # gem 'daemonizer'
 # gem 'daemons'

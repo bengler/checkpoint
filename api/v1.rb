@@ -17,6 +17,10 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/' do
+    response.set_cookie("test",
+      :value => "Dette er en annen test",
+      :path => "/",
+      :expires => Time.now+1.year)
     <<-HTML
       <a href='/api/v1/auth/twitter'>Sign in with Twitter</a>
     HTML

@@ -151,5 +151,32 @@ describe Account do
       account1.id.should_not eq account3.id
     end
 
+    it "sets a primary account when the identity is first created" do
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)      
+      account1.identity.primary_account.should eq account1      
+      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)      
+      account1.identity.primary_account.should eq account1            
+    end
+
+    it "unsets primary_account when an account is deleted" do 
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)      
+      identity = account1.identity
+      identity.reload
+      identity.primary_account.should eq account1
+      account1.destroy
+      identity.reload
+      identity.primary_account.should be_nil
+    end
+
+    it "silently picks a different primary_account when one of many accounts is deleted" do
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
+      identity = account1.identity
+      identity.primary_account.should eq account1
+      account1.destroy
+      identity.reload
+      identity.primary_account.should eq account2
+    end
+
   end
 end

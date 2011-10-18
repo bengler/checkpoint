@@ -2,6 +2,7 @@ class InitialSchema < ActiveRecord::Migration
   def self.up
     create_table :identities do |t|
       t.integer :realm_id, :null => false
+      t.integer :primary_account_id
       t.boolean :god, :default => false
       t.datetime :last_login_at
       t.timestamps

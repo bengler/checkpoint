@@ -35,8 +35,9 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
   add_index "accounts", ["provider", "identity_id", "uid"], :name => "account_uniqueness_index", :unique => true
 
   create_table "identities", :force => true do |t|
-    t.integer  "realm_id",                         :null => false
-    t.boolean  "god",           :default => false
+    t.integer  "realm_id",                              :null => false
+    t.integer  "primary_account_id"
+    t.boolean  "god",                :default => false
     t.datetime "last_login_at"
     t.datetime "created_at"
     t.datetime "updated_at"
