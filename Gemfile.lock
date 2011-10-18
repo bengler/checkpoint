@@ -58,6 +58,7 @@ GEM
     macaddr (1.4.0)
       systemu (~> 2.2.0)
     mime-types (1.16)
+    mock_redis (0.2.0)
     multi_json (1.0.3)
     multi_xml (0.4.1)
     multipart-post (1.1.3)
@@ -195,6 +196,7 @@ DEPENDENCIES
   haml (= 3.1.1)
   hiredis (~> 0.3.1)
   i18n
+  mock_redis
   ohm
   omniauth (~> 0.3.0)
   pg
