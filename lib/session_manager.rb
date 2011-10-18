@@ -15,8 +15,13 @@ module SessionManager
   end
 
   def self.identity_id_for_session(key)
+    return nil unless key
     identity_id = @redis.get("session:#{key}")
     identity_id.to_i unless identity_id.nil?
+  end
+
+  def self.redis
+    @redis
   end
 
 end
