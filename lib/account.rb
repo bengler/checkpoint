@@ -59,6 +59,10 @@ class Account < ActiveRecord::Base
     !!credentials
   end
 
+  def primary?
+    identity.primary_account_id == self.id
+  end
+
   def credentials
     return nil unless token && secret
     {:token => token, :secret => secret}
@@ -67,6 +71,7 @@ class Account < ActiveRecord::Base
   private
 
   def update_identity_primary_account
+    return unless self.primary?
     self.identity.primary_account = nil
     self.identity.ensure_primary_account
     self.identity.save!
