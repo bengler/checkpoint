@@ -1,5 +1,7 @@
 module SessionManager
 
+  COOKIE_NAME = "checkpoint.identity"
+
   def self.connect(redis = nil)
     @redis = redis || Redis.new
   end

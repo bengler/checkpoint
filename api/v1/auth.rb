@@ -40,10 +40,9 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/:provider/callback' do
-    realm = Realm.find_by_label(session[:realm])
+    realm = Realm.find_by_label(session[:realm])    
     return halt(500, "Realm not specified in session") unless realm
-    # TODO: Session!
-    account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm)
-    "realm: #{realm.label}! oh look: #{request.env['omniauth.auth'].inspect}"
+    account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm, :identity => current_identity)
+    set_current_identity(account.identity) unless current_identity
   end
 end
