@@ -43,6 +43,7 @@ class CheckpointV1 < Sinatra::Base
     realm = Realm.find_by_label(session[:realm])    
     return halt(500, "Realm not specified in session") unless realm
     account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm, :identity => current_identity)
-    set_current_identity(account.identity) unless current_identity
+    set_current_identity(account.identity)
+    # TODO: Redirect as per the instruction of the client
   end
 end
