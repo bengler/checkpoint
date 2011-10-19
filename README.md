@@ -11,14 +11,13 @@ If a person uses both Facebook and Twitter, it's still just one person (Identity
 ### Get the code
 
 * Clone project from GitHub.
-
 * (RVM) bundle install
 
 ### Set up database
 
-    rake db:bootstrap
-    rake db:seed
-    rake db:test:prepare
+    $ rake db:bootstrap
+    $ rake db:seed
+    $ rake db:test:prepare
 
 This creates the postgreSQL user for the project. Notice how we're giving the user not only superpowers, but the ability to create databases. This is for automated testing purposes.
 
@@ -29,6 +28,34 @@ RVM will handle all gems.
 #### Development
 For development on Mac / Ports in order to get SSL working properly you
 must set the following env. variable: export RUBYOPT='-r openssl
+
+##### Pow
+
+http://pow.cx/
+
+    $ curl get.pow.cx | sh
+
+To set up a Rack app, just symlink it into ~/.pow:
+    $ cd ~/.pow
+    $ ln -s /path/to/myapp
+
+
+##### Testing against facebook
+
+You won't be able to use pow for this, as it doesn't expose its port.
+
+Log in to Tilde Nielsen's facebook account (tilde@skogsmaskin.no).
+Password is the same as the local network at the office.
+
+    `gem install localtunnel`
+    `localtunnel 9292`
+
+You'll get back a url that is publically available on the web, mapped to port 9292.
+Obviously, you can pick whatever port you like.
+
+Then you need to run the app on that port, forexample with rackup.
+
+    `rackup -p 9292`
 
 
 #### Production
