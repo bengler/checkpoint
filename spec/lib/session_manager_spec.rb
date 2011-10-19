@@ -23,6 +23,6 @@ describe SessionManager do
     key = SessionManager.new_session(1)
     SessionManager.redis.ttl("session:#{key}").should > 1000000
     key = SessionManager.new_session(2, :expire => 1.hour)
-    SessionManager.redis.ttl("session:#{key}").should > 0
+    SessionManager.redis.ttl("session:#{key}").should <= 1.hour
   end
 end
