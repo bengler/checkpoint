@@ -10,9 +10,11 @@ module SessionManager
     rand(2**512).to_s(36)
   end
 
-  def self.new_session(identity_id)
+  def self.new_session(identity_id, options = {})
     key = random_key
-    @redis.set("session:#{key}", identity_id)
+    redis_key = "session:#{key}"
+    @redis.set(redis_key, identity_id)
+    @redis.expire(redis_key, options[:expire]) if options[:expire]
     key
   end
 

@@ -4,7 +4,7 @@ require "json"
 Dir.glob("#{File.dirname(__FILE__)}/v1/**").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
-  before do
+  after do
     Thread.current[:identity] = nil
   end
 
