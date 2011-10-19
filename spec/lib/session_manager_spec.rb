@@ -21,7 +21,7 @@ describe SessionManager do
 
   it "knows how to create a session that expires" do
     key = SessionManager.new_session(1)
-    SessionManager.redis.ttl("session:#{key}").should eq -1
+    SessionManager.redis.ttl("session:#{key}").should > 1000000
     key = SessionManager.new_session(2, :expire => 1.hour)
     SessionManager.redis.ttl("session:#{key}").should > 0
   end

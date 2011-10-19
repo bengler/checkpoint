@@ -53,7 +53,7 @@ describe "API v1/auth" do
     JSON.parse(last_response.body)['identity']['id'].should eq someone.id
   end
 
-  it "won't let me create a session unless I'm god of the right realm" do
+  it "won't let me create a session unless I'm a god and of the right realm" do
     post "/sessions", :identity_id => somegod.id, :session => someone_session
     last_response.status.should eq 403
     post "/sessions", :identity_id => somegod.id, :session => false_god_session

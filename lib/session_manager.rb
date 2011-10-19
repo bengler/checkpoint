@@ -14,7 +14,7 @@ module SessionManager
     key = random_key
     redis_key = "session:#{key}"
     @redis.set(redis_key, identity_id)
-    @redis.expire(redis_key, options[:expire]) if options[:expire]
+    @redis.expire(redis_key, options[:expire] || 6.months)
     key
   end
 
