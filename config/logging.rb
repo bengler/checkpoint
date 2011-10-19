@@ -1,3 +1,5 @@
+require 'logger'
+
 Dir.mkdir('log') unless File.exist?('log')
 
 logfile = File.new("log/#{Sinatra::Application.environment}.log", 'a+')
