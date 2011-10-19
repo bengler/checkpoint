@@ -13,13 +13,13 @@ module OmniAuth
       # @param [Rack Application] app standard middleware application argument
       # @param [String] client_id the application ID for your client
       # @param [String] client_secret the application secret
-      def initialize(app, client_id = nil, client_secret = nil, options = {}, &block)
+      def initialize(realm, client_id = nil, client_secret = nil, options = {}, &block)
         client_options = {
           :site => 'http://secure.origo.no',
           :authorize_path => '/-/oauth/authorize',
           :access_token_path => '/-/oauth/token'
         }
-        super(app, :origo, client_id, client_secret, client_options, options, &block)
+        super(realm, :origo, client_id, client_secret, client_options, options, &block)
       end
 
       protected
@@ -33,7 +33,7 @@ module OmniAuth
           'name' => user_data['result']['user']['full_name'],
           'first_name' => user_data['result']['user']['first_name'],
           'last_name' => user_data['result']['user']['last_name'],
-          'image' => user_data['result']['user']['image_url'],          
+          'image' => user_data['result']['user']['image_url'],
           'urls' => {
             'Origo' => "http://origo.no/-/user/show/#{user_data['result']['user']['id']}"
           }
