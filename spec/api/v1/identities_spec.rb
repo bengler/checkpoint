@@ -105,4 +105,12 @@ describe "API v1/auth" do
     get "/identities/me"
     last_response.status.should eq 404
   end
+
+  it "is possible to set current session with a http parameter" do 
+    key = SessionManager.new_session(me)
+    get "/identities/me", :session => key
+    last_response.body
+    identity = JSON.parse(last_response.body)['identity']
+    identity['id'].should eq me.id
+  end
 end

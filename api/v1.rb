@@ -13,7 +13,7 @@ class CheckpointV1 < Sinatra::Base
   helpers do 
     def current_identity
       return Thread.current[:identity] if Thread.current[:identity] 
-      identity_id = SessionManager.identity_id_for_session(request.cookies[SessionManager::COOKIE_NAME])
+      identity_id = SessionManager.identity_id_for_session(params[:session] || request.cookies[SessionManager::COOKIE_NAME])
       Thread.current[:identity] = Identity.find_by_id(identity_id)
     end
 
@@ -24,6 +24,12 @@ class CheckpointV1 < Sinatra::Base
         :path => '/',
         :expires => Time.now + 1.year)
       Thread.current[:identity] = identity
+    end
+
+    def check_god_credentials(realm_id)
+      unless current_identity.try(:god?) && current_identity.realm_id == realm_id
+        halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).try(:label) || '[deleted]'}'-realm"
+      end
     end
   end
 

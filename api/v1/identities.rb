@@ -14,9 +14,9 @@ class CheckpointV1 < Sinatra::Base
 
   get '/identities/:id/accounts/:provider' do
     identity = identity_from_param(params[:id])
-    halt 403, "Will only provide keys for gods or self" unless current_identity.god? || current_identity == identity
+    identity == current_identity or check_god_credentials(identity.realm_id)
     @account = identity.accounts.where("provider = ?", params[:provider]).first
-    halt 404, "No keys for provider" unless @account && @account.authorized?
+    halt 404, "No keys for provider" unless @account.try(:authorized?)
     render :rabl, :account, :format => :json
   end
 

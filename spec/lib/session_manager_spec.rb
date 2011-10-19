@@ -15,7 +15,14 @@ describe SessionManager do
   end
 
   it "always returns nil for the nil key" do
-    SessionManager.redis.set(nil, "1234")
+    SessionManager.redis.set('session:', "1234")
     SessionManager.identity_id_for_session(nil).should be_nil
+  end
+
+  it "knows how to create a session that expires" do
+    key = SessionManager.new_session(1)
+    SessionManager.redis.ttl("session:#{key}").should eq -1
+    key = SessionManager.new_session(2, :expire => 1.hour)
+    SessionManager.redis.ttl("session:#{key}").should > 0
   end
 end
