@@ -8,6 +8,7 @@ gem 'omniauth', '~> 0.3.0'
 gem 'yajl-ruby', :require => "yajl"
 gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 gem "hiredis", "~> 0.3.1"
+gem 'rabl'
 
 group :development, :test do
   gem 'rspec', '~> 2.7.0.rc1'

@@ -52,10 +52,11 @@ describe "API v1/auth" do
     Thread.current[:identity] = me
     get "/identities/me"
     result = JSON.parse(last_response.body)
-    result['id'].should eq me.id
-    result['realm'].should eq me.realm.label
-    result['accounts'].should eq ['twitter']
-    profile = result['profile']
+    identity = result['identity']
+    identity['id'].should eq me.id
+    identity['realm'].should eq me.realm.label
+    identity['accounts'].should eq ['twitter']
+    profile = identity['profile']
     profile['provider'].should eq 'twitter'
     profile['nickname'].should eq 'nickname'
     profile['name'].should eq 'name'
@@ -71,32 +72,37 @@ describe "API v1/auth" do
   it "describes someone else as a json hash" do
     Thread.current[:identity] = me
     get "/identities/#{god.id}"
-    JSON.parse(last_response.body)['profile']['nickname'].should eq 'god'
+    JSON.parse(last_response.body)['identity']['id'].should eq god.id
   end
 
   it "hands me my keys" do
     Thread.current[:identity] = me
-    get "/identities/me/credentials/twitter"
-    result = JSON.parse(last_response.body)
-    result['identity'].should eq me.id
+    get "/identities/me/accounts/twitter"
+    result = JSON.parse(last_response.body)['account']
+    result['identity_id'].should eq me.id
     result['uid'].should eq '1'
     result['token'].should eq 'token'
     result['secret'].should eq 'secret'
     result['provider'].should eq 'twitter'
   end
 
-  it "refuses to hand me the keys of god" do
+  it "refuses to hand me the keys for someone else" do
     Thread.current[:identity] = me
-    get "/identities/#{god.id}/credentials/twitter"
+    get "/identities/#{god.id}/accounts/twitter"
     last_response.status.should eq 403
   end
 
   it "hands me anyones key if I'm god" do
     Thread.current[:identity] = god
-    get "/identities/#{me.id}/credentials/twitter"
-    result = JSON.parse(last_response.body)
+    get "/identities/#{me.id}/accounts/twitter"
+    result = JSON.parse(last_response.body)['account']
     result['uid'].should eq '1'
     result['token'].should eq 'token'
     result['secret'].should eq 'secret'
+  end
+
+  it "hands me my balls if I ask for current user when there is no current user" do
+    get "/identities/me"
+    last_response.status.should eq 404
   end
 end

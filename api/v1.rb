@@ -1,9 +1,11 @@
 # encoding: utf-8
 require "json"
 
-Dir.glob("#{File.dirname(__FILE__)}/v1/**").each{ |file| require file }
+Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
+  Rabl.register!
+
   after do
     Thread.current[:identity] = nil
   end
@@ -25,9 +27,4 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
-  get '/' do
-    <<-HTML
-      <a href='/api/v1/area51/auth/twitter'>Sign in with Twitter</a>
-    HTML
-  end
 end
