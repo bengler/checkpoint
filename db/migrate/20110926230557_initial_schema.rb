@@ -9,14 +9,6 @@ class InitialSchema < ActiveRecord::Migration
     end
     add_index :identities, :realm_id
 
-    create_table :orphaned_identities do |t|
-      t.integer :old_id
-      t.integer :identity_id
-      t.timestamps
-    end
-    add_index :orphaned_identities, :old_id
-    add_index :orphaned_identities, :identity_id
-
     create_table :realms do |t|
       t.text :title
       t.text :label, :null => false

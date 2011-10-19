@@ -134,22 +134,7 @@ describe Account do
       account1.identity.should_not eq account2.identity
     end
 
-    it "orphans an identity when an account is attached to a different identity" do
-      # Create two different identitites for the same physical person
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account2 = Account.declare_with_omniauth(facebook_auth, :realm => realm)
-      # This identity is about to be terminated
-      old_identity = account1.identity
-      # Attach the twitter account to the identity formerly having just a FB-account. 
-      # The identity formerly associated with that account will be orphaned and merged
-      account3 = Account.declare_with_omniauth(twitter_auth, :identity => account2.identity)      
-      account2.identity.should eq account3.identity
-      account2.identity.should_not eq old_identity
-      # Check that a reference from the orphaned identity to the current identity has been stored
-      OrphanedIdentity.find_by_old_id(old_identity.id).identity.should eq account3.identity
-      # Check that the account object was not reused when reattaching to a new identity
-      account1.id.should_not eq account3.id
-    end
+    it "is cannot be bound to a new identity if it is already bound to another"
 
     it "sets a primary account when the identity is first created" do
       account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)      
