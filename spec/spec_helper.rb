@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'mock_redis'
+require 'logger'
 
 SimpleCov.add_filter 'spec'
 SimpleCov.add_filter 'config'

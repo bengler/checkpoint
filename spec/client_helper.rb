@@ -1,5 +1,0 @@
-require 'spec_helper'
-require './lib/loggable'
-require './app/clients/facebook_client'
-require './app/clients/origo_client'
-require './app/clients/twitter_client'

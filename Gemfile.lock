@@ -17,7 +17,6 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.6)
     arel (2.2.1)
-    attr_required (0.0.3)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
     capistrano (2.5.19)
@@ -28,32 +27,15 @@ GEM
       net-ssh-gateway (>= 1.0.0)
     capistrano-ext (1.2.1)
       capistrano (>= 1.0.0)
-    chunky_png (1.2.5)
-    compass (0.11.5)
-      chunky_png (~> 1.2)
-      fssm (>= 0.2.7)
-      sass (~> 3.1)
     crack (0.3.1)
-    daemons (1.1.4)
     diff-lcs (1.1.3)
-    eventmachine (0.12.10)
     faraday (0.7.5)
       addressable (~> 2.2.6)
       multipart-post (~> 1.1.3)
       rack (>= 1.1.0, < 2)
-    faraday_middleware (0.7.0)
-      faraday (~> 0.7.3)
-    fb_graph (2.1.10)
-      httpclient (>= 2.2.0.2)
-      rack-oauth2 (>= 0.9.4)
-    fssm (0.2.7)
-    haml (3.1.1)
-    hashie (1.1.0)
     highline (1.6.2)
     hiredis (0.3.2)
-    httpclient (2.2.1)
     i18n (0.6.0)
-    json (1.6.1)
     log4r (1.1.9)
     macaddr (1.4.0)
       systemu (~> 2.2.0)
@@ -62,8 +44,6 @@ GEM
     multi_json (1.0.3)
     multi_xml (0.4.1)
     multipart-post (1.1.3)
-    nest (1.1.0)
-      redis (~> 2.1)
     net-ldap (0.2.2)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -105,8 +85,6 @@ GEM
     oauth2 (0.5.1)
       faraday (~> 0.7.4)
       multi_json (~> 1.0.3)
-    ohm (0.1.3)
-      nest (~> 1.0)
     omniauth (0.3.0)
       oa-basic (= 0.3.0)
       oa-core (= 0.3.0)
@@ -117,13 +95,6 @@ GEM
     pg (0.11.0)
     pyu-ruby-sasl (0.0.3.3)
     rack (1.3.4)
-    rack-oauth2 (0.11.0)
-      activesupport (>= 2.3)
-      attr_required (>= 0.0.3)
-      httpclient (>= 2.2.0.2)
-      i18n
-      json (>= 1.4.3)
-      rack (>= 1.1)
     rack-openid (1.3.1)
       rack (>= 1.1.0)
       ruby-openid (>= 2.1.8)
@@ -146,8 +117,6 @@ GEM
     ruby-openid-apps-discovery (1.2.0)
       ruby-openid (>= 2.1.7)
     rubyntlm (0.1.1)
-    sass (3.1.8)
-    simple_oauth (0.1.5)
     simplecov (0.5.3)
       multi_json (~> 1.0.3)
       simplecov-html (~> 0.5.3)
@@ -159,22 +128,9 @@ GEM
     sinatra-activerecord (0.1.3)
       sinatra (>= 0.9.4)
     systemu (2.2.0)
-    thin (1.2.7)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
-    thor (0.14.6)
     tilt (1.3.3)
     timecop (0.3.5)
-    twitter (1.7.2)
-      faraday (~> 0.7.4)
-      faraday_middleware (~> 0.7.0)
-      hashie (~> 1.1.0)
-      multi_json (~> 1.0.0)
-      multi_xml (~> 0.4.0)
-      simple_oauth (~> 0.1.5)
     tzinfo (0.3.30)
-    unicode_utils (1.0.0)
     uuid (2.3.4)
       macaddr (~> 1.0)
     vcr (1.11.3)
@@ -188,16 +144,10 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-  bundler
   capistrano (= 2.5.19)
   capistrano-ext (= 1.2.1)
-  compass
-  fb_graph
-  haml (= 3.1.1)
   hiredis (~> 0.3.1)
-  i18n
   mock_redis
-  ohm
   omniauth (~> 0.3.0)
   pg
   rack-test
@@ -206,11 +156,7 @@ DEPENDENCIES
   simplecov
   sinatra
   sinatra-activerecord
-  thin (= 1.2.7)
-  thor (= 0.14.6)
   timecop
-  twitter
-  unicode_utils (~> 1.0.0)
   vcr
   webmock
   yajl-ruby
