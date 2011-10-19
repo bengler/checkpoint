@@ -1,5 +1,7 @@
 class Account < ActiveRecord::Base
 
+  class InUseError < Exception; end
+
   belongs_to :identity
   belongs_to :realm
 
@@ -30,7 +32,7 @@ class Account < ActiveRecord::Base
 
       account = find_by_provider_and_realm_id_and_uid(attributes[:provider], attributes[:realm_id], attributes[:uid])
       if account && account.identity != identity
-        account = nil
+        raise Account::InUseError.new('This account is already bound to a different identity.')
       end
 
       account ||= new(attributes)

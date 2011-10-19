@@ -134,17 +134,27 @@ describe Account do
       account1.identity.should_not eq account2.identity
     end
 
-    it "is cannot be bound to a new identity if it is already bound to another"
+    it "cannot be bound to an identity if it already is attached to another" do
+      # Create two different identitites for the same physical person
+      account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
 
-    it "sets a primary account when the identity is first created" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)      
-      account1.identity.primary_account.should eq account1      
-      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)      
-      account1.identity.primary_account.should eq account1            
+      # Try to attach the twitter account to the identity formerly having just a FB-account.
+      lambda {
+        Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
+      }.should raise_error(Account::InUseError)
     end
 
-    it "unsets primary_account when an account is deleted" do 
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)      
+
+    it "sets a primary account when the identity is first created" do
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account1.identity.primary_account.should eq account1
+      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
+      account1.identity.primary_account.should eq account1
+    end
+
+    it "unsets primary_account when an account is deleted" do
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
       identity = account1.identity
       identity.reload
       identity.primary_account.should eq account1
