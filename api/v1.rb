@@ -9,15 +9,6 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do 
-    def api_version
-      @api_version ||= self.class.name.scan(/\d+$/).first
-    end
-
-    def api_path(path)
-      path = "/#{path}" unless path[0] == '/'
-      "/api/v#{api_version}#{path}"
-    end
-
     def current_identity
       return Thread.current[:identity] if Thread.current[:identity] 
       identity_id = SessionManager.identity_id_for_session(cookie[SessionManager.COOKIE_NAME])
@@ -32,7 +23,6 @@ class CheckpointV1 < Sinatra::Base
         :expires => Time.now + 1.year)
       Thread.current[:identity] = identity
     end
-
   end
 
   get '/' do
@@ -44,5 +34,4 @@ class CheckpointV1 < Sinatra::Base
       <a href='/api/v1/auth/twitter'>Sign in with Twitter</a>
     HTML
   end
-
 end

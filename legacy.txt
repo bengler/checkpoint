@@ -1,0 +1,10 @@
+def api_version
+  @api_version ||= self.class.name.scan(/\d+$/).first
+end
+
+def api_path(path)
+  path = "/#{path}" unless path[0] == '/'
+  "/api/v#{api_version}#{path}"
+end
+
+
