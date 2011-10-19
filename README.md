@@ -1,33 +1,10 @@
-Keeper of Gates
+= Checkpoint
+
 Centralized identity store and authentication broker for realms against external providers such as facebook and twitter.
-Acts as a persistent atomic cache for realms through different web services, limited to what the individual gates need to operate responsive at the moment, and what the user allows.
 
-When we think of an Identity within the Realm it's a real person somewhere, and not necessarily a user within our system (yet).
+An identity is a keychain, which holds a single person's keys to  many different accounts. For the moment, accounts are providers set up through omniauth, but we expect to expand on this such that a verified mobile number and/or a verified email address is also an account belonging to the identity.
 
-An identity is all about authentications initiated by that person, on how exposed that person want's to be within the actual realm.
-
-If a person uses both Facebook and Twitter, it's still just one person (Identity), and this person will have a local profile for each of these providers, caching relevant data.
-
-There are different kinds of people (robots are people too!)
-
-```
-Species::Robot = -1
-Species::Stub = 0
-Species::User = 1
-Species::Admin = 2
-Species::God = 9
-```
-
-### It's more important to have an authentication with an access_token for that user...
-
-...to a spesific data source. Then we can collect data about this user at any time,
-and make them available fast in the Redis storage. Key data (uids'n'stuff) are
-saved in postgres though. 
-
-Data put into Redis must always be recreateable from postgres data or third party API's!
-
-The point of Redis storage is to make collections and atomic data available fast, and keep
-them permanent just as long as we need to.
+If a person uses both Facebook and Twitter, it's still just one person (Identity), and this person will have a local profile for each of these providers, caching relevant data (name, url to the profile, url to the profile image).
 
 ## Installation
 
@@ -39,9 +16,11 @@ them permanent just as long as we need to.
 
 ### Set up database
 
-thor development:setup
+    rake db:bootstrap
+    rake db:seed
+    rake db:test:prepare
 
-This creates the postgreSQL user for the project. Notice how we're giving the user not only superpowers, but the ability to create databases. This is for automated testing purposes
+This creates the postgreSQL user for the project. Notice how we're giving the user not only superpowers, but the ability to create databases. This is for automated testing purposes.
 
 ### Pagackes and dependencies
 
@@ -51,26 +30,12 @@ RVM will handle all gems.
 For development on Mac / Ports in order to get SSL working properly you
 must set the following env. variable: export RUBYOPT='-r openssl
 
-#### Testing
-Katrina, help! :)
 
 #### Production
 See debian info below
 
-#### Services
-There are some background tasks that always should be running:
-
-* rake jobs:work (process all delayed jobs)
-
-In production mode these should be monitored (see Monit configurations)
-
-#### Tasks
-Refer to ```thor -T``` and ```rake -T```
-There is also a cron helper (Wheneverize) installed.
-Take a look in ```/config/schedule.rb```
-
 #### Server configurations
-Depends on Rails 3, Postgres, Redis Server
+Depends on Sinatra, Postgres, Redis Server
 
 ##### Linux (Ubuntu) setup
 
@@ -109,9 +74,6 @@ Install packages:
   cd rubygems-1.5.2
   sudo ruby setup.rb
   sudo gem install bundler
-  sudo gem install thor
-  sudo gem install daemonizer ##
-  sudo gem install daemons
 
   sudo rvm --default use 1.9.2-p290
 
@@ -149,11 +111,6 @@ dbfilename /srv/checkpoint/shared/redis/checkpoint.rdb
 logfile /srv/checkpoint/shared/log/redis.log
 ```
 
-####### Monit
-
-Configs for daemons can be found in /config/monit.conf
-
-
 ## Notes
 
 * openID auths have problems with the Webrick server
@@ -164,23 +121,6 @@ Configs for daemons can be found in /config/monit.conf
     * http://stackoverflow.com/questions/6046453/rails-3-with-mysql-and-omniauth-bug-segmentation-fault
     * http://stackoverflow.com/questions/3977303/omniauth-facebook-certificate-verify-failed
     * http://redmine.ruby-lang.org/issues/4373
-
-* Delayed Job + Puppet / Monit / Whenever / CronD
-  See ./script/delayed_job, ./config/initializers/delayed_job and ./config/schedule.rb
-  * http://rubydoc.info/gems/delayed_job/
-  * https://github.com/javan/whenever
-  * http://asciicasts.com/episodes/171-delayed-job
-  * http://stackoverflow.com/questions/1226302/how-to-monitor-delayed-job-with-monit
-  * http://gist.github.com/175866
-  * https://github.com/collectiveidea/delayed_job/issues/7
-  * http://www.bencurtis.com/2011/04/auto-spawning-delayed-job-workers/
-
-
-### Ohm
-  * http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/
-  
-### GeoKit
-  * https://github.com/andre/geokit-gem
 
 ## Links (not yet sorted)  
 * https://github.com/intridea/omniauth/wiki/Dynamic-Providers
@@ -207,26 +147,7 @@ Configs for daemons can be found in /config/monit.conf
 * http://www.ubuntugeek.com/monitoring-ubuntu-services-using-monit.html
 * http://css3wizardry.com/2010/07/13/css3-page-flips/
 
+## Authors
 
-## TODO:
-* Dereference Person data (Redis) after user destroy / make auth/terminate clean up data in redis storage.
-* Fix No route matches "/auth/google/callback" and that whole weird open auth business.
-* Make a /apps/1/terms/ (something) (priv.pol. etc) to show a custom priv.policy for the app.
-* Play with https://github.com/jnunemaker/twitter and especially geo data tweets (TwitterClient).
-
-And of course (!):
-
-* + grep for TODO: in the project
-
-## Greetinx!
-
-* Alex 4 p2p!
-* Simen for the thinking of Users as Identitys in Origo.
-* Everyone involved in any software or code which this humble project depends on.
-* Please check out the links!
-
-## Author
-Per-Kristian Nordnes
-Origogruppen AS
-https://github.com/skogsmaskin
-http://origo.no
+Per-Kristian Nordnes and
+git log --format="%an" | sort | uniq
