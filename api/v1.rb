@@ -33,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def current_realm
-      @realm ||= Realm.find_by_url(request.host)
+      Thread.current[:realm] ||= Realm.find_by_url(request.host)
     end
 
   end
