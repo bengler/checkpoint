@@ -43,12 +43,18 @@ class CheckpointV1 < Sinatra::Base
   get '/auth/:provider/callback' do
     realm = Realm.find_by_label(session[:realm])
     return halt(500, "Realm not specified in session") unless realm
-    account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm, :identity => current_identity)
-    set_current_identity(account.identity)
+
+    begin
+      account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm, :identity => current_identity)
+      set_current_identity(account.identity)
+    rescue Account::InUseError => e
+      redirect '/login/failed?message=account_in_use'
+    end
+
     if session[:redirect_to]
-      redirect to(session[:redirect_to])
+      redirect session[:redirect_to]
     else
-      redirect to('/login/succeeded')
+      redirect '/login/succeeded'
     end
   end
 

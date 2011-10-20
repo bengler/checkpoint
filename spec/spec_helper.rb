@@ -3,7 +3,6 @@ require 'mock_redis'
 
 SimpleCov.add_filter 'spec'
 SimpleCov.add_filter 'config'
-SimpleCov.add_filter 'legacy'
 SimpleCov.start
 
 $:.unshift(File.dirname(File.dirname(__FILE__)))
