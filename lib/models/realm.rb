@@ -9,7 +9,7 @@ class Realm < ActiveRecord::Base
 
   def self.find_by_url(url)
     result = nil
-    DomainSection.new(url).variants.each do |domain|
+    Domain.search_strings_for_url(url) do |domain|
       result = joins(:domains).where('domains.name = ?', domain).first
       break if result
     end
