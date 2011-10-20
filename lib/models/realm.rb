@@ -8,12 +8,10 @@ class Realm < ActiveRecord::Base
   validates_uniqueness_of :label, :allow_nil => false
 
   def self.find_by_url(url)
-    result = nil
     search_strings_for_url(url) do |domain|
       result = joins(:domains).where('domains.name = ?', domain).first
-      break if result
+      return result if result
     end
-    result
   end
 
   def external_service_keys
