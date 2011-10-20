@@ -29,6 +29,7 @@ set :environment, :test
 RSpec.configure do |c|
   c.mock_with :rspec
   c.around(:each) do |example|
+    clear_cookies if respond_to?(:clear_cookies)
     SessionManager.connect(MockRedis.new)
     ActiveRecord::Base.connection.transaction do
       example.run 
