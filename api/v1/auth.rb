@@ -51,4 +51,9 @@ class CheckpointV1 < Sinatra::Base
       redirect to('/login/succeeded')
     end
   end
+
+  get '/logout' do
+    response.delete_cookie(SessionManager::COOKIE_NAME)
+    redirect request.referer
+  end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'base64'
 
 class TestCheckpointV1 < CheckpointV1
-  use Rack::Session::Cookie, :key => 'checkpoint.identity',
+  use Rack::Session::Cookie, :key => 'checkpoint.session',
     :expire_after => 2592000, # In seconds
     :secret => 'ice cream sandwich'
 
@@ -30,7 +30,7 @@ describe "API v1/auth" do
     Realm.stub(:find_by_label => stub)
     get "/test_realm/auth/twitter?redirect_to=http://example.com"
     last_response.status.should eq 302
-    decode_cookie(rack_mock_session.cookie_jar['checkpoint.identity'])['redirect_to'].should eq 'http://example.com'
+    decode_cookie(rack_mock_session.cookie_jar['checkpoint.session'])['redirect_to'].should eq 'http://example.com'
   end
 
   context "with a successful authentication" do
