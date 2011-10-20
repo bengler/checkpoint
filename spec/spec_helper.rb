@@ -12,6 +12,7 @@ ENV["RACK_ENV"] = "test"
 require 'config/environment'
 
 require 'api/v1'
+
 require 'rack/test'
 require 'config/logging'
 
