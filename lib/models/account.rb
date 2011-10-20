@@ -15,8 +15,7 @@ class Account < ActiveRecord::Base
     # in the options. E.g.:
     #     Account.declare_with_omniauth(auth, :realm => current_realm) # creates a new user
     #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
-    # If the account was previously attached to an identity, it will be moved to this identity and the former identity
-    # will be scrapped along with any account it may have had. So there.
+    # If the account was previously attached to an identity, an InUseError exception will be raised.
     def declare_with_omniauth(auth_data, options = {})
       identity = options[:identity]
       unless identity
