@@ -103,6 +103,13 @@ describe Realm do
         Realm.send(:search_strings_for_url, 'foo.bar.baz.example.org') { |variant| variants << variant }
         variants.should eq(['example.org', 'baz.example.org', 'bar.baz.example.org', 'foo.bar.baz.example.org'])
       end
+
+      it "handles domains followed by a path" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'example.org/some/page') { |variant| variants << variant }
+        variants.should eq(['example.org'])
+      end
+
     end
   end
 end
