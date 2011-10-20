@@ -28,6 +28,10 @@ module SessionManager
     @redis.del("session:#{key}")
   end
 
+  def self.persist_session(key)
+    @redis.persist("session:#{key}")
+  end
+
   def self.redis
     @redis
   end

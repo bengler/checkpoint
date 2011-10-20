@@ -19,10 +19,13 @@ describe SessionManager do
     SessionManager.identity_id_for_session(nil).should be_nil
   end
 
-  it "knows how to create a session that expires" do
+  it "knows how to create a session that expires and how to persist one" do
     key = SessionManager.new_session(1)
+    # The default is just a very long lived session
     SessionManager.redis.ttl("session:#{key}").should > 1000000
-    key = SessionManager.new_session(2, :expire => 1.hour)
+    key = SessionManager.new_session(2, :expire => 1.hour)    
     SessionManager.redis.ttl("session:#{key}").should <= 1.hour
+    SessionManager.persist_session(key)
+    SessionManager.redis.ttl("session:#{key}").should eq -1
   end
 end

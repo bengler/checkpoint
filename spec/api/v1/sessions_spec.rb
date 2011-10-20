@@ -66,4 +66,12 @@ describe "API v1/auth" do
     last_response.status.should eq 404
   end
 
+  it "lets me persist sessions" do
+    post "/sessions", :identity_id => someone.id, :session => somegod_session
+    key = JSON.parse(last_response.body)['session']
+    SessionManager.redis.ttl("session:#{key}").should > 0
+    post "/sessions/#{key}/persist", :session => somegod_session
+    SessionManager.redis.ttl("session:#{key}").should eq -1
+  end
+
 end
