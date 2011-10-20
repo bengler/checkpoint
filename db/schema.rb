@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
     t.integer "realm_id"
   end
 
+  add_index "domains", ["name"], :name => "index_domains_on_name", :unique => true
+  add_index "domains", ["realm_id"], :name => "index_domains_on_realm_id"
+
   create_table "identities", :force => true do |t|
     t.integer  "realm_id",                              :null => false
     t.integer  "primary_account_id"
