@@ -72,5 +72,37 @@ describe Realm do
         Realm.find_by_url('example.org').should be_nil
       end
     end
+
+    context "domain search string factory" do
+      it "handles bare domains" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'example.org') { |variant| variants << variant }
+        variants.should eq(['example.org'])
+      end
+
+      it "strips off http://" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'http://example.org') { |variant| variants << variant }
+        variants.should eq(['example.org'])
+      end
+
+      it "strips off https://" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'https://example.org') { |variant| variants << variant }
+        variants.should eq(['example.org'])
+      end
+
+      it "handles sub domain" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'www.example.org') { |variant| variants << variant }
+        variants.should eq(['example.org', 'www.example.org'])
+      end
+
+      it "handles bare domains with many segments" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'foo.bar.baz.example.org') { |variant| variants << variant }
+        variants.should eq(['example.org', 'baz.example.org', 'bar.baz.example.org', 'foo.bar.baz.example.org'])
+      end
+    end
   end
 end
