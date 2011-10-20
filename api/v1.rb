@@ -11,9 +11,13 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do 
+    def current_session
+      params[:session] || request.cookies[SessionManager::COOKIE_NAME]
+    end
+
     def current_identity
       return Thread.current[:identity] if Thread.current[:identity] 
-      identity_id = SessionManager.identity_id_for_session(params[:session] || request.cookies[SessionManager::COOKIE_NAME])
+      identity_id = SessionManager.identity_id_for_session(current_session)
       Thread.current[:identity] = Identity.find_by_id(identity_id)
     end
 
