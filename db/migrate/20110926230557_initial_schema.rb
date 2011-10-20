@@ -17,6 +17,13 @@ class InitialSchema < ActiveRecord::Migration
     end
     add_index :realms, :label, :unique => true
 
+    create_table :domains do |t|
+      t.text :name
+      t.integer :realm_id
+    end
+    add_index :domains, :name, :unique => true
+    add_index :domains, :realm_id
+
     create_table :accounts do |t|
       t.integer :identity_id
       t.integer :realm_id, :null => false

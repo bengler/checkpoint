@@ -34,6 +34,11 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
 
   add_index "accounts", ["provider", "identity_id", "uid"], :name => "account_uniqueness_index", :unique => true
 
+  create_table "domains", :force => true do |t|
+    t.text    "name"
+    t.integer "realm_id"
+  end
+
   create_table "identities", :force => true do |t|
     t.integer  "realm_id",                              :null => false
     t.integer  "primary_account_id"
@@ -44,16 +49,6 @@ ActiveRecord::Schema.define(:version => 20110926230557) do
   end
 
   add_index "identities", ["realm_id"], :name => "index_identities_on_realm_id"
-
-  create_table "orphaned_identities", :force => true do |t|
-    t.integer  "old_id"
-    t.integer  "identity_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "orphaned_identities", ["identity_id"], :name => "index_orphaned_identities_on_identity_id"
-  add_index "orphaned_identities", ["old_id"], :name => "index_orphaned_identities_on_old_id"
 
   create_table "realms", :force => true do |t|
     t.text     "title"

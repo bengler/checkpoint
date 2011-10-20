@@ -3,6 +3,7 @@ class Realm < ActiveRecord::Base
 
   has_many :accounts
   has_many :identities
+  has_many :domains
 
   validates_uniqueness_of :label, :allow_nil => false
 
