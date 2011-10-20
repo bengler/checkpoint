@@ -1,25 +1,21 @@
 class CheckpointV1 < Sinatra::Base
 
-  get '/:realm/auth/:provider' do
-    realm = Realm.find_by_label(params[:realm])
-    halt 404, "Unknown realm #{params[:realm]}" unless realm
-    session[:realm] = params[:realm]
+  get '/login/:provider' do
+    halt 404, "Unknown realm #{request.host}" unless current_realm
     session[:redirect_to] = params[:redirect_to] if params[:redirect_to]
     redirect to("/auth/#{params[:provider]}")
   end
 
   # This is called directly by Omniauth as a rack method
   # (not HTTP, mkay?) to allow us to setup
-  # the strategy. Unfortunately I did not find a way to
-  # provide the realm with the url, so it is passed through
-  # the session. Yuck!
+  # the strategy.
   #
   # Oh, and by the way:
   # OMNIAUTH SWALLOWS ALL HTTP ERRORS AND EXCEPTIONS.
   get '/auth/:provider/setup' do
+
     strategy = request.env['omniauth.strategy']
-    realm = Realm.find_by_label(session[:realm])
-    service_keys = realm.keys_for(params[:provider].to_sym)
+    service_keys = current_realm.keys_for(params[:provider].to_sym)
 
     if strategy.respond_to?(:consumer_key)
       strategy.consumer_key = service_keys.consumer_key
@@ -41,11 +37,10 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/:provider/callback' do
-    realm = Realm.find_by_label(session[:realm])
-    return halt(500, "Realm not specified in session") unless realm
+    return halt(500, "Realm not specified in session") unless current_realm
 
     begin
-      account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => realm, :identity => current_identity)
+      account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm, :identity => current_identity)
       set_current_identity(account.identity)
     rescue Account::InUseError => e
       redirect '/login/failed?message=account_in_use'

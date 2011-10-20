@@ -31,6 +31,11 @@ class CheckpointV1 < Sinatra::Base
         halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).try(:label) || '[deleted]'}'-realm"
       end
     end
+
+    def current_realm
+      @realm ||= Realm.find_by_url(request.host)
+    end
+
   end
 
 end

@@ -7,6 +7,15 @@ class Realm < ActiveRecord::Base
 
   validates_uniqueness_of :label, :allow_nil => false
 
+  def self.find_by_url(url)
+    result = nil
+    DomainSection.new(url).variants.each do |domain|
+      result = joins(:domains).where('domains.name = ?', domain).first
+      break if result
+    end
+    result
+  end
+
   def external_service_keys
     keys = YAML.load(self.service_keys)
     raise "Missing or malformed configuration for #<Realm:#{id} #{label}>" unless keys
