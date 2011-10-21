@@ -8,6 +8,7 @@ class CheckpointV1 < Sinatra::Base
 
   after do
     Thread.current[:identity] = nil
+    Thread.current[:realm] = nil
   end
 
   helpers do 

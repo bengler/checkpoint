@@ -4,7 +4,7 @@ gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'activerecord', :require => 'active_record'
 gem 'pg'
-gem 'omniauth', '~> 0.2.6'
+gem 'omniauth', '~> 0.3'
 gem 'yajl-ruby', :require => "yajl"
 gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 gem "hiredis", "~> 0.3.1"
