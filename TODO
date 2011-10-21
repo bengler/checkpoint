@@ -1,7 +1,1 @@
-You create an account, and pass in the identity it should be joined with.
-If no identity is passed in, you get a new one.
-
-When you update an account, you can pass in a new identity.
-If there is an old identity, this one gets orphaned.
-
-Identity knows how to orphan itself (create entry in orphan table, then nuke original)
+Modify the session reset action to run before instead of after the request. (Involves refactoring identities_spec.rb to use session vairables)
