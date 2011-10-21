@@ -113,4 +113,5 @@ describe "API v1/auth" do
     identity = JSON.parse(last_response.body)['identity']
     identity['id'].should eq me.id
   end
+
 end

@@ -91,4 +91,13 @@ describe "API v1/auth" do
     last_response.status.should eq 403
   end
 
+  it "can tell me which realm I'm on" do
+    get "/realms/current"
+    JSON.parse(last_response.body)['realm'].should eq nil
+    realm = Realm.create!(:label => 'area51')
+    Domain.create!(:name => 'example.org', :realm => realm)
+    get "/realms/current"
+    JSON.parse(last_response.body)['realm']['label'].should eq 'area51'
+  end
+
 end

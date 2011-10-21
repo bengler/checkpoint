@@ -12,7 +12,9 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/realms/current' do
-    current_realm.try(:label)
+    @realm = current_realm 
+    halt 200, "{}" unless @realm
+    render :rabl, :realm, :format => :json
   end
 
   get '/realms/:label' do
