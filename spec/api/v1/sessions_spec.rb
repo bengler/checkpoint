@@ -69,7 +69,7 @@ describe "API v1/auth" do
   it "lets me kill other sessions at will" do
     delete "/sessions/#{someone_session}", :session => somegod_session
     get "/identities/me", :session => someone_session
-    last_response.status.should eq 404
+    last_response.body.should eq '{}'
   end
 
   it "lets me persist sessions" do

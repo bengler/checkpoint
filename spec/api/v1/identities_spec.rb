@@ -27,7 +27,6 @@ describe "API v1/auth" do
       :image_url => 'image_url')
     identity.primary_account = account
     identity.save!
-    Thread.current[:identity] = identity
     identity
   end
 
@@ -48,9 +47,22 @@ describe "API v1/auth" do
     identity
   end
 
+  let :me_session do
+    SessionManager.new_session(me.id)
+  end
+
+  let :god_session do
+    SessionManager.new_session(god.id)
+  end
+
+  it "is possible to set current session with a http parameter" do 
+    get "/identities/me", :session => me_session
+    identity = JSON.parse(last_response.body)['identity']
+    identity['id'].should eq me.id
+  end
+
   it "describes me as a json hash" do
-    Thread.current[:identity] = me
-    get "/identities/me"
+    get "/identities/me", :session => me_session
     result = JSON.parse(last_response.body)
     identity = result['identity']
     identity['id'].should eq me.id
@@ -63,21 +75,18 @@ describe "API v1/auth" do
     profile['profile_url'].should eq 'profile_url'
     profile['image_url'].should eq 'image_url'
     # And the result is the same if I ask for me by id
-    Thread.current[:identity] = me
     former_response_body = last_response.body
-    get "/identities/#{me.id}"
+    get "/identities/#{me.id}", :session => me_session
     last_response.body.should eq former_response_body
   end
 
   it "describes someone else as a json hash" do
-    Thread.current[:identity] = me
-    get "/identities/#{god.id}"
+    get "/identities/#{god.id}", :session => me_session
     JSON.parse(last_response.body)['identity']['id'].should eq god.id
   end
 
   it "hands me my keys" do
-    Thread.current[:identity] = me
-    get "/identities/me/accounts/twitter"
+    get "/identities/me/accounts/twitter", :session => me_session
     result = JSON.parse(last_response.body)['account']
     result['identity_id'].should eq me.id
     result['uid'].should eq '1'
@@ -87,14 +96,12 @@ describe "API v1/auth" do
   end
 
   it "refuses to hand me the keys for someone else" do
-    Thread.current[:identity] = me
-    get "/identities/#{god.id}/accounts/twitter"
+    get "/identities/#{god.id}/accounts/twitter", :session => me_session
     last_response.status.should eq 403
   end
 
   it "hands me anyones key if I'm god" do
-    Thread.current[:identity] = god
-    get "/identities/#{me.id}/accounts/twitter"
+    get "/identities/#{me.id}/accounts/twitter", :session => god_session
     result = JSON.parse(last_response.body)['account']
     result['uid'].should eq '1'
     result['token'].should eq 'token'
@@ -103,15 +110,7 @@ describe "API v1/auth" do
 
   it "hands me my balls if I ask for current user when there is no current user" do
     get "/identities/me"
-    last_response.status.should eq 404
-  end
-
-  it "is possible to set current session with a http parameter" do 
-    key = SessionManager.new_session(me)
-    get "/identities/me", :session => key
-    last_response.body
-    identity = JSON.parse(last_response.body)['identity']
-    identity['id'].should eq me.id
+    last_response.body.should eq "{}"
   end
 
 end
