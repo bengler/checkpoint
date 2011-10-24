@@ -41,7 +41,7 @@ class CheckpointV1 < Sinatra::Base
 
     begin
       account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm, :identity => current_identity)
-      set_current_identity(account.identity)
+      log_in(account.identity)
     rescue Account::InUseError => e
       redirect '/login/failed?message=account_in_use'
     end

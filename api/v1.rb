@@ -16,7 +16,7 @@ class CheckpointV1 < Sinatra::Base
       @current_identity = Identity.find_by_id(SessionManager.identity_id_for_session(current_session))
     end
 
-    def set_current_identity(identity)
+    def log_in(identity)
       return if current_identity == identity
       key = SessionManager.new_session(identity.id)
       response.set_cookie(SessionManager::COOKIE_NAME, :value => key,
