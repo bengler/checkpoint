@@ -138,6 +138,35 @@ dbfilename /srv/checkpoint/shared/redis/checkpoint.rdb
 logfile /srv/checkpoint/shared/log/redis.log
 ```
 
+## Links to oauth providers
+<table>
+    <tr>
+        <th>Provider</th>
+        <th>Administer API keys for apps</th>
+        <th>Administer authenticated apps</th>
+    </tr>
+    <tr>
+        <td>Origo</td>
+        <td>http://origo.no/-/admin/external_application</td>
+        <td>n/a</td>
+    </tr>
+    <tr>
+        <td>Google</td>
+        <td>https://code.google.com/apis/console/#:access</td>
+        <td>https://accounts.google.com/b/0/IssuedAuthSubTokens</td>
+    </tr>
+    <tr>
+        <td>Twitter</td>
+        <td>&lt;fill in&gt;</td>
+        <td>&lt;fill in&gt;</td>
+    </tr>
+    <tr>
+        <td>Facebook</td>
+        <td>&lt;fill in&gt;</td>
+        <td>&lt;fill in&gt;</td>
+    </tr>
+</table>
+
 ## Notes
 
 * openID auths have problems with the Webrick server
