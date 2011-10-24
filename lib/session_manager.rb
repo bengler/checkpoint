@@ -18,6 +18,7 @@ module SessionManager
     # The number of possible keys is approximately the number of atoms
     # in the observable universe multiplied by the number of atoms in
     # the observable universe.
+    srand
     rand(2**512).to_s(36)
   end
 
