@@ -1,6 +1,7 @@
 class CheckpointV1 < Sinatra::Base
   get '/sessions/:key' do
-    @identity = Identity.find(SessionManager.identity_id_for_session(params[:key]))
+    @identity = SessionManager.identity_for_session(params[:key])
+    halt 404, "No such session" unless @identity
     @identity == current_identity or check_god_credentials(@identity.realm_id)
     render :rabl, :identity, :format => :json
   end
@@ -15,14 +16,16 @@ class CheckpointV1 < Sinatra::Base
   end
 
   delete '/sessions/:key' do
-    identity = Identity.find(SessionManager.identity_id_for_session(params[:key]))
+    identity = SessionManager.identity_for_session(params[:key])
+    return unless identity
     identity == current_identity or check_god_credentials(identity.realm_id)
     SessionManager.kill_session(params[:key])
     { identity_id: identity.id }.to_json
   end
 
   post '/sessions/:key/persist' do
-    identity = Identity.find(SessionManager.identity_id_for_session(params[:key]))
+    identity = SessionManager.identity_for_session(params[:key])
+    halt 404, "No such session" unless identity
     identity == current_identity or check_god_credentials(identity.realm_id)
     SessionManager.persist_session(params[:key])
     { session: params[:key] }

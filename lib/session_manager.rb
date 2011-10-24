@@ -27,6 +27,10 @@ module SessionManager
     identity_id.to_i unless identity_id.nil?
   end
 
+  def self.identity_for_session(key)
+    Identity.find_by_id(identity_id_for_session(key))
+  end
+
   def self.kill_session(key)
     @redis.del("session:#{key}")
   end

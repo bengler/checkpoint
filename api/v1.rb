@@ -13,7 +13,7 @@ class CheckpointV1 < Sinatra::Base
 
     def current_identity
       return @current_identity if @current_identity
-      @current_identity = Identity.find_by_id(SessionManager.identity_id_for_session(current_session))
+      @current_identity = SessionManager.identity_for_session(current_session)
     end
 
     def log_in(identity)
