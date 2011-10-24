@@ -1,6 +1,14 @@
 module SessionManager
 
   COOKIE_NAME = "checkpoint.identity"
+  DEFAULT_SESSION_EXPIRY = 6.months
+
+  # A somewhat hacky way to load the identity rabl template
+  # outside a controller for use in 'update_identity_record'
+  @@identity_template = Rabl::Engine.new(
+    File.read(Sinatra::Application.root+'/api/v1/views/identity.rabl'), 
+    :format => 'json')
+
 
   def self.connect(redis = nil)
     @redis = redis || Redis.new
@@ -17,8 +25,14 @@ module SessionManager
     key = random_key
     redis_key = "session:#{key}"
     @redis.set(redis_key, identity_id)
-    @redis.expire(redis_key, options[:expire] || 6.months)
+    @redis.expire(redis_key, options[:expire] || DEFAULT_SESSION_EXPIRY)
     key
+  end
+
+  def self.update_identity_record(identity)
+    template_scope = Object.new; template_scope.instance_variable_set(:@identity, identity)
+    @redis.set("identity:#{identity.id}", 
+      @@identity_template.render(template_scope, {}))
   end
 
   def self.identity_id_for_session(key)

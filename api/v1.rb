@@ -22,6 +22,7 @@ class CheckpointV1 < Sinatra::Base
       response.set_cookie(SessionManager::COOKIE_NAME, :value => key,
         :path => '/',
         :expires => Time.now + 1.year)
+      SessionManager.update_identity_record(identity)
       @current_identity = identity
     end
 

@@ -28,4 +28,33 @@ describe SessionManager do
     SessionManager.persist_session(key)
     SessionManager.redis.ttl("session:#{key}").should eq -1
   end
+
+  it "can store central profile information in redis" do
+    realm = Realm.create!(:label => "realm")
+    identity = Identity.create!(:realm => realm)
+    account = Account.create!(:identity => identity,
+      :realm => realm,
+      :provider => 'twitter',
+      :uid => '1',
+      :token => 'token',
+      :secret => 'secret',
+      :nickname => 'nickname',
+      :name => 'name',
+      :profile_url => 'profile_url',
+      :image_url => 'image_url')
+    identity.primary_account = account
+    identity.save!
+    SessionManager.update_identity_record(identity)
+
+    result = JSON.parse(SessionManager.redis.get("identity:#{identity.id}"))['identity']
+    result['id'].should eq identity.id
+    result['realm'].should eq identity.realm.label
+    result['accounts'].should eq ['twitter']
+    profile = result['profile']
+    profile['provider'].should eq 'twitter'
+    profile['nickname'].should eq 'nickname'
+    profile['name'].should eq 'name'
+    profile['profile_url'].should eq 'profile_url'
+    profile['image_url'].should eq 'image_url'
+  end
 end
