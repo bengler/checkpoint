@@ -1,5 +1,5 @@
 object @identity
-attributes :id
+attributes :id, :god
 code(:realm) { @identity.realm.label }
 code(:accounts) { @identity.accounts.map(&:provider) }
 child @identity.primary_account => :profile do
