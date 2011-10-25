@@ -1,20 +1,15 @@
 class CheckpointV1 < Sinatra::Base
   helpers do 
     def find_realm_by_label(label)
-      realm = Realm.find_by_label(label)
-      halt 404, "Realm not found" unless realm
+      realm = current_realm if label == 'current'
+      realm ||= Realm.find_by_label(label)
+      halt 200, "{}" unless realm
       realm
     end
   end
 
   get '/realms' do
     { realms: Realm.all.map(&:label) }.to_json
-  end
-
-  get '/realms/current' do
-    @realm = current_realm 
-    halt 200, "{}" unless @realm
-    render :rabl, :realm, :format => :json
   end
 
   get '/realms/:label' do

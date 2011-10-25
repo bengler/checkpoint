@@ -26,6 +26,12 @@ class CheckpointV1 < Sinatra::Base
       @current_identity = identity
     end
 
+    def log_out
+      SessionManager.kill_session(current_session)
+      response.delete_cookie(SessionManager::COOKIE_NAME)
+      @current_identity = nil      
+    end
+
     def check_god_credentials(realm_id)
       unless current_identity.try(:god?) && current_identity.realm_id == realm_id
         halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).try(:label) || '[deleted]'}'-realm"
