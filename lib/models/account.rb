@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
   belongs_to :realm
 
   after_destroy :update_identity_primary_account
+  after_save :update_session_manager
 
   validates_presence_of :uid, :provider, :realm_id
 
@@ -60,7 +61,7 @@ class Account < ActiveRecord::Base
   end
 
   def primary?
-    identity.primary_account_id == self.id
+    identity.try(:primary_account_id) == self.id
   end
 
   def credentials
@@ -75,6 +76,10 @@ class Account < ActiveRecord::Base
     self.identity.primary_account = nil
     self.identity.ensure_primary_account
     self.identity.save!
+  end
+
+  def update_session_manager
+    SessionManager.update_identity_record(self.identity) if self.primary?
   end
 
 end

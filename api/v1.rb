@@ -22,7 +22,6 @@ class CheckpointV1 < Sinatra::Base
       response.set_cookie(SessionManager::COOKIE_NAME, :value => key,
         :path => '/',
         :expires => Time.now + 1.year)
-      SessionManager.update_identity_record(identity)
       @current_identity = identity
     end
 
@@ -34,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
 
     def check_god_credentials(realm_id)
       unless current_identity.try(:god?) && current_identity.realm_id == realm_id
-        halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).try(:label) || '[deleted]'}'-realm"
+        halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).label}'-realm"
       end
     end
 
