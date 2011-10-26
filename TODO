@@ -1,1 +1,0 @@
-Modify the session reset action to run before instead of after the request. (Involves refactoring identities_spec.rb to use session vairables)
