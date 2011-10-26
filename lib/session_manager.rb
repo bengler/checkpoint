@@ -1,6 +1,6 @@
 module SessionManager
 
-  COOKIE_NAME = "checkpoint.identity"
+  COOKIE_NAME = "checkpoint.session"
   DEFAULT_SESSION_EXPIRY = 6.months
 
   # A somewhat hacky way to load the identity rabl template
