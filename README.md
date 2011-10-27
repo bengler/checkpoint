@@ -5,15 +5,16 @@ Centralized authentication broker for web applications that supports a number of
 ## Concepts
 
 * Realm - the security context for your application. A given session is valid for a specific realm. Realms may span any number of services, but they should ideally be construed as a single coherent 'brand' in the mind of your users. An example realm could be "google" where all the services provided within the 'google' realm shared identities across services.
-* Domain - connected to a number of domains. Checkpoint looks at the current host domain to determine current realm when e.g. logging a user in.
+* Domain - A realm is connected to a number of domains (e.g. 'google' realm could be attached to the domains 'maps.google.com' and 'reader.google.com' and even 'youtube.com'). Checkpoint looks at the current host domain to determine the current realm when e.g. logging a user in.
 * Identity - represents one specific person. An identity may have a number of accounts.
-* Account - a verified account that can be used to log in to a specific identity.
-* Provider - a specific authentication mechanism, e.g. Twitter or Facebook.
+* Account - a verified account with a specific provider that can be used to log in to a specific identity.
+* Provider - refers to an authentication mechanism, e.g. Twitter or Facebook.
 
 ## Basic config
 
 To initiate authentication, you first need to have a realm with a domain set up for your application:
 
+    require './config/environment'
     realm = Realm.create!(:label => 'example')
     Domain.create!(:realm => realm, :name => 'example.org')
 
