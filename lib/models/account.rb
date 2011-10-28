@@ -18,19 +18,19 @@ class Account < ActiveRecord::Base
     #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
     # If the account was previously attached to an identity, an InUseError exception will be raised.
     def declare_with_omniauth(auth_data, options = {})
-      identity = options[:identity]
-      unless identity
-        raise ArgumentError, "Identity or realm must be specified" unless options[:realm]
-        identity ||= Identity.create!(:realm => options[:realm])
-      end
+      identity = options[:identity]      
+      raise ArgumentError, "Identity or realm must be specified" unless (options[:realm] || identity)
 
       attributes = {
         :provider => auth_data['provider'],
         :uid => auth_data['uid'],
-        :realm_id => identity.realm.id,
+        :realm_id => options[:realm].try(:id) || identity.realm.id,
       }
 
       account = find_by_provider_and_realm_id_and_uid(attributes[:provider], attributes[:realm_id], attributes[:uid])
+
+      identity ||= account.try(:identity) || Identity.create!(:realm => options[:realm])
+
       if account && account.identity != identity
         raise Account::InUseError.new('This account is already bound to a different identity.')
       end
