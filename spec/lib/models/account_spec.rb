@@ -122,6 +122,12 @@ describe Account do
       account.identity.should be_a_kind_of(Identity)
     end
 
+    it "declaring the same account twice should yield the same account with the same identity" do
+      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account2 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account1.identity.should eq account2.identity
+    end
+
     it "does not override existing identity" do
       account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
       account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
