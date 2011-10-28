@@ -1,1 +1,1 @@
-Proxed requests seems to come from checkpoint.dev. How to propagate information about real host in a secure fashion
+* Logging out does not remove the cookie.
