@@ -260,5 +260,11 @@ logfile /srv/checkpoint/shared/log/redis.log
 
 ## Authors
 
-Per-Kristian Nordnes and
-git log --format="%an" | sort | uniq
+    git log --format="%an" | sort | uniq
+
+Per-Kristian Nordnes
+Bjørge Næss
+Katrina Owen
+Simen Svale Skogsrud
+Thomas Drevon
+
