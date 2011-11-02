@@ -4,7 +4,11 @@ gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'activerecord', :require => 'active_record'
 gem 'pg'
-gem 'omniauth', '~> 0.3'
+gem 'omniauth', '~> 1.0.0.rc2'
+gem 'omniauth-facebook', '~> 1.0.0.rc1', :git => 'https://github.com/mkdynamic/omniauth-facebook.git'
+gem 'omniauth-contrib', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-contrib.git'
+gem 'omniauth-oauth', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-oauth.git'
+gem 'omniauth-origo', '~> 1.0.0.rc2', :git => 'https://github.com/origo/omniauth-origo.git'
 gem 'yajl-ruby', :require => "yajl"
 gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 gem "hiredis", "~> 0.3.1"
