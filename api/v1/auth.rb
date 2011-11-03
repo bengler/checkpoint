@@ -9,15 +9,16 @@ class CheckpointV1 < Sinatra::Base
   # This is called directly by Omniauth as a rack method
   # OMNIAUTH SWALLOWS ALL HTTP ERRORS AND EXCEPTIONS.
   get '/auth/:provider/setup' do
+
     strategy = request.env['omniauth.strategy']
     service_keys = current_realm.keys_for(params[:provider].to_sym)
 
-    if strategy.respond_to?(:consumer_key)
-      strategy.consumer_key = service_keys.consumer_key
-      strategy.consumer_secret = service_keys.consumer_secret
-    elsif strategy.respond_to?(:client_id)
-      strategy.client_id = service_keys.client_id
-      strategy.client_secret = service_keys.client_secret
+    if strategy.options.respond_to?(:consumer_key)
+      strategy.options.consumer_key = service_keys.consumer_key
+      strategy.options.consumer_secret = service_keys.consumer_secret
+    elsif strategy.options.respond_to?(:client_id)
+      strategy.options.client_id = service_keys.client_id
+      strategy.options.client_secret = service_keys.client_secret
     else
       halt 500, "Invalid strategy for provider: #{params[:provider]}"
     end
