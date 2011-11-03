@@ -13,6 +13,7 @@ class Account < ActiveRecord::Base
   class << self
     # Creates or updates an account from auth data as provided by
     # omniauth. An existing identity or a realm must be provided
+    # see https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema for an overview of the data omniauth provides
     # in the options. E.g.:
     #     Account.declare_with_omniauth(auth, :realm => current_realm) # creates a new user
     #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
@@ -40,12 +41,12 @@ class Account < ActiveRecord::Base
         :identity =>     identity,
         :token =>        auth_data['credentials']['token'],
         :secret =>       auth_data['credentials']['secret'],
-        :nickname =>     auth_data['user_info']['nickname'],
-        :name =>         auth_data['user_info']['name'],
-        :location =>     auth_data['user_info']['location'],
-        :image_url =>    auth_data['user_info']['image'],
-        :description =>  auth_data['user_info']['description'],
-        :profile_url =>  auth_data['user_info']['urls']['Twitter']
+        :nickname =>     auth_data['info']['nickname'],
+        :name =>         auth_data['info']['name'],
+        :location =>     auth_data['info']['location'],
+        :image_url =>    auth_data['info']['image'],
+        :description =>  auth_data['info']['description'],
+        :profile_url =>  auth_data['info']['urls']['Twitter']
       }
       account.save!
 
