@@ -68,7 +68,7 @@ describe Account do
        "credentials"=>
         {"token"=>"sometoken",
          "secret"=>"somesecret"},
-       "user_info"=>
+       "info"=>
         {"nickname"=>"svale",
          "name"=>"Simen Svale Skogsrud",
          "location"=>"59.916551,10.741328",
@@ -92,7 +92,7 @@ describe Account do
        "credentials"=>
         {"token"=>"sometoken",
          "secret"=>"somesecret"},
-       "user_info"=>
+       "info"=>
         {"nickname"=>nil,
          "name"=>"Simen Svale Skogsrud",
          "location"=>"59.916551,10.741328",

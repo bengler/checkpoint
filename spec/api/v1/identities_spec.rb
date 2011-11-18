@@ -108,6 +108,17 @@ describe "API v1/auth" do
     result['secret'].should eq 'secret'
   end
 
+  it "hands me a list of a single identity if I ask for it using a comma" do
+   get "/identities/#{god.id},", :session => me_session
+    JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
+  end
+
+  it "hands me multiple identities if I ask for it" do
+   get "/identities/#{god.id},#{me.id}", :session => me_session
+    JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
+    JSON.parse(last_response.body)['identities'].last['identity']['id'].should eq me.id
+  end
+
   it "hands me my balls if I ask for current user when there is no current user" do
     get "/identities/me"
     last_response.body.should eq "{}"
