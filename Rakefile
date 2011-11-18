@@ -48,5 +48,13 @@ namespace :db do
   task :seed do
     require_relative './db/seeds'
   end
-
 end
+
+namespace :ci do
+  desc "continuous integration setup"
+  task :prepare do
+    ActiveRecord::Base.establish_connection($config['test'])
+    load('db/schema.rb')
+  end
+end
+
