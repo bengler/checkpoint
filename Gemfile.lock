@@ -105,6 +105,7 @@ GEM
     rspec-core (2.7.1)
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
+    rspec-extra-formatters (0.3)
     rspec-mocks (2.7.0)
     simplecov (0.5.4)
       multi_json (~> 1.0.3)
@@ -145,6 +146,7 @@ DEPENDENCIES
   rake
   redis (~> 2.2.2)
   rspec (~> 2.7.0.rc1)
+  rspec-extra-formatters
   simplecov
   sinatra
   sinatra-activerecord

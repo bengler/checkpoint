@@ -1,3 +1,5 @@
+require 'active_support'
+
 module SessionManager
 
   COOKIE_NAME = "checkpoint.session"
