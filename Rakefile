@@ -55,6 +55,7 @@ namespace :ci do
   task :prepare do
     ActiveRecord::Base.establish_connection($config['test'])
     load('db/schema.rb')
+    require_relative './db/seeds'
   end
 end
 
