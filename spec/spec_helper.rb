@@ -1,8 +1,5 @@
 require 'simplecov'
 require 'mock_redis'
-require 'bundler'
-
-Bundler.require
 
 SimpleCov.add_filter 'spec'
 SimpleCov.add_filter 'config'
@@ -12,11 +9,14 @@ $:.unshift(File.dirname(File.dirname(__FILE__)))
 
 ENV["RACK_ENV"] = "test"
 require 'config/environment'
+require 'active_support/all'
+require 'bundler'
+Bundler.require
 
 require 'api/v1'
 
 require 'rack/test'
-require 'config/logging'
+#require 'config/logging'
 
 require 'vcr'
 VCR.config do |c|
