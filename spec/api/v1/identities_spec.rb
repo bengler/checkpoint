@@ -119,6 +119,27 @@ describe "API v1/auth" do
     JSON.parse(last_response.body)['identities'].last['identity']['id'].should eq me.id
   end
 
+  it "hands me empty identities if I ask for identities that does not exists" do
+   get "/identities/1024,1025,1026", :session => me_session
+   empty_hash = {}
+   result =JSON.parse(last_response.body)
+   result['identities'].length.should eq 3
+   result['identities'][0]['identity'].should eq empty_hash
+   result['identities'][1]['identity'].should eq empty_hash
+   result['identities'][2]['identity'].should eq empty_hash
+  end
+
+  it "hands me a mix of empty and real identities if I ask for identities that does not exists" do
+   get "/identities/1024,#{me.id},1026,#{god.id}", :session => me_session
+   empty_hash = {}
+   result =JSON.parse(last_response.body)
+   result['identities'].length.should eq 4
+   result['identities'][0]['identity'].should eq empty_hash
+   result['identities'][1]['identity']['id'].should eq me.id
+   result['identities'][2]['identity'].should eq empty_hash
+   result['identities'].last['identity']['id'].should eq god.id
+  end
+
   it "hands me my balls if I ask for current user when there is no current user" do
     get "/identities/me"
     last_response.body.should eq "{}"

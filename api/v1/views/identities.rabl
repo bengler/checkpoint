@@ -1,2 +1,5 @@
-collection @identities => :identities
-extends "identity"
+object false
+
+child @identities => :identities do |identity|
+  extends "identity"
+end
