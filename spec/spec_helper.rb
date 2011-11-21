@@ -8,10 +8,10 @@ SimpleCov.start
 $:.unshift(File.dirname(File.dirname(__FILE__)))
 
 ENV["RACK_ENV"] = "test"
-require 'config/environment'
 require 'active_support/all'
 require 'bundler'
 Bundler.require
+require 'config/environment'
 
 require 'api/v1'
 
