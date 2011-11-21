@@ -131,6 +131,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  activesupport
   capistrano (= 2.5.19)
   capistrano-ext (= 1.2.1)
   hiredis (~> 0.3.1)
