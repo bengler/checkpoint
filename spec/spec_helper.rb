@@ -1,5 +1,8 @@
 require 'simplecov'
 require 'mock_redis'
+require 'bundler'
+
+Bundler.require
 
 SimpleCov.add_filter 'spec'
 SimpleCov.add_filter 'config'
