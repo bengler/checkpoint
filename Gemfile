@@ -6,6 +6,7 @@ gem 'activerecord', :require => 'active_record'
 gem 'activesupport'
 gem 'pg'
 gem 'omniauth', '~> 1.0.0.rc2'
+gem 'omniauth-twitter', :git => 'https://github.com/arunagw/omniauth-twitter.git'
 gem 'omniauth-facebook', '~> 1.0.0.rc1', :git => 'https://github.com/mkdynamic/omniauth-facebook.git'
 gem 'omniauth-contrib', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-contrib.git'
 gem 'omniauth-oauth', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-oauth.git'
@@ -17,6 +18,7 @@ gem 'rabl'
 gem 'thor'
 
 group :development, :test do
+  gem 'bengler_test_helper',  :git => "git@github.com:origo/bengler_test_helper.git"
   gem 'rake'
   gem 'rspec', '~> 2.7.0.rc1'
   gem 'simplecov'
