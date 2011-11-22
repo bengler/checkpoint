@@ -2,6 +2,8 @@
 
 Centralized authentication broker for web applications that supports a number of authentication mechanisms and is provided via a http-interface. Checkpoint can take care of logging your users into your application and keep track of session and access privileges across services.
 
+In a next iteration, logging in is going to be extracted into a frontend pebble. This is partly for performance purposes (identity store vs logging in have very differente usage patterns), and partly because they're different things and should, therefore, live in different places. However, that is going to happen after we've gotten the bare bones of our Cahootsware project working.
+
 ## Concepts
 
 * Realm - the security context for your application. A given session is valid for a specific realm. Realms may span any number of services, but they should ideally be construed as a single coherent 'brand' in the mind of your users. An example realm could be "google" where all the services provided within the 'google' realm shared identities across services.
