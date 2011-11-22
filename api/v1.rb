@@ -6,6 +6,10 @@ Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 class CheckpointV1 < Sinatra::Base
   Rabl.register!
 
+  error ActiveRecord::RecordNotFound do
+    halt 404, "Record not found"
+  end
+
   helpers do 
     def current_session
       params[:session] || request.cookies[SessionManager::COOKIE_NAME]
