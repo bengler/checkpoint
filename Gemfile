@@ -14,6 +14,7 @@ gem 'yajl-ruby', :require => "yajl"
 gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 gem "hiredis", "~> 0.3.1"
 gem 'rabl'
+gem 'thor'
 
 group :development, :test do
   gem 'rake'
