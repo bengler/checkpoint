@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:origo/bengler_test_helper.git
-  revision: c6731efda912e7051888663bb7be9f830844e956
+  revision: 0e16fdd97fa48133fc0dfc197d1f4d8f124b1c4f
   specs:
     bengler_test_helper (0.0.1)
 
