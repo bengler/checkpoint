@@ -16,6 +16,7 @@ gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
 gem "hiredis", "~> 0.3.1"
 gem 'rabl'
 gem 'thor'
+gem 'unicorn', '~> 4.1.1'
 
 group :development, :test do
   gem 'bengler_test_helper',  :git => "git@github.com:origo/bengler_test_helper.git"
