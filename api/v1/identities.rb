@@ -4,14 +4,11 @@ class CheckpointV1 < Sinatra::Base
     if id =~ /\,/
       # Retrieve a list of identities      
       ids = id.split(/\s*,\s*/).compact
-      found_identities = Identity.find_all_by_id(ids)
-      @identities = ids.collect do |id|
-        found_identities.find {|i| i.id == id.to_i}
-      end
+      @identities = Identity.cached_find_all_by_id(ids)
       render :rabl, :identities, :format => :json
     else
       # Retrieve a single identity
-      @identity = (id == 'me') ? current_identity : Identity.find_by_id(id)
+      @identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
       halt 200, "{}" unless @identity
       render :rabl, :identity, :format => :json
     end

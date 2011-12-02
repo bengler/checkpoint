@@ -40,6 +40,7 @@ class Identity < ActiveRecord::Base
   end
 
   def self.cached_find_all_by_id(ids)
+    ids.map!(&:to_i)
     keys = ids.map{ |id| Identity.cache_key(id)}
     result =  Hash[
       $memcached.get_multi(*keys).map do |key, value| 
@@ -52,7 +53,7 @@ class Identity < ActiveRecord::Base
     Identity.find_all_by_id(uncached).each do |identity|
       $memcached.set(identity.cache_key, identity.attributes.to_json) if identity
       result[identity.id] = identity
-    end
+    end    
     ids.map{|id| result[id]}
   end
 
