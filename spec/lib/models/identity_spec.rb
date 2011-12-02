@@ -26,19 +26,39 @@ describe Identity do
         :name => 'account2')
     end
 
-    it "updates the identity record when primary account is switched or modified" do
-      someone.primary_account = account1
-      someone.save!
-      JSON.parse(SessionManager.redis.get("identity:#{someone.id}"))['identity']['profile']['name'].should eq 'account1'
-      someone.primary_account = account2
-      someone.save!
-      JSON.parse(SessionManager.redis.get("identity:#{someone.id}"))['identity']['profile']['name'].should eq 'account2'
-      account2.name = "bingo"
-      account2.save!
-      JSON.parse(SessionManager.redis.get("identity:#{someone.id}"))['identity']['profile']['name'].should eq 'bingo'
-      account1.name = "bananas"
-      account1.save!
-      JSON.parse(SessionManager.redis.get("identity:#{someone.id}"))['identity']['profile']['name'].should eq 'bingo'
+    it "can read throught a cache" do
+      identity = someone
+      result = Identity.cached_find_by_id(identity.id)
+      result.should eq identity
+      attributes = result.attributes
+      attributes[:god] = true
+      $memcached.set(result.cache_key, attributes.to_json)
+      from_cache = Identity.cached_find_by_id(identity.id)
+      from_cache.god?.should be_true
+    end
+
+    it "can read a collection through a cache" do
+      identities = (1..20).map { Identity.create!(:realm => realm) }
+      from_db = Identity.cached_find_all_by_id(identities[0..10].map(&:id))
+      from_db.map(&:id).should eq from_db[0..10].map(&:id)
+      # Spoof all cached identities as gods
+      from_db.each do |identity|
+        attributes = identity.attributes.merge({'god' => true})        
+        $memcached.set(identity.cache_key, attributes.to_json)
+      end
+      from_db_and_cache = Identity.cached_find_all_by_id(identities[0..20].map(&:id))
+      # Check all gods
+      from_db_and_cache[0..10].map(&:god).inject(true){|r, e| r && e}.should be_true
+      # Check all muggles
+      from_db_and_cache[11..19].map(&:god).inject(true){|r, e| r && !e}.should be_true
+    end
+
+    it "can retrieve a user from a session_key" do 
+      me = someone
+      session = Session.create!(:identity => me)
+      Identity.find_by_session_key(session.key).should eq me
+      # Again from cache
+      Identity.find_by_session_key(session.key).should eq me
     end
 
   end

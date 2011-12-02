@@ -12,26 +12,26 @@ class CheckpointV1 < Sinatra::Base
 
   helpers do 
     def current_session
-      params[:session] || request.cookies[SessionManager::COOKIE_NAME]
+      params[:session] || request.cookies[Session::COOKIE_NAME]
     end
 
     def current_identity
       return @current_identity if @current_identity
-      @current_identity = SessionManager.identity_for_session(current_session)
+      @current_identity = Identity.find_by_session_key(current_session)
     end
 
     def log_in(identity)
       return if current_identity == identity
-      key = SessionManager.new_session(identity.id)
-      response.set_cookie(SessionManager::COOKIE_NAME, :value => key,
+      session = Session.create!(:identity => identity)
+      response.set_cookie(Session::COOKIE_NAME, :value => session.key,
         :path => '/',
         :expires => Time.now + 1.year)
       @current_identity = identity
     end
 
     def log_out
-      SessionManager.kill_session(current_session)
-      response.delete_cookie(SessionManager::COOKIE_NAME)
+      Session.destroy_by_key(current_session)
+      response.delete_cookie(Session::COOKIE_NAME)
       @current_identity = nil      
     end
 

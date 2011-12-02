@@ -12,8 +12,7 @@ gem 'omniauth-contrib', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omn
 gem 'omniauth-oauth', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-oauth.git'
 gem 'omniauth-origo', '~> 1.0.0.rc2', :git => 'https://github.com/origo/omniauth-origo.git'
 gem 'yajl-ruby', :require => "yajl"
-gem "redis", "~> 2.2.2", :require => ["redis/connection/hiredis", "redis"]
-gem "hiredis", "~> 0.3.1"
+gem 'dalli'
 gem 'rabl'
 gem 'thor'
 gem 'unicorn', '~> 4.1.1'

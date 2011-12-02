@@ -48,11 +48,11 @@ describe "API v1/auth" do
   end
 
   let :me_session do
-    SessionManager.new_session(me.id)
+    Session.create!(:identity => me).key
   end
 
   let :god_session do
-    SessionManager.new_session(god.id)
+    Session.create!(:identity => god).key
   end
 
   it "is possible to set current session with a http parameter" do 

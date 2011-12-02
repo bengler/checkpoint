@@ -28,15 +28,15 @@ describe "API v1/auth" do
   end
 
   let :someone_session do
-    SessionManager.new_session(someone.id)
+    Session.create!(:identity => someone).key
   end
 
   let :somegod_session do
-    SessionManager.new_session(somegod.id)
+    Session.create!(:identity => somegod).key
   end
 
   let :false_god_session do 
-    SessionManager.new_session(false_god.id)
+    Session.create!(:identity => false_god).key
   end
 
   it "lists the realms" do

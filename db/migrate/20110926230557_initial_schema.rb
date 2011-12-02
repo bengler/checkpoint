@@ -44,6 +44,12 @@ class InitialSchema < ActiveRecord::Migration
       t.timestamps
     end
     add_index :accounts, [:provider, :identity_id, :uid], :unique => true, :name => 'account_uniqueness_index'
+
+    create_table :sessions do |t|
+      t.integer :identity_id
+      t.text :key
+      t.timestamps
+    end
   end
 
   def self.down

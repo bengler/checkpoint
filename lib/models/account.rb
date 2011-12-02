@@ -6,7 +6,9 @@ class Account < ActiveRecord::Base
   belongs_to :realm
 
   after_destroy :update_identity_primary_account
-  after_save :update_session_manager
+  
+  after_save :invalidate_cache
+  before_destroy :invalidate_cache
 
   validates_presence_of :uid, :provider, :realm_id
 
@@ -79,8 +81,8 @@ class Account < ActiveRecord::Base
     self.identity.save!
   end
 
-  def update_session_manager
-    SessionManager.update_identity_record(self.identity) if self.primary?
+  def invalidate_cache
+    self.identity.uncache if self.primary?
   end
 
 end
