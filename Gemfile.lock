@@ -5,6 +5,12 @@ GIT
     bengler_test_helper (0.0.1)
 
 GIT
+  remote: git@github.com:origo/hupper.git
+  revision: 4eb51c501d62be1d84e6cd845e4122e21c4b0b62
+  specs:
+    hupper (0.0.1)
+
+GIT
   remote: https://github.com/arunagw/omniauth-twitter.git
   revision: ffd1e43c778234a1aa6b88ea945046e7ee82c615
   specs:
@@ -155,6 +161,7 @@ DEPENDENCIES
   capistrano (= 2.5.19)
   capistrano-ext (= 1.2.1)
   dalli
+  hupper!
   mock_redis
   omniauth (~> 1.0.0.rc2)
   omniauth-contrib (~> 1.0.0.rc2)!

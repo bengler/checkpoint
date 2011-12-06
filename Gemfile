@@ -16,6 +16,7 @@ gem 'dalli'
 gem 'rabl'
 gem 'thor'
 gem 'unicorn', '~> 4.1.1'
+gem 'hupper', :git => 'git@github.com:origo/hupper.git'
 
 group :development, :test do
   gem 'bengler_test_helper',  :git => "git@github.com:origo/bengler_test_helper.git"
