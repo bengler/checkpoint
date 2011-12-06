@@ -15,6 +15,10 @@ class Identity < ActiveRecord::Base
     self.primary_account ||= accounts.order('created_at').first
   end
 
+  def provisional?
+    primary_account.nil? and accounts.empty?
+  end
+
   def self.cache_key(id)
     "identity:#{id}"
   end

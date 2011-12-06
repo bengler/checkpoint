@@ -32,6 +32,8 @@ class Account < ActiveRecord::Base
 
       account = find_by_provider_and_realm_id_and_uid(attributes[:provider], attributes[:realm_id], attributes[:uid])
 
+      identity = nil if identity.try(:provisional?) # toss the provisional identity
+
       identity ||= account.try(:identity) || Identity.create!(:realm => options[:realm])
 
       if account && account.identity != identity

@@ -1,5 +1,11 @@
 class CheckpointV1 < Sinatra::Base
 
+  get '/login/anonymous' do
+    halt 500, "No registered realm for #{request.host}" unless current_realm
+    anonumous_identity = Identity.find_by_session_key(current_session) || Identity.create!(:realm => current_realm)
+    log_in(anonumous_identity)
+  end
+
   get '/login/:provider' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
     session[:redirect_to] = params[:redirect_to] if params[:redirect_to]
@@ -47,6 +53,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/logout' do
+    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
     redirect request.referer
   end
