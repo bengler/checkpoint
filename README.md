@@ -40,7 +40,7 @@ An authentication process will commence possibly taking your user via twitter to
 
 The session key for the logged in user is now stored in the cookie named 'checkpoint.session'. This is a 512 bit hash that can be used with all Pebble-compliant web-services to identify your current user and hir credentials. (Unsuccessful logins are returned to: /login/failed)
 
-Currently Checkpoint supports the following authentication mechanisms: 
+Currently Checkpoint supports the following authentication mechanisms:
 
 * Twitter
 * Facebook
@@ -61,7 +61,7 @@ Pebbles expect to find the session string in one of two places. First it looks f
 
 * The service defines a criticial single point of failure. Infrastructure should be put in place for a redundant solution – either a clustered Redis if one should become available, multiple Redis installations or a separate key-value store.
 
-* 
+*
 
 ## Installation
 
@@ -77,4 +77,16 @@ Pebbles expect to find the session string in one of two places. First it looks f
     $ rake db:test:prepare
 
 This creates the postgreSQL user for the project. Notice how we're giving the user not only superpowers, but the ability to create databases. This is for automated testing purposes.
+
+### Add domains and realms
+
+The application comes with a default development realm `pebbles` (domain: `pebbles.dev`).
+
+You can add domains to this using the `checkpoint` executable:
+
+    $ bin/checkpoint add_domain rocks.dev --realm pebbles
+
+If you need your own realm use `create`:
+
+    $ bin/checkpoint create pets --title "Animal Farm" --domain hamsters.dev
 
