@@ -11,6 +11,7 @@ gem 'omniauth-facebook', '~> 1.0.0.rc1', :git => 'https://github.com/mkdynamic/o
 gem 'omniauth-contrib', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-contrib.git'
 gem 'omniauth-oauth', '~> 1.0.0.rc2', :git => 'https://github.com/intridea/omniauth-oauth.git'
 gem 'omniauth-origo', '~> 1.0.0.rc2', :git => 'https://github.com/origo/omniauth-origo.git'
+gem 'pebblebed', :git => 'git@github.com:benglerpebbles/pebblebed.git'
 gem 'yajl-ruby', :require => "yajl"
 gem 'dalli'
 gem 'rabl'
