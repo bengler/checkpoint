@@ -26,7 +26,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'rspec-extra-formatters'
   gem 'rack-test'
-  gem 'capistrano', '=2.5.19'
+  gem 'capistrano', '=2.8.0'
   gem 'capistrano-ext', '=1.2.1'
   gem 'timecop'
   gem 'vcr'
