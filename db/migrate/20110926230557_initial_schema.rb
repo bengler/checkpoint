@@ -53,7 +53,9 @@ class InitialSchema < ActiveRecord::Migration
   end
 
   def self.down
+    drop_table :sessions
     drop_table :accounts
+    drop_table :domains
     drop_table :realms
     drop_table :identities
   end
