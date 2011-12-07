@@ -61,5 +61,25 @@ describe Identity do
       Identity.find_by_session_key(session.key).should eq me
     end
 
+    describe "#root?" do
+      let(:root) { Realm.create!(:label => 'root') }
+
+      it "has root" do
+        he = Identity.new(:realm => root, :god => true)
+        he.should be_root
+      end
+
+      it "is not root if just a regular guy" do
+        he = Identity.new(:realm => root, :god => false)
+        he.should_not be_root
+      end
+
+      it "is not root if good in a different realm" do
+        he = Identity.new(:realm => realm, :god => true)
+        he.should_not be_root
+      end
+
+    end
+
   end
 end

@@ -75,20 +75,22 @@ describe "API v1/auth" do
     last_response.status.should eq 403 # not okay because ditto.org committed to area51
   end
 
-  it "lets god delete a domain" do
-    delete "/realms/area51/domains/example.org", :session => someone_session
-    last_response.status.should eq 403 # must be god
-    delete "/realms/area51/domains/example.org", :session => somegod_session
-    last_response.status.should eq 200 # must be god
-    Domain.find_by_name('example.org').should be_nil
-  end
+  describe "DELETE /realms/:realm/domains/:domain" do
+    it "lets god delete a domain" do
+      delete "/realms/area51/domains/example.org", :session => someone_session
+      last_response.status.should eq 403 # must be god
+      delete "/realms/area51/domains/example.org", :session => somegod_session
+      last_response.status.should eq 200 # must be god
+      Domain.find_by_name('example.org').should be_nil
+    end
 
-  it "prevents gods from deleting domains for other realms" do
-    realm
-    delete "/realms/hell/domains/example.org", :session => false_god_session
-    last_response.status.should eq 403
-    delete "/realms/area51/domains/example.org", :session => false_god_session
-    last_response.status.should eq 403
+    it "prevents gods from deleting domains for other realms" do
+      realm
+      delete "/realms/hell/domains/example.org", :session => false_god_session
+      last_response.status.should eq 403
+      delete "/realms/area51/domains/example.org", :session => false_god_session
+      last_response.status.should eq 403
+    end
   end
 
   it "can tell me which realm I'm on" do
@@ -97,7 +99,32 @@ describe "API v1/auth" do
     realm = Realm.create!(:label => 'area51')
     Domain.create!(:name => 'example.org', :realm => realm)
     get "/realms/current"
-    JSON.parse(last_response.body)['realm']['label'].should eq 'area51'
+    json_output = JSON.parse(last_response.body)
+    json_output['realm']['label'].should eq 'area51'
+    json_output.should_not have_key('identity')
+    json_output.should_not have_key('session')
+  end
+
+  describe "POST /realms" do
+    it "succeeds with a root session" do
+      realm = Realm.create!(:label => 'root')
+      root = Identity.create!(:realm => realm, :god => true)
+      access = Session.create!(:identity => root)
+      post "/realms", :realm => {:label => 'rainbows'}, :domain => {:name => 'magical.org'}, :session => access.key
+      last_response.status.should eq 200
+      json_output = JSON.parse(last_response.body)
+      json_output['realm']['label'].should eq 'rainbows'
+      json_output['realm']['domains'].should eq ['magical.org']
+      json_output['identity']['god'].should be_true
+      json_output['session']['key'].should_not be_nil
+    end
+
+    it "fails with a non-root session" do
+      some_guy = Identity.create!(:realm => realm)
+      access = Session.create!(:identity => some_guy)
+      post "/realms", :realm => {:label => 'unicorns'}, :session => access.key
+      last_response.status.should eq 403
+    end
   end
 
 end

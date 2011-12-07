@@ -41,6 +41,12 @@ class CheckpointV1 < Sinatra::Base
       end
     end
 
+    def check_root_credentials
+      unless current_identity && current_identity.root?
+        halt 403, "You must be a god of the root realm"
+      end
+    end
+
     def current_realm
       @current_realm ||= Realm.find_by_url(request.host)
     end

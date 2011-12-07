@@ -11,6 +11,10 @@ class Identity < ActiveRecord::Base
 
   validates_presence_of :realm_id
 
+  def root?
+    god && realm.label == 'root'
+  end
+
   def ensure_primary_account
     self.primary_account ||= accounts.order('created_at').first
   end
