@@ -31,5 +31,4 @@ group :development, :test do
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
-  gem 'mock_redis'
 end
