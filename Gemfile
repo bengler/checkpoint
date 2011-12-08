@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-activerecord'
+gem 'rack-contrib'
 gem 'activerecord', :require => 'active_record'
 gem 'activesupport'
 gem 'pg'
