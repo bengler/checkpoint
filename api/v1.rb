@@ -6,6 +6,7 @@ Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
   set :root, "#{File.dirname(__FILE__)}/v1"
+  set :show_exceptions, false
 
   register Sinatra::Pebblebed
   i_am :checkpoint
@@ -14,6 +15,10 @@ class CheckpointV1 < Sinatra::Base
 
   error ActiveRecord::RecordNotFound do
     halt 404, "Record not found"
+  end
+
+  error Exception do |e|
+    halt 500, e.message
   end
 
   helpers do 
