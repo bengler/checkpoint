@@ -22,6 +22,6 @@ class CheckpointV1 < Sinatra::Base
     halt 500, "No such session" unless session
     session.identity == current_identity or check_god_credentials(session.identity.realm_id)
     session.destroy
-    "Ok"
+    halt 204
   end
 end

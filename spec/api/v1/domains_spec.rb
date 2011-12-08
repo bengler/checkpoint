@@ -60,11 +60,15 @@ describe "Domains" do
 
   describe "DELETE /realms/:realm/domains/:domain" do
     it "lets god delete a domain" do
-      delete "/realms/area51/domains/example.org", :session => someone_session
-      last_response.status.should eq 403 # must be god
       delete "/realms/area51/domains/example.org", :session => somegod_session
-      last_response.status.should eq 200 # must be god
+      last_response.status.should eq 204
+
       Domain.find_by_name('example.org').should be_nil
+    end
+
+    it "prevents regular identities from deleting domains" do
+      delete "/realms/area51/domains/example.org", :session => someone_session
+      last_response.status.should eq 403
     end
 
     it "prevents gods from deleting domains for other realms" do

@@ -19,7 +19,7 @@ class CheckpointV1 < Sinatra::Base
     halt 403, "Domain is connected to '#{@domain.realm.label}'" unless @domain.realm.label == params[:label]
     check_god_credentials(@domain.realm.id)
     @domain.destroy
-    "Ok"
+    halt 204
   end
 
 end
