@@ -21,8 +21,11 @@ class CheckpointV1 < Sinatra::Base
     { realms: Realm.all.map(&:label) }.to_json
   end
 
-  get '/realms/:label' do
-    @realm = find_realm_by_label(params[:label])
+  get '/realms/:label' do |label|
+    @realm = find_realm_by_label(label)
+    if current_identity && current_identity.root?
+      @sessions = @realm.god_sessions
+    end
     render :rabl, :realm, :format => :json
   end
 

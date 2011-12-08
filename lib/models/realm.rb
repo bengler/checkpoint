@@ -14,6 +14,10 @@ class Realm < ActiveRecord::Base
     end
   end
 
+  def god_sessions
+    Session.joins('inner join identities on sessions.identity_id = identities.id').where('identities.god = ? and identities.realm_id = ?', true, id)
+  end
+
   def external_service_keys
     keys = YAML.load(self.service_keys)
     raise "Missing or malformed configuration for #<Realm:#{id} #{label}>" unless keys

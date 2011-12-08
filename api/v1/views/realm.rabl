@@ -11,3 +11,7 @@ end
 child @session, :if => !!@session do
   attributes :key
 end
+
+child @sessions, :if => !!@sessions do
+  attributes :key
+end

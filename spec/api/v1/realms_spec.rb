@@ -47,13 +47,33 @@ describe "API v1/auth" do
     result['realms'].sort.should eq ['hell', 'area51'].sort
   end
 
-  it "provides details for any realm" do
-    realm = Realm.create!(:label => 'area51')
-    Domain.create!(:name => 'example.org', :realm => realm)
-    get "/realms/area51"
-    result = JSON.parse(last_response.body)
-    result['realm']['label'].should eq 'area51'
-    result['realm']['domains'].should eq ['example.org']
+  describe "GET /realms/:realm" do
+    context "without identity" do
+      it "provides details for any realm" do
+        get "/realms/#{realm.label}"
+        result = JSON.parse(last_response.body)
+        result['realm']['label'].should eq 'area51'
+        result['realm']['domains'].should eq ['example.org']
+        result.should_not have_key('sessions')
+      end
+    end
+
+    context "as root" do
+      it "includes a god session that can be used" do
+        root_realm = Realm.create!(:label => 'root')
+        root = Identity.create!(:realm => root_realm, :god => true)
+        root_session = Session.create!(:identity => root)
+
+        expected = somegod_session
+
+        get "/realms/#{realm.label}", :session => root_session.key
+
+        result = JSON.parse(last_response.body)
+        result['realm']['label'].should eq 'area51'
+        result['realm']['domains'].should eq ['example.org']
+        result['sessions'].first["session"]["key"].should eq(expected)
+      end
+    end
   end
 
   it "provides details for a specific domain" do
