@@ -42,66 +42,77 @@ describe "API v1/auth" do
     Session.create!(:identity => god).key
   end
 
-  it "is possible to set current session with a http parameter" do 
-    get "/identities/me", :session => me_session
-    identity = JSON.parse(last_response.body)['identity']
-    identity['id'].should eq me.id
+  describe "GET /identities/me" do
+
+    it "is possible to set current session with a http parameter" do 
+      get "/identities/me", :session => me_session
+      identity = JSON.parse(last_response.body)['identity']
+      identity['id'].should eq me.id
+    end
+
+    it "describes me as a json hash" do
+      get "/identities/me", :session => me_session
+      result = JSON.parse(last_response.body)
+      identity = result['identity']
+      identity['id'].should eq me.id
+      identity['realm'].should eq me.realm.label
+      identity['accounts'].should eq ['twitter']
+      profile = identity['profile']
+      profile['provider'].should eq 'twitter'
+      profile['nickname'].should eq 'nickname'
+      profile['name'].should eq 'name'
+      profile['profile_url'].should eq 'profile_url'
+      profile['image_url'].should eq 'image_url'
+      # And the result is the same if I ask for me by id
+      former_response_body = last_response.body
+      get "/identities/#{me.id}", :session => me_session
+      last_response.body.should eq former_response_body
+    end
+
+    it "hands me my balls if I ask for current user when there is no current user" do
+      get "/identities/me"
+      last_response.body.should eq "{}"
+    end
   end
 
-  it "describes me as a json hash" do
-    get "/identities/me", :session => me_session
-    result = JSON.parse(last_response.body)
-    identity = result['identity']
-    identity['id'].should eq me.id
-    identity['realm'].should eq me.realm.label
-    identity['accounts'].should eq ['twitter']
-    profile = identity['profile']
-    profile['provider'].should eq 'twitter'
-    profile['nickname'].should eq 'nickname'
-    profile['name'].should eq 'name'
-    profile['profile_url'].should eq 'profile_url'
-    profile['image_url'].should eq 'image_url'
-    # And the result is the same if I ask for me by id
-    former_response_body = last_response.body
-    get "/identities/#{me.id}", :session => me_session
-    last_response.body.should eq former_response_body
+  describe "GET /identities/:id" do
+
+    it "describes an identity as a json hash" do
+      get "/identities/#{god.id}", :session => me_session
+      JSON.parse(last_response.body)['identity']['id'].should eq god.id
+    end
+
   end
 
-  it "describes someone else as a json hash" do
-    get "/identities/#{god.id}", :session => me_session
-    JSON.parse(last_response.body)['identity']['id'].should eq god.id
-  end
+  describe "GET /identities/:list_of_ids" do
 
-  it "hands me multiple identities if I ask for it" do
-   get "/identities/#{god.id},#{me.id}", :session => me_session
-    JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
-    JSON.parse(last_response.body)['identities'].last['identity']['id'].should eq me.id
-  end
+    it "returns multiple identities" do
+     get "/identities/#{god.id},#{me.id}", :session => me_session
+      JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
+      JSON.parse(last_response.body)['identities'].last['identity']['id'].should eq me.id
+    end
 
-  it "hands me empty identities if I ask for identities that does not exists" do
-   get "/identities/1024,1025,1026", :session => me_session
-   empty_hash = {}
-   result =JSON.parse(last_response.body)
-   result['identities'].length.should eq 3
-   result['identities'][0]['identity'].should eq empty_hash
-   result['identities'][1]['identity'].should eq empty_hash
-   result['identities'][2]['identity'].should eq empty_hash
-  end
+    it "returns empty identities if requested ids do not exist" do
+     get "/identities/1024,1025,1026", :session => me_session
+     empty_hash = {}
+     result =JSON.parse(last_response.body)
+     result['identities'].length.should eq 3
+     result['identities'][0]['identity'].should eq empty_hash
+     result['identities'][1]['identity'].should eq empty_hash
+     result['identities'][2]['identity'].should eq empty_hash
+    end
 
-  it "hands me a mix of empty and real identities if I ask for identities that does not exists" do
-   get "/identities/1024,#{me.id},1026,#{god.id}", :session => me_session
-   empty_hash = {}
-   result =JSON.parse(last_response.body)
-   result['identities'].length.should eq 4
-   result['identities'][0]['identity'].should eq empty_hash
-   result['identities'][1]['identity']['id'].should eq me.id
-   result['identities'][2]['identity'].should eq empty_hash
-   result['identities'].last['identity']['id'].should eq god.id
-  end
+    it "can mix existing and non-existant identities" do
+      get "/identities/1024,#{me.id},1026,#{god.id}", :session => me_session
+      empty_hash = {}
+      result =JSON.parse(last_response.body)
+      result['identities'].length.should eq 4
+      result['identities'][0]['identity'].should eq empty_hash
+      result['identities'][1]['identity']['id'].should eq me.id
+      result['identities'][2]['identity'].should eq empty_hash
+      result['identities'].last['identity']['id'].should eq god.id
+    end
 
-  it "hands me my balls if I ask for current user when there is no current user" do
-    get "/identities/me"
-    last_response.body.should eq "{}"
   end
 
 end
