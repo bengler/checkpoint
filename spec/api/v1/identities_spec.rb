@@ -31,20 +31,7 @@ describe "API v1/auth" do
   end
 
   let :god do
-    identity = Identity.create!(:god => true, :realm => realm)
-    account = Account.create!(:identity => identity,
-      :realm => realm,
-      :provider => 'twitter',
-      :uid => '2',
-      :token => 'token',
-      :secret => 'secret',
-      :nickname => 'god',
-      :name => 'name',
-      :profile_url => 'profile_url',
-      :image_url => 'image_url')
-    identity.primary_account = account
-    identity.save!
-    identity
+    Identity.create!(:god => true, :realm => realm)
   end
 
   let :me_session do
@@ -83,34 +70,6 @@ describe "API v1/auth" do
   it "describes someone else as a json hash" do
     get "/identities/#{god.id}", :session => me_session
     JSON.parse(last_response.body)['identity']['id'].should eq god.id
-  end
-
-  it "hands me my keys" do
-    get "/identities/me/accounts/twitter", :session => me_session
-    result = JSON.parse(last_response.body)['account']
-    result['identity_id'].should eq me.id
-    result['uid'].should eq '1'
-    result['token'].should eq 'token'
-    result['secret'].should eq 'secret'
-    result['provider'].should eq 'twitter'
-  end
-
-  it "refuses to hand me the keys for someone else" do
-    get "/identities/#{god.id}/accounts/twitter", :session => me_session
-    last_response.status.should eq 403
-  end
-
-  it "hands me anyones key if I'm god" do
-    get "/identities/#{me.id}/accounts/twitter", :session => god_session
-    result = JSON.parse(last_response.body)['account']
-    result['uid'].should eq '1'
-    result['token'].should eq 'token'
-    result['secret'].should eq 'secret'
-  end
-
-  it "hands me a list of a single identity if I ask for it using a comma" do
-   get "/identities/#{god.id},", :session => me_session
-    JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
   end
 
   it "hands me multiple identities if I ask for it" do
