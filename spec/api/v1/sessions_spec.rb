@@ -2,7 +2,7 @@ require 'spec_helper'
 
 class TestCheckpointV1 < CheckpointV1; end
 
-describe "API v1/auth" do
+describe "Sessions" do
   include Rack::Test::Methods
 
   def app

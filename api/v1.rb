@@ -62,6 +62,12 @@ class CheckpointV1 < Sinatra::Base
       @current_realm ||= Realm.find_by_url(request.host)
     end
 
+    def find_realm_by_label(label)
+      realm = current_realm if label == 'current'
+      realm ||= Realm.find_by_label(label)
+      halt 200, "{}" unless realm
+      realm
+    end
   end
 
 end

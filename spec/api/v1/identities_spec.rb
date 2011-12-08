@@ -2,7 +2,7 @@ require 'spec_helper'
 
 class TestCheckpointV1 < CheckpointV1; end
 
-describe "API v1/auth" do
+describe "Identities" do
   include Rack::Test::Methods
 
   def app
@@ -113,6 +113,12 @@ describe "API v1/auth" do
       result['identities'].last['identity']['id'].should eq god.id
     end
 
+  end
+
+  describe "POST /identities" do
+    it "creates a single identity"
+    it "creates a single identity with accounts"
+    it "creates identities in bulk"
   end
 
 end
