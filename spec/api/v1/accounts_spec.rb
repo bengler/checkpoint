@@ -65,9 +65,4 @@ describe "Accounts" do
     result['secret'].should eq 'secret'
   end
 
-  it "hands me a list of a single identity if I ask for it using a comma" do
-   get "/identities/#{god.id},", :session => me_session
-    JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
-  end
-
 end

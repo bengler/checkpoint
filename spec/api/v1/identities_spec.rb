@@ -10,7 +10,9 @@ describe "Identities" do
   end
 
   let :realm do
-    Realm.create!(:label => "area51")
+    realm = Realm.create!(:label => "area51")
+    Domain.create!(:realm => realm, :name => 'example.org')
+    realm
   end
 
   let :me do 
@@ -75,37 +77,33 @@ describe "Identities" do
     end
   end
 
-  describe "GET /identities/:id" do
+  describe "GET /identities/:identity_or_identities" do
 
     it "describes an identity as a json hash" do
       get "/identities/#{god.id}", :session => me_session
       JSON.parse(last_response.body)['identity']['id'].should eq god.id
     end
 
-  end
-
-  describe "GET /identities/:list_of_ids" do
-
     it "returns multiple identities" do
-     get "/identities/#{god.id},#{me.id}", :session => me_session
+      get "/identities/#{god.id},#{me.id}", :session => me_session
       JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
       JSON.parse(last_response.body)['identities'].last['identity']['id'].should eq me.id
     end
 
     it "returns empty identities if requested ids do not exist" do
-     get "/identities/1024,1025,1026", :session => me_session
-     empty_hash = {}
-     result =JSON.parse(last_response.body)
-     result['identities'].length.should eq 3
-     result['identities'][0]['identity'].should eq empty_hash
-     result['identities'][1]['identity'].should eq empty_hash
-     result['identities'][2]['identity'].should eq empty_hash
+      get "/identities/1024,1025,1026", :session => me_session
+      empty_hash = {}
+      result = JSON.parse(last_response.body)
+      result['identities'].length.should eq 3
+      result['identities'][0]['identity'].should eq empty_hash
+      result['identities'][1]['identity'].should eq empty_hash
+      result['identities'][2]['identity'].should eq empty_hash
     end
 
     it "can mix existing and non-existant identities" do
       get "/identities/1024,#{me.id},1026,#{god.id}", :session => me_session
       empty_hash = {}
-      result =JSON.parse(last_response.body)
+      result = JSON.parse(last_response.body)
       result['identities'].length.should eq 4
       result['identities'][0]['identity'].should eq empty_hash
       result['identities'][1]['identity']['id'].should eq me.id
@@ -113,12 +111,11 @@ describe "Identities" do
       result['identities'].last['identity']['id'].should eq god.id
     end
 
-  end
+    it "hands me a list of a single identity if I ask for it using a comma" do
+      get "/identities/#{god.id},", :session => me_session
+      JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
+    end
 
-  describe "POST /identities" do
-    it "creates a single identity"
-    it "creates a single identity with accounts"
-    it "creates identities in bulk"
   end
 
 end
