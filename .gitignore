@@ -1,7 +1,9 @@
 log
 tmp
 coverage/
+vendor/bundle/
 
 .DS_Store
+.bundle
 .rvmrc
 .idea
