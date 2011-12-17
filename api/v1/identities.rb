@@ -22,21 +22,21 @@ class CheckpointV1 < Sinatra::Base
   post '/identities' do
     check_god_credentials(current_realm.id)
 
-    @identity = create_identity(params['identity'], params['account'])
-    render :rabl, :identity, :format => :json
+    identity = create_identity(params['identity'], params['account'])
+    pg :identity, :locals => {:identity => identity}
   end
 
   get '/identities/:id' do |id|
     if id =~ /\,/
       # Retrieve a list of identities      
       ids = id.split(/\s*,\s*/).compact
-      @identities = Identity.cached_find_all_by_id(ids)
-      render :rabl, :identities, :format => :json
+      identities = Identity.cached_find_all_by_id(ids)
+      pg :identities, :locals => {:identities => identities}
     else
       # Retrieve a single identity
-      @identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
-      halt 200, "{}" unless @identity
-      render :rabl, :identity, :format => :json
+      identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
+      halt 200, "{}" unless identity
+      pg :identity, :locals => {:identity => identity}
     end
   end
 

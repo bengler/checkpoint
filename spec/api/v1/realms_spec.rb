@@ -76,7 +76,6 @@ describe "Realms" do
     end
   end
 
-
   it "can tell me which realm I'm on" do
     get "/realms/current"
     JSON.parse(last_response.body)['realm'].should eq nil
@@ -100,7 +99,7 @@ describe "Realms" do
       json_output['realm']['label'].should eq 'rainbows'
       json_output['realm']['domains'].should eq ['magical.org']
       json_output['identity']['god'].should be_true
-      json_output['session']['key'].should_not be_nil
+      json_output['sessions'].first['session']['key'].should_not be_nil
     end
 
     it "fails with a non-root session" do

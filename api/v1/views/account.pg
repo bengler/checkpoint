@@ -1,0 +1,3 @@
+node :account => account do
+  attributes :uid, :token, :secret, :identity_id, :provider
+end

@@ -44,6 +44,8 @@ describe "Identities" do
     Session.create!(:identity => god).key
   end
 
+  let(:json_output) { JSON.parse(last_response.body) }
+
   describe "GET /identities/me" do
 
     it "is possible to set current session with a http parameter" do 
@@ -54,12 +56,14 @@ describe "Identities" do
 
     it "describes me as a json hash" do
       get "/identities/me", :session => me_session
-      result = JSON.parse(last_response.body)
-      identity = result['identity']
+
+      identity = json_output['identity']
       identity['id'].should eq me.id
       identity['realm'].should eq me.realm.label
-      identity['accounts'].should eq ['twitter']
-      profile = identity['profile']
+
+      json_output['accounts'].should eq ['twitter']
+
+      profile = json_output['profile']
       profile['provider'].should eq 'twitter'
       profile['nickname'].should eq 'nickname'
       profile['name'].should eq 'name'
@@ -88,12 +92,12 @@ describe "Identities" do
       get "/identities/#{god.id},#{me.id}", :session => me_session
       result = JSON.parse(last_response.body)['identities']
       result.first['identity']['id'].should eq god.id
-      result.first['identity']['accounts'].should eq([])
-      result.first['identity']['profile'].should be_nil
+      result.first['accounts'].should eq([])
+      result.first['profile'].should be_nil
 
       result.last['identity']['id'].should eq me.id
-      result.last['identity']['accounts'].should eq(['twitter'])
-      result.last['identity']['profile']['provider'].should eq('twitter')
+      result.last['accounts'].should eq(['twitter'])
+      result.last['profile']['provider'].should eq('twitter')
     end
 
     it "returns empty identities if requested ids do not exist" do
@@ -126,23 +130,24 @@ describe "Identities" do
   end
 
   describe "POST /identities" do
-    it "creates a single identity with an account" do
+    it "creates an identity with an account" do
       parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(200)
+
       result = JSON.parse(last_response.body)
-      result['identity']['id'].should_not be_nil
-      result['identity']['profile']["nickname"].should eq('nick')
+      json_output['identity']['id'].should_not be_nil
+      json_output['profile']["nickname"].should eq('nick')
     end
 
     it "can create god users" do
       parameters = {:session => god_session, :identity => {:god => true}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(200)
-      result = JSON.parse(last_response.body)
-      result['identity']['id'].should_not be_nil
-      result['identity']['god'].should be_true
-      result['identity']['profile']["nickname"].should eq('nick')
+      identity = json_output['identity']
+      identity['id'].should_not be_nil
+      identity['god'].should be_true
+      json_output['profile']["nickname"].should eq('nick')
     end
 
     it "ignores any realm that is passed in" do
@@ -150,10 +155,13 @@ describe "Identities" do
       parameters = {:session => god_session, :identity => {:realm => 'rock_and_roll'}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(200)
-      result = JSON.parse(last_response.body)
-      result['identity']['id'].should_not be_nil
-      result['identity']['realm'].should eq('area51')
-      result['identity']['profile']["nickname"].should eq('nick')
+
+      identity = json_output['identity']
+      identity['id'].should_not be_nil
+      identity['realm'].should eq('area51')
+
+      profile = json_output['profile']
+      profile["nickname"].should eq('nick')
     end
 
     it "fails to create identities if not god" do
@@ -161,23 +169,6 @@ describe "Identities" do
       post '/identities', parameters
       last_response.status.should eq(403)
     end
-
-    xit "creates identities in bulk (Math is hard. Let's go shopping.)" do
-      nick = {:account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
-      sally = {:account => {:provider => 'twitter', :nickname => 'sally', :uid => '2'}}
-      parameters = {:session => god_session, :accounts => [nick, sally]}
-      post '/identities', parameters.to_json, :content_type => :json
-
-      last_response.status.should eq(200)
-
-      result = JSON.parse(last_response.body)["identities"]
-      result.first["identity"]['id'].should_not be_nil
-      result.first["identity"]['profile']['nickname'].should eq('nick')
-
-      result.last["identity"]['id'].should_not be_nil
-      result.last["identity"]['profile']['nickname'].should eq('sally')
-    end
-
   end
 
 end

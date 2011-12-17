@@ -1,0 +1,4 @@
+node :domain => domain do
+  attributes :name
+  node :realm => domain.realm.label
+end

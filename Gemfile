@@ -15,10 +15,10 @@ gem 'omniauth-origo', '~> 1.0.0.rc2', :git => 'https://github.com/origo/omniauth
 gem 'pebblebed', :git => 'git@github.com:benglerpebbles/pebblebed.git'
 gem 'yajl-ruby', :require => "yajl"
 gem 'dalli'
-gem 'rabl'
 gem 'thor'
 gem 'unicorn', '~> 4.1.1'
 gem 'hupper', :git => 'git@github.com:origo/hupper.git'
+gem 'petroglyph', :git => 'git@github.com:benglerpebbles/petroglyph.git'
 
 group :development, :test do
   gem 'bengler_test_helper',  :git => "git@github.com:origo/bengler_test_helper.git"

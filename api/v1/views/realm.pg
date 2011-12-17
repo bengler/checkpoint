@@ -1,0 +1,25 @@
+node :realm => realm do
+  attributes :label
+  node :domains => realm.domains.map(&:name)
+end
+
+if identity
+  node :identity => identity do
+    attributes :id, :god
+    node :realm => identity.realm.label
+  end
+  node :accounts => identity.accounts.map(&:provider)
+  if identity.primary_account
+    node :profile => identity.primary_account do
+      attributes :provider, :nickname, :name, :profile_url, :image_url, :description
+    end
+  end
+end
+
+if sessions
+  collection :sessions => sessions do |session|
+    node :session => session do
+      attributes :key
+    end
+  end
+end
