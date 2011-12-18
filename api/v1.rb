@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "json"
 require 'pebblebed/sinatra'
-require 'petroglyph/tilt'
+require 'sinatra/petroglyph'
 
 Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
