@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: git@github.com:benglerpebbles/petroglyph.git
-  revision: b09273ac7bb33748c8f08dfa92090b5db5337fd0
+  revision: 06d3ea629ddc69105629a06e7828a803987006b2
   specs:
     petroglyph (0.0.1)
       tilt
