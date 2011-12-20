@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git@github.com:origo/bengler_test_helper.git
-  revision: 0e16fdd97fa48133fc0dfc197d1f4d8f124b1c4f
+  revision: 388b8545455c4ef1c0c4ee1841c154041241c97f
   specs:
     bengler_test_helper (0.0.1)
 
@@ -151,7 +151,6 @@ GEM
     rspec-core (2.7.1)
     rspec-expectations (2.7.0)
       diff-lcs (~> 1.1.2)
-    rspec-extra-formatters (0.3)
     rspec-mocks (2.7.0)
     simplecov (0.5.4)
       multi_json (~> 1.0.3)
@@ -201,7 +200,6 @@ DEPENDENCIES
   rack-test
   rake
   rspec (~> 2.7.0.rc1)
-  rspec-extra-formatters
   simplecov
   sinatra
   sinatra-activerecord

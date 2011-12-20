@@ -25,7 +25,6 @@ group :development, :test do
   gem 'rake'
   gem 'rspec', '~> 2.7.0.rc1'
   gem 'simplecov'
-  gem 'rspec-extra-formatters'
   gem 'rack-test'
   gem 'capistrano', '=2.8.0'
   gem 'capistrano-ext', '=1.2.1'
