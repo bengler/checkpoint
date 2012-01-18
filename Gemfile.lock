@@ -200,7 +200,7 @@ DEPENDENCIES
   rack-contrib
   rack-test
   rake
-  rspec (~> 2.7.0.rc1)
+  rspec (~> 2.7)
   simplecov
   sinatra
   sinatra-activerecord

@@ -24,7 +24,7 @@ gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 
 group :development, :test do
-  gem 'rspec', '~> 2.7.0.rc1'
+  gem 'rspec', '~> 2.7'
   gem 'simplecov'
   gem 'rack-test'
   gem 'capistrano', '=2.8.0'
