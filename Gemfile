@@ -19,10 +19,10 @@ gem 'thor'
 gem 'unicorn', '~> 4.1.1'
 gem 'hupper', :git => 'git://github.com/origo/hupper.git'
 gem 'petroglyph', :git => 'git://github.com/benglerpebbles/petroglyph.git'
+gem 'bengler_test_helper',  :git => 'git://github.com/origo/bengler_test_helper.git'
+gem 'rake'
 
 group :development, :test do
-  gem 'bengler_test_helper',  :git => "git://github.com/origo/bengler_test_helper.git"
-  gem 'rake'
   gem 'rspec', '~> 2.7.0.rc1'
   gem 'simplecov'
   gem 'rack-test'
