@@ -1,7 +1,11 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'sinatra/activerecord/rake'
-require 'bengler_test_helper/tasks'
+begin
+  require 'bengler_test_helper/tasks'
+rescue LoadError
+  puts "Unable to load bengler_test_helper. This is probably ok in production."
+end
 
 task :environment do
   require 'config/environment'
