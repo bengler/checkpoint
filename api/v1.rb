@@ -70,4 +70,25 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
+  get '/ping' do
+    failures = []
+
+    begin
+      ActiveRecord::Base.connection.execute("select 1")
+    rescue Exception => e
+      failures << "ActiveRecord: #{e.message}"
+    end
+
+    begin
+      $memcached.get('ping')
+    rescue Exception => e
+      failures << "Memcached: #{e.message}"
+    end
+
+    if failures.empty?
+      halt 200, "checkpoint"
+    else
+      halt 503, failures.join("\n")
+    end
+  end
 end
