@@ -36,15 +36,15 @@ class Identity < ActiveRecord::Base
   end
 
   def self.cached_find_by_id(id)
-    if attributes = $memcached.get(cache_key(id))
-      return Identity.instantiate(Yajl::Parser.parse(attributes))
-    else
+    # if attributes = $memcached.get(cache_key(id))
+    #   return Identity.instantiate(Yajl::Parser.parse(attributes))
+    # else
       identity = Identity.find_by_id(id)      
       return nil unless identity
       $memcached.set(cache_key(id), identity.attributes.to_json)
       identity.readonly!
       return identity
-    end
+    # end
   end
 
   def self.cached_find_all_by_id(ids)
