@@ -31,7 +31,7 @@ class Identity < ActiveRecord::Base
     cache_key.match(/\d+$/).to_s.to_i
   end
 
-  def cache_key(id)
+  def cache_key
     self.class.cache_key(id)
   end
 
