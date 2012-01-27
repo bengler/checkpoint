@@ -90,3 +90,8 @@ If you need your own realm use `create`:
 
     $ bin/checkpoint create pets --title "Animal Farm" --domain hamsters.dev
 
+## TODO
+
+[ ] create a login script that adds an identity and optionally sets the `god` bit
+
+    $ ./bin/checkpoint login --realm dittforslag --provider twitter --username <your twitter handle> --password <your twitter password> --god
