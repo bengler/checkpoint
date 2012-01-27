@@ -15,15 +15,19 @@ describe Session do
   end
 
   it "Retrieves identities from keys in the database and caches them" do
-    session = Session.create!(:identity_id => 10)
-    Session.identity_id_for_session(session.key).should eq 10
-    $memcached.get(session.cache_key).should eq '10'
+    pending "Caching removed due to confusion about varnish issues" do
+      session = Session.create!(:identity_id => 10)
+      Session.identity_id_for_session(session.key).should eq 10
+      $memcached.get(session.cache_key).should eq '10'
+    end
   end
 
   it "Reads identites from the cache if a key exists" do
-    hash = 'secretkeystuffs'
-    $memcached.set(Session.cache_key(hash), '10')
-    Session.identity_id_for_session(hash).should eq 10
+    pending "Caching removed due to confusion about varnish issues" do
+      hash = 'secretkeystuffs'
+      $memcached.set(Session.cache_key(hash), '10')
+      Session.identity_id_for_session(hash).should eq 10
+    end
   end
 
   it "Deletes itself from cache when destroyed" do
