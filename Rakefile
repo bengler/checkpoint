@@ -30,9 +30,4 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
   end
-
-  desc "add seed data to database"
-  task :seed => :environment do
-    require_relative './db/seeds'
-  end
 end
