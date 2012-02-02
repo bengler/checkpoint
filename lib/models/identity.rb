@@ -69,7 +69,6 @@ class Identity < ActiveRecord::Base
     cached_find_by_id(Session.identity_id_for_session(session_key))
   end
 
-
   def uncache
     $memcached.delete(self.cache_key)
   end
