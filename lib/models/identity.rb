@@ -7,7 +7,7 @@ class Identity < ActiveRecord::Base
   belongs_to :realm
   
   before_create :initialize_last_seen
-  before_destroy :invalidate_cache
+  before_destroy :invalidate_cache, :destroy_sessions
   before_update :invalidate_cache
 
   validates_presence_of :realm_id
@@ -89,6 +89,10 @@ class Identity < ActiveRecord::Base
 
   def initialize_last_seen
     self.last_seen_at ||= Time.now.to_date
+  end
+
+  def destroy_sessions
+    Session.destroy_all_for_identity(self)
   end
 
 end

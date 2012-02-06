@@ -33,6 +33,10 @@ class Session < ActiveRecord::Base
     Session.find_by_key(session_key).try(:destroy)
   end
 
+  def self.destroy_all_for_identity(identity)
+    Session.where("identity_id = ?", identity).map(&:destroy)
+  end
+
   def uncache
     $memcached.delete(self.cache_key)
   end

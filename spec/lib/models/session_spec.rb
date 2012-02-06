@@ -32,4 +32,17 @@ describe Session do
     session.destroy
     Session.identity_id_for_session(session.key).should be_nil
   end
+
+  it "All may be destroyed for a certain identity" do
+    Session.create(:identity_id => 10)
+    Session.create(:identity_id => 10)
+    Session.create(:identity_id => 10)
+    Session.create(:identity_id => 12)
+    Session.destroy_all_for_identity(9)
+    Session.count.should eq 4
+    Session.destroy_all_for_identity(10)
+    Session.count.should eq 1
+    Session.destroy_all_for_identity(12)
+    Session.count.should eq 0
+  end
 end

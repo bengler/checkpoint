@@ -61,6 +61,13 @@ describe Identity do
       Identity.find_by_session_key(session.key).should eq me
     end
 
+    it "automatically destroys all sessions when destroyed" do
+      me = someone
+      session = Session.create!(:identity => me)
+      me.destroy
+      Session.find_by_id(session.id).should be_nil
+    end
+
     it "initializes the last_seen_at for new identitites" do
       Identity.find(someone.id).last_seen_at.should eq Time.now.to_date
     end

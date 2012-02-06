@@ -60,6 +60,13 @@ describe "Identities" do
       last_response.body.should eq '{}'
     end
 
+    it "handles orphaned sessions with grace" do
+      Session.create!(:identity_id => 91821, :key => "halal")
+      get "/identities/me", :session => "halal"
+      last_response.status.should eq 200
+      last_response.body.should eq '{}'
+    end
+
     it "describes me as a json hash" do
       get "/identities/me", :session => me_session
 
