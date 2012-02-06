@@ -22,10 +22,9 @@ class Session < ActiveRecord::Base
   end
 
   def self.identity_id_for_session(session_key)
-    # TODO: Remove quickfix to get dittforslag out the door
-    #result = $memcached.fetch(cache_key(session_key)) do
-    result = Session.connection.select_value("select identity_id from sessions where key = '#{session_key}'")
-    #end
+    result = $memcached.fetch(cache_key(session_key)) do
+      Session.connection.select_value("select identity_id from sessions where key = '#{session_key}'")
+    end
     return nil unless result
     result.to_i
   end

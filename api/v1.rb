@@ -24,6 +24,10 @@ class CheckpointV1 < Sinatra::Base
     halt 500, e.message
   end
 
+  after do
+    current_identity.mark_as_seen if current_identity
+  end
+
   helpers do 
     def current_session
       params[:session] || request.cookies[Session::COOKIE_NAME]

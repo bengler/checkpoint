@@ -27,16 +27,14 @@ describe Identity do
     end
 
     it "can read throught a cache" do
-      pending "Caching removed due to confusion about varnish issues" do
-        identity = someone
-        result = Identity.cached_find_by_id(identity.id)
-        result.should eq identity
-        attributes = result.attributes
-        attributes[:god] = true
-        $memcached.set(result.cache_key, attributes.to_json)
-        from_cache = Identity.cached_find_by_id(identity.id)
-        from_cache.god?.should be_true
-      end
+      identity = someone
+      result = Identity.cached_find_by_id(identity.id)
+      result.should eq identity
+      attributes = result.attributes
+      attributes[:god] = true
+      $memcached.set(result.cache_key, attributes.to_json)
+      from_cache = Identity.cached_find_by_id(identity.id)
+      from_cache.god?.should be_true
     end
 
     it "can read a collection through a cache" do

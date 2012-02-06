@@ -107,7 +107,8 @@ CREATE TABLE identities (
     god boolean DEFAULT false,
     last_login_at timestamp without time zone,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    last_seen_at timestamp without time zone
 );
 
 

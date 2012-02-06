@@ -84,7 +84,7 @@ class Account < ActiveRecord::Base
   end
 
   def invalidate_cache
-    self.identity.uncache if self.primary?
+    self.identity.invalidate_cache if self.identity
   end
 
 end

@@ -6,10 +6,12 @@ class Identity < ActiveRecord::Base
   belongs_to :primary_account, :class_name => 'Account'
   belongs_to :realm
   
-  before_destroy :uncache
-  before_update :uncache
+  before_destroy :invalidate_cache
+  before_update :invalidate_cache
 
   validates_presence_of :realm_id
+
+  TTL = 60*60*1000 # The TTL for a cached identity
 
   def root?
     god && realm.label == 'root'
@@ -36,15 +38,15 @@ class Identity < ActiveRecord::Base
   end
 
   def self.cached_find_by_id(id)
-    # if attributes = $memcached.get(cache_key(id))
-    #   return Identity.instantiate(Yajl::Parser.parse(attributes))
-    # else
+    if attributes = $memcached.get(cache_key(id))
+      return Identity.instantiate(Yajl::Parser.parse(attributes))
+    else
       identity = Identity.find_by_id(id)      
       return nil unless identity
       $memcached.set(cache_key(id), identity.attributes.to_json)
       identity.readonly!
       return identity
-    # end
+    end
   end
 
   def self.cached_find_all_by_id(ids)
@@ -69,7 +71,13 @@ class Identity < ActiveRecord::Base
     cached_find_by_id(Session.identity_id_for_session(session_key))
   end
 
-  def uncache
+  def mark_as_seen
+    update_count = Identity.update_all(
+      "last_seen_at = current_date", "id = #{self.id} and (last_seen_at != current_date or last_seen_at is null)")
+    invalidate_cache if update_count > 0
+  end
+
+  def invalidate_cache
     $memcached.delete(self.cache_key)
   end
 
