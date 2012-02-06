@@ -30,4 +30,15 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
   end
+
 end
+
+namespace :maintenance do
+  desc "delete anonymous identities that have not been seen for a month"
+  task :delete_inactive_anonymous_identities => :environment do
+    Identity.anonymous.not_seen_for_more_than_days(30).find_in_batches(:batch_size => 50) do |identities|
+      identities.map(&:destroy)
+    end
+  end
+end
+

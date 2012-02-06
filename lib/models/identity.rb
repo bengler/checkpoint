@@ -6,6 +6,7 @@ class Identity < ActiveRecord::Base
   belongs_to :primary_account, :class_name => 'Account'
   belongs_to :realm
   
+  before_create :initialize_last_seen
   before_destroy :invalidate_cache
   before_update :invalidate_cache
 
@@ -13,7 +14,7 @@ class Identity < ActiveRecord::Base
 
   scope :anonymous, where("primary_account_id is null")
   scope :not_seen_for_more_than_days, lambda { |days|
-    where("(current_date - last_seen_at) > interval '? days'", days)
+    where("last_seen_at is not null and (current_date - last_seen_at) > ?", days)
   }
 
   def root?
@@ -82,6 +83,12 @@ class Identity < ActiveRecord::Base
 
   def invalidate_cache
     $memcached.delete(self.cache_key)
+  end
+
+  private
+
+  def initialize_last_seen
+    self.last_seen_at ||= Time.now.to_date
   end
 
 end

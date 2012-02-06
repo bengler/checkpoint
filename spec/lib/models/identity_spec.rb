@@ -61,6 +61,10 @@ describe Identity do
       Identity.find_by_session_key(session.key).should eq me
     end
 
+    it "initializes the last_seen_at for new identitites" do
+      Identity.find(someone.id).last_seen_at.should eq Time.now.to_date
+    end
+
     it "can find identities not seen for a while" do
       (0..9).each do |age|
         Identity.create!(:realm => realm, :last_seen_at => Time.now.to_date - age)
@@ -70,6 +74,16 @@ describe Identity do
       Identity.not_seen_for_more_than_days(8).size.should eq 1
       Identity.not_seen_for_more_than_days(1).size.should eq 8
       Identity.not_seen_for_more_than_days(0).size.should eq 9
+    end
+
+    it "can find anonymous identities" do 
+      someone
+      Identity.anonymous.all.first.should eq someone
+      account1.identity = someone
+      account1.save!
+      someone.ensure_primary_account
+      someone.save!
+      Identity.anonymous.all.size.should eq 0
     end
 
     describe "#root?" do
