@@ -11,6 +11,9 @@ class CheckpointV1 < Sinatra::Base
     uri.path
   end
 
+  # Log in anonymously
+  #
+  # @param [String] redirect_to where to redirect to
   get '/login/anonymous' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
     redirect_to_path = ensure_valid_redirect_path || '/'
@@ -19,6 +22,10 @@ class CheckpointV1 < Sinatra::Base
     redirect redirect_to_path
   end
 
+  # Log in with a given provider
+  #
+  # @param [String] provider which provider's login to redirect to
+  # @param [String] redirect_to where to redirect to after login is complete (optional)
   get '/login/:provider' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
     session[:redirect_to] = params[:redirect_to] if params[:redirect_to]
@@ -65,6 +72,7 @@ class CheckpointV1 < Sinatra::Base
     redirect "/login/failed?message=#{params[:message]}"
   end
 
+  # Log out
   get '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out

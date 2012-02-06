@@ -22,6 +22,7 @@ gem 'petroglyph', :git => 'git://github.com/benglerpebbles/petroglyph.git'
 gem 'bengler_test_helper',  :git => 'git://github.com/origo/bengler_test_helper.git'
 gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
+gem 'yard'
 
 group :development, :test do
   gem 'rspec', '~> 2.8'

@@ -1,13 +1,21 @@
-# TODO: Rabl template for session
+# TODO: add petroglyph templates for session.
 
 class CheckpointV1 < Sinatra::Base
-  get '/sessions/:id' do |id|
+  # Get a session
+  #
+  # @param [String] key  the session key
+  # @return [JSON] json containing the session key and the identity id
+  get '/sessions/:key' do |id|
     @session = Session.find_by_key(id)
     halt 200, "{}" unless @session
     @session.identity == current_identity or check_god_credentials(@session.identity.realm_id)
     { session: {id: @session.key, identity_id: @session.identity_id }}.to_json
   end
 
+  # Create a session
+  #
+  # @param [String] identity_id the id of the identity requesting a session (optional). Defaults to current id.
+  # @return [JSON] json containing the session key and the identity id
   post '/sessions' do
     identity = Identity.find_by_id(params[:identity_id])
     identity ||= current_identity
@@ -17,6 +25,10 @@ class CheckpointV1 < Sinatra::Base
     { session: {id: Session.create!(:identity => identity).key, identity_id: identity.id }}.to_json
   end
 
+  # Delete a session key
+  #
+  # @param [String] key the session key for the session to be deleted.
+  # @return [Nothing]
   delete '/sessions/:key' do
     session = Session.find_by_key(params[:key])
     halt 500, "No such session" unless session

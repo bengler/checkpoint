@@ -19,6 +19,11 @@ class CheckpointV1 < Sinatra::Base
   # [x] make it work
   # [ ] make it right
   # [ ] make it fast
+
+  # Create a new identity.
+  #
+  # @param [Hash] identity the attributes of the new identity
+  # @param [Hash] account the attributes of the new account (optional)
   post '/identities' do
     check_god_credentials(current_realm.id)
 
@@ -26,6 +31,10 @@ class CheckpointV1 < Sinatra::Base
     pg :identity, :locals => {:identity => identity}
   end
 
+  # Retrieve one or more identities
+  #
+  # @param [String] id the id or a comma separated list of ids. One id with a trailing comma will return a list of one.
+  # @return [JSON] The identity or identities.
   get '/identities/:id' do |id|
     if id =~ /\,/
       # Retrieve a list of identities      

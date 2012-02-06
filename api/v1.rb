@@ -74,6 +74,9 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
+  # Returns the status of the system.
+  #
+  # @return [String] the name of the service if all systems go, or error messages.
   get '/ping' do
     failures = []
 
