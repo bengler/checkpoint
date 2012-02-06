@@ -11,7 +11,10 @@ class Identity < ActiveRecord::Base
 
   validates_presence_of :realm_id
 
-  TTL = 60*60*1000 # The TTL for a cached identity
+  scope :anonymous, where("primary_account_id is null")
+  scope :not_seen_for_more_than_days, lambda { |days|
+    where("(current_date - last_seen_at) > interval '? days'", days)
+  }
 
   def root?
     god && realm.label == 'root'

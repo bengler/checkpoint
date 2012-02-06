@@ -61,6 +61,17 @@ describe Identity do
       Identity.find_by_session_key(session.key).should eq me
     end
 
+    it "can find identities not seen for a while" do
+      (0..9).each do |age|
+        Identity.create!(:realm => realm, :last_seen_at => Time.now.to_date - age)
+      end
+      Identity.not_seen_for_more_than_days(20).size.should eq 0
+      Identity.not_seen_for_more_than_days(9).size.should eq 0
+      Identity.not_seen_for_more_than_days(8).size.should eq 1
+      Identity.not_seen_for_more_than_days(1).size.should eq 8
+      Identity.not_seen_for_more_than_days(0).size.should eq 9
+    end
+
     describe "#root?" do
       let(:root) { Realm.create!(:label => 'root') }
 
