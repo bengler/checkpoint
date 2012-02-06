@@ -54,6 +54,12 @@ describe "Identities" do
       identity['id'].should eq me.id
     end
 
+    it "handles invalid sessions gracefully" do
+      get "/identities/me", :session => "invalidsessionhash"
+      last_response.status.should eq 200
+      last_response.body.should eq '{}'
+    end
+
     it "describes me as a json hash" do
       get "/identities/me", :session => me_session
 
