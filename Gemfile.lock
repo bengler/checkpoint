@@ -72,6 +72,14 @@ GIT
   specs:
     rack (1.4.0)
 
+GIT
+  remote: git@github.com:origo/capistrano-bengler.git
+  revision: 3298498d0fd460b2ed7ab08aedfb5217effa7004
+  specs:
+    capistrano-bengler (0.0.6)
+      capistrano (>= 2.9)
+      capistrano-ext (>= 1.2.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -89,7 +97,7 @@ GEM
     addressable (2.2.6)
     arel (2.2.1)
     builder (3.0.0)
-    capistrano (2.8.0)
+    capistrano (2.9.0)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -108,7 +116,7 @@ GEM
       rack (>= 1.1.0, < 2)
     futurevalue (0.0.2)
     hashie (1.2.0)
-    highline (1.6.9)
+    highline (1.6.11)
     i18n (0.6.0)
     kgio (2.7.2)
     multi_json (1.0.4)
@@ -183,8 +191,8 @@ DEPENDENCIES
   activerecord
   activesupport
   bengler_test_helper!
-  capistrano (= 2.8.0)
-  capistrano-ext (= 1.2.1)
+  capistrano (~> 2.9.0)
+  capistrano-bengler!
   dalli
   hupper!
   omniauth (~> 1.0.2)
