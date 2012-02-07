@@ -10,7 +10,6 @@ class CheckpointV1 < Sinatra::Base
   set :show_exceptions, false
 
   register Sinatra::Pebblebed
-  i_am :checkpoint
 
   error ActiveRecord::RecordNotFound do
     halt 404, "Record not found"
@@ -75,32 +74,6 @@ class CheckpointV1 < Sinatra::Base
       realm ||= Realm.find_by_label(label)
       halt 200, "{}" unless realm
       realm
-    end
-  end
-
-  # Returns the status of the system.
-  #
-  # @return [String] the name of the service if all systems go, or error messages.
-  get '/ping' do
-    failures = []
-
-    begin
-      ActiveRecord::Base.verify_active_connections!
-      ActiveRecord::Base.connection.execute("select 1")
-    rescue Exception => e
-      failures << "ActiveRecord: #{e.message}"
-    end
-
-    begin
-      $memcached.get('ping')
-    rescue Exception => e
-      failures << "Memcached: #{e.message}"
-    end
-
-    if failures.empty?
-      halt 200, "checkpoint"
-    else
-      halt 503, failures.join("\n")
     end
   end
 end
