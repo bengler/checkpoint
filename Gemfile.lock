@@ -7,11 +7,11 @@ GIT
 
 GIT
   remote: git://github.com/benglerpebbles/pebblebed.git
-  revision: 139f6e53a95a1911cd3e04160debb7000f814be6
+  revision: cf7fb56aba9f1cd90f1748492e6ef96cc8570f8c
   specs:
-    pebblebed (0.0.5)
+    pebblebed (0.0.7)
       activesupport
-      curb
+      curb (~> 0.8.0)
       deepstruct
       futurevalue
       i18n
@@ -106,7 +106,7 @@ GEM
     capistrano-ext (1.2.1)
       capistrano (>= 1.0.0)
     crack (0.3.1)
-    curb (0.7.18)
+    curb (0.8.0)
     dalli (1.1.4)
     deepstruct (0.0.1)
     diff-lcs (1.1.3)
