@@ -23,6 +23,7 @@ gem 'bengler_test_helper',  :git => 'git://github.com/origo/bengler_test_helper.
 gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'pingable'
+gem 'o5-logging', :git => "git://github.com/benglerpebbles/o5-logging.git"
 
 group :development, :test do
   gem 'rspec', '~> 2.8'

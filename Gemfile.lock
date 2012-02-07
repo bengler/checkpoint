@@ -6,6 +6,12 @@ GIT
       omniauth-oauth (~> 1.0)
 
 GIT
+  remote: git://github.com/benglerpebbles/o5-logging.git
+  revision: db9686026912448e19fa0512e46f66c871a45da7
+  specs:
+    o5-logging (0.0.1)
+
+GIT
   remote: git://github.com/benglerpebbles/pebblebed.git
   revision: cf7fb56aba9f1cd90f1748492e6ef96cc8570f8c
   specs:
@@ -197,6 +203,7 @@ DEPENDENCIES
   capistrano-bengler!
   dalli
   hupper!
+  o5-logging!
   omniauth (~> 1.0.2)
   omniauth-contrib (~> 1.0.0)!
   omniauth-facebook (~> 1.2.0)
