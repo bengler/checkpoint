@@ -1,7 +1,7 @@
 class Session < ActiveRecord::Base
   belongs_to :identity
   before_save :create_key
-  before_destroy :uncache
+  before_destroy :invalidate_cache
 
   COOKIE_NAME = "checkpoint.session"
 
@@ -33,11 +33,7 @@ class Session < ActiveRecord::Base
     Session.find_by_key(session_key).try(:destroy)
   end
 
-  def self.destroy_all_for_identity(identity)
-    Session.where("identity_id = ?", identity).map(&:destroy)
-  end
-
-  def uncache
+  def invalidate_cache
     $memcached.delete(self.cache_key)
   end
 

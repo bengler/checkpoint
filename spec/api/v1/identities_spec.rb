@@ -184,19 +184,19 @@ describe "Identities" do
     end
   end
 
-  describe "last_seen_at" do
+  describe "last_seen_on" do
     it "stamps the user with a date for when it was last seen" do
       get "/identities/me", :session => me_session
       identities = Identity.cached_find_by_id(me.id)
-      identities.last_seen_at.to_date.should eq Time.now.to_date
+      identities.last_seen_on.to_date.should eq Time.now.to_date
     end
 
-    it "updates last_seen_at timestamp when it is old" do
-      me.last_seen_at = Time.now.to_date-2
+    it "updates last_seen_on timestamp when it is old" do
+      me.last_seen_on = Time.now.to_date-2
       me.save!
       get "/identities/me", :session => me_session
       identity = Identity.cached_find_by_id(me.id)
-      identity.last_seen_at.to_date.should eq Time.now.to_date
+      identity.last_seen_on.to_date.should eq Time.now.to_date
     end
   end
 end

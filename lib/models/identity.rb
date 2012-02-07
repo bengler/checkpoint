@@ -3,18 +3,19 @@ class Identity < ActiveRecord::Base
   class NotAuthorized < Exception; end
 
   has_many :accounts, :dependent => :destroy  
+  has_many :sessions, :dependent => :destroy
   belongs_to :primary_account, :class_name => 'Account'
   belongs_to :realm
-  
+
   before_create :initialize_last_seen
-  before_destroy :invalidate_cache, :destroy_sessions
+  before_destroy :invalidate_cache
   before_update :invalidate_cache
 
   validates_presence_of :realm_id
 
   scope :anonymous, where("primary_account_id is null")
   scope :not_seen_for_more_than_days, lambda { |days|
-    where("last_seen_at is not null and (current_date - last_seen_at) > ?", days)
+    where("last_seen_on is not null and (current_date - last_seen_on) > ?", days)
   }
 
   def root?
@@ -77,7 +78,7 @@ class Identity < ActiveRecord::Base
 
   def mark_as_seen
     update_count = Identity.update_all(
-      "last_seen_at = current_date", "id = #{self.id} and (last_seen_at != current_date or last_seen_at is null)")
+      "last_seen_on = current_date", "id = #{self.id} and (last_seen_on != current_date or last_seen_on is null)")
     invalidate_cache if update_count > 0
   end
 
@@ -88,11 +89,7 @@ class Identity < ActiveRecord::Base
   private
 
   def initialize_last_seen
-    self.last_seen_at ||= Time.now.to_date
-  end
-
-  def destroy_sessions
-    Session.destroy_all_for_identity(self)
+    self.last_seen_on ||= Time.now.to_date
   end
 
 end

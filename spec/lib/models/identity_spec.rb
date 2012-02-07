@@ -68,13 +68,13 @@ describe Identity do
       Session.find_by_id(session.id).should be_nil
     end
 
-    it "initializes the last_seen_at for new identitites" do
-      Identity.find(someone.id).last_seen_at.should eq Time.now.to_date
+    it "initializes the last_seen_on for new identitites" do
+      Identity.find(someone.id).last_seen_on.should eq Time.now.to_date
     end
 
     it "can find identities not seen for a while" do
       (0..9).each do |age|
-        Identity.create!(:realm => realm, :last_seen_at => Time.now.to_date - age)
+        Identity.create!(:realm => realm, :last_seen_on => Time.now.to_date - age)
       end
       Identity.not_seen_for_more_than_days(20).size.should eq 0
       Identity.not_seen_for_more_than_days(9).size.should eq 0
