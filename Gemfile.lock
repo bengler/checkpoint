@@ -80,7 +80,7 @@ GIT
 
 GIT
   remote: git@github.com:origo/capistrano-bengler.git
-  revision: d293d0afc60d58fbccba64821981d99e07040559
+  revision: a811ae8a10d807fd52b306bc6ac089f76f22d53e
   specs:
     capistrano-bengler (0.0.11)
       capistrano (>= 2.9)
