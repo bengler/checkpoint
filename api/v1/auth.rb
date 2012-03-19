@@ -17,8 +17,8 @@ class CheckpointV1 < Sinatra::Base
   get '/login/anonymous' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
     redirect_to_path = ensure_valid_redirect_path || '/'
-    anonumous_identity = Identity.find_by_session_key(current_session) || Identity.create!(:realm => current_realm)
-    log_in(anonumous_identity)
+    anonymous_identity = Identity.find_by_session_key(current_session) || Identity.create!(:realm => current_realm)
+    log_in(anonymous_identity)
     redirect redirect_to_path
   end
 
