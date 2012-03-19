@@ -3,12 +3,12 @@ class CheckpointV1 < Sinatra::Base
   def ensure_valid_redirect_path
     return nil unless params[:redirect_to]
     begin
-      uri = URI(params[:redirect_to])
+      uri = URI(CGI.unescape(params[:redirect_to]))
     rescue => e
       halt 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
     end
     halt 500, "Invalid value for redirect_to: '#{params[:redirect_to]}'. Please use path only." if (uri.host || uri.scheme)
-    uri.path
+    uri.to_s
   end
 
   # Log in anonymously
