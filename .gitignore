@@ -7,3 +7,5 @@ vendor/bundle/
 .bundle
 .rvmrc
 .idea
+*.sublime-*
+/_trash
