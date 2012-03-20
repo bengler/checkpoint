@@ -186,7 +186,7 @@ GEM
       kgio (~> 2.4)
       rack
       raindrops (~> 0.6)
-    vcr (2.0.0)
+    vcr (1.11.3)
     webmock (1.8.3)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
@@ -225,6 +225,6 @@ DEPENDENCIES
   thor
   timecop
   unicorn (~> 4.1.1)
-  vcr
+  vcr (~> 1.11)
   webmock
   yajl-ruby

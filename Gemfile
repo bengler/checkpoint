@@ -32,6 +32,6 @@ group :development, :test do
   gem 'capistrano', '~> 2.9.0'
 	gem 'capistrano-bengler', :git => 'git@github.com:origo/capistrano-bengler.git'
   gem 'timecop'
-  gem 'vcr'
+  gem 'vcr', '~> 1.11'
   gem 'webmock'
 end
