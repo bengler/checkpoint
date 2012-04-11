@@ -6,6 +6,12 @@ GIT
       omniauth-oauth (~> 1.0)
 
 GIT
+  remote: git://github.com/bengler/hupper.git
+  revision: 4eb51c501d62be1d84e6cd845e4122e21c4b0b62
+  specs:
+    hupper (0.0.1)
+
+GIT
   remote: git://github.com/benglerpebbles/o5-logging.git
   revision: db9686026912448e19fa0512e46f66c871a45da7
   specs:
@@ -55,12 +61,6 @@ GIT
   revision: 388b8545455c4ef1c0c4ee1841c154041241c97f
   specs:
     bengler_test_helper (0.0.1)
-
-GIT
-  remote: git://github.com/origo/hupper.git
-  revision: 4eb51c501d62be1d84e6cd845e4122e21c4b0b62
-  specs:
-    hupper (0.0.1)
 
 GIT
   remote: git://github.com/origo/omniauth-origo.git
