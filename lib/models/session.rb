@@ -1,4 +1,5 @@
 class Session < ActiveRecord::Base
+
   belongs_to :identity
   before_save :create_key
   before_destroy :invalidate_cache
@@ -17,8 +18,7 @@ class Session < ActiveRecord::Base
     # The number of possible keys is approximately the number of atoms
     # in the observable universe multiplied by the number of atoms in
     # the observable universe.
-    srand
-    rand(2**512).to_s(36)
+    SecureRandom.random_number(2 ** 512).to_s(36)
   end
 
   def self.identity_id_for_session(session_key)
@@ -42,6 +42,5 @@ class Session < ActiveRecord::Base
   def create_key
     self.key ||= Session.random_key
   end
-
 
 end
