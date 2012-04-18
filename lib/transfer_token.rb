@@ -26,15 +26,15 @@ class TransferToken
     end
   end
 
-  def valid_referrer?(referrer)
-    host_from_referrer(@referrer) == host_from_referrer(referrer)
-  end
-
   def save
     $memcached.set(TransferToken.cache_key(@token), Marshal.dump(
       :referrer => @referrer,
       :secret => @secret
     ), 5.minutes)
+  end
+
+  def valid_referrer?(referrer)
+    host_from_referrer(@referrer) == host_from_referrer(referrer)
   end
 
   def sign_with_secret(data)
@@ -52,7 +52,7 @@ class TransferToken
     def host_from_referrer(referrer)
       uri = URI.parse(referrer) rescue nil
       if uri
-        uri.host
+        uri.host.downcase
       end
     end
 
