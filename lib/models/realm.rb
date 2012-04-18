@@ -1,4 +1,5 @@
 require 'ostruct'
+
 class Realm < ActiveRecord::Base
 
   has_many :accounts
@@ -15,7 +16,7 @@ class Realm < ActiveRecord::Base
   end
 
   def god_sessions
-    Session.joins('inner join identities on sessions.identity_id = identities.id').where('identities.god = ? and identities.realm_id = ?', true, id)
+    Session.where("sessions.identity_id in (select id from identities where god and realm_id = ?)", id)
   end
 
   def external_service_keys
