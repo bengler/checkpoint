@@ -8,21 +8,21 @@ SimpleCov.start
 $:.unshift(File.dirname(File.dirname(__FILE__)))
 
 ENV["RACK_ENV"] = "test"
-require 'config/environment'
 
+require 'config/environment'
 require 'api/v1'
 
 require 'rack/test'
-#require 'config/logging'
-
 require 'vcr'
+
+$logger.level = Logger::ERROR  # Avoid most output in tests
+
 VCR.config do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.stub_with :webmock 
 end
 
 set :environment, :test
-
 
 # Run all examples in a transaction
 RSpec.configure do |c|
