@@ -18,7 +18,7 @@ class CheckpointV1 < Sinatra::Base
   error Exception do |e|
     $logger.error e.message
     e.backtrace.each do |line|
-      $logger.info line
+      $logger.error line
     end
     halt 500, e.message
   end
