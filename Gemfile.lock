@@ -58,9 +58,9 @@ GIT
 
 GIT
   remote: git://github.com/origo/bengler_test_helper.git
-  revision: 388b8545455c4ef1c0c4ee1841c154041241c97f
+  revision: 25c9cdd45795c530ad8e82d325e7c6d28b5cb37c
   specs:
-    bengler_test_helper (0.0.1)
+    bengler_test_helper (0.0.2)
 
 GIT
   remote: git://github.com/origo/omniauth-origo.git
