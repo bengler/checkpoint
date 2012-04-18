@@ -1,0 +1,2 @@
+node :token => transfer_token.token
+node :secret => transfer_token.secret
