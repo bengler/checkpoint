@@ -23,15 +23,18 @@ gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'pingable'
 gem 'o5-logging', :git => "git://github.com/benglerpebbles/o5-logging.git"
-gem 'bengler_test_helper', :git => 'git://github.com/origo/bengler_test_helper.git'
 
-group :development, :test do
+group :development do
+  gem 'capistrano', '~> 2.9.0'
+	gem 'capistrano-bengler', :git => 'git@github.com:origo/capistrano-bengler.git'
+end
+
+group :test do
   gem 'rspec', '~> 2.8'
   gem 'simplecov'
   gem 'rack-test'
-  gem 'capistrano', '~> 2.9.0'
-	gem 'capistrano-bengler', :git => 'git@github.com:origo/capistrano-bengler.git'
   gem 'timecop'
   gem 'vcr', '~> 1.11'
   gem 'webmock'
+  gem 'bengler_test_helper', :git => 'git://github.com/origo/bengler_test_helper.git'
 end
