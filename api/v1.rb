@@ -28,28 +28,51 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do 
-    def current_session
+    def current_session_key
       params[:session] || request.cookies[Session::COOKIE_NAME]
     end
 
+    def current_session
+      return @current_session ||= session_from_cookie || new_session
+    end
+
+    def session_from_cookie
+      if (key = current_session_key)
+        session = Session.where("key = ?", key).first(:include => :identity)
+        unless session
+          # Cookie contains invalid key, so delete cookie
+          response.delete_cookie(Session::COOKIE_NAME)
+        end
+      end
+      session
+    end
+
+    def new_session
+      session = Session.create!(:identity => @current_identity)
+      response.set_cookie(Session::COOKIE_NAME,
+        :value => session.key,
+        :path => '/',
+        :expires => Session::DEFAULT_EXPIRY.dup)
+      session
+    end
+
     def current_identity
-      return @current_identity if @current_identity
-      @current_identity = Identity.find_by_session_key(current_session)
-      @current_identity
+      return @current_identity ||= current_session.identity
     end
 
     def log_in(identity)
-      return if current_identity == identity
-      session = Session.create!(:identity => identity)
-      response.set_cookie(Session::COOKIE_NAME, :value => session.key,
-        :path => '/',
-        :expires => Time.now + 1.year)
-      @current_identity = identity
+      if current_identity != identity
+        current_session.identity = identity
+        current_session.save!
+        @current_identity = identity
+      end
     end
 
     def log_out
-      Session.destroy_by_key(current_session)
-      response.delete_cookie(Session::COOKIE_NAME)
+      if current_session.identity and not current_session.identity.provisional?
+        current_session.identity = nil
+        current_session.save!
+      end
       @current_identity = nil      
     end
 

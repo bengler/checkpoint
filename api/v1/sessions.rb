@@ -1,6 +1,6 @@
 # TODO: add petroglyph templates for session.
-
 class CheckpointV1 < Sinatra::Base
+
   # Get a session
   #
   # @param [String] key  the session key
@@ -36,4 +36,5 @@ class CheckpointV1 < Sinatra::Base
     session.destroy
     halt 204
   end
+
 end

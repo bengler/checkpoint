@@ -1,10 +1,14 @@
 class Session < ActiveRecord::Base
 
   belongs_to :identity
-  before_save :create_key
-  before_destroy :invalidate_cache
 
-  COOKIE_NAME = "checkpoint.session"
+  before_save :ensure_key
+  after_destroy :invalidate_cache
+  after_save :invalidate_cache
+
+  COOKIE_NAME = "checkpoint.session".freeze
+
+  DEFAULT_EXPIRY = Time.parse("2100-01-01").freeze
 
   def self.cache_key(key)
     "session:#{key}"
@@ -22,11 +26,10 @@ class Session < ActiveRecord::Base
   end
 
   def self.identity_id_for_session(session_key)
-    result = $memcached.fetch(cache_key(session_key)) do
-      Session.connection.select_value("select identity_id from sessions where key = '#{session_key}'")
-    end
-    return nil unless result
-    result.to_i
+    return $memcached.fetch(cache_key(session_key)) {
+      Session.connection.select_value(
+        "select identity_id from sessions where key = '#{session_key}'")
+    }.try(:to_i)
   end
 
   def self.destroy_by_key(session_key)
@@ -39,8 +42,8 @@ class Session < ActiveRecord::Base
 
   private
 
-  def create_key
-    self.key ||= Session.random_key
-  end
+    def ensure_key
+      self.key ||= Session.random_key
+    end
 
 end
