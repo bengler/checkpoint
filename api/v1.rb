@@ -56,6 +56,16 @@ class CheckpointV1 < Sinatra::Base
       session
     end
 
+    def set_session_key(key)
+      @current_session = Session.find_by_key(key)
+      return unless @current_session
+      response.set_cookie(Session::COOKIE_NAME,
+        :value => @current_session.key,
+        :path => '/',
+        :expires => Session::DEFAULT_EXPIRY.dup)
+      key
+    end
+
     def current_identity
       return @current_identity ||= current_session.identity
     end
