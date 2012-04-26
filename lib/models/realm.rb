@@ -5,6 +5,7 @@ class Realm < ActiveRecord::Base
   has_many :accounts
   has_many :identities
   has_many :domains
+  belongs_to :primary_domain, :class_name => "Domain"
 
   validates_uniqueness_of :label, :allow_nil => false
 
