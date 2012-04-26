@@ -98,5 +98,14 @@ class CheckpointV1 < Sinatra::Base
       halt 200, "{}" unless realm
       realm
     end
+
+    def url_with_query_params(url, params)
+      uri = URI.parse(url)
+      uri.query << "&" if uri.query
+      uri.query ||= ''
+      uri.query += QueryParams.encode(params)
+      uri.to_s
+    end
+
   end
 end

@@ -23,6 +23,7 @@ gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'pingable'
 gem 'o5-logging', :git => "git://github.com/benglerpebbles/o5-logging.git"
+gem 'queryparams'
 
 group :development do
   gem 'capistrano', '~> 2.9.0'

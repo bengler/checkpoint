@@ -2,21 +2,6 @@ require 'uri'
 
 class CheckpointV1 < Sinatra::Base
 
-  helpers do
-    def url_with_query_params(url, params)
-      uri = URI.parse(url)
-      uri.query << "&" if uri.query
-      uri.query ||= ''
-      params.each do |key, value|
-        uri.query << CGI.escape(key.to_s)
-        uri.query << '='
-        uri.query << CGI.escape(value.to_s)
-        uri.query << '&'
-      end
-      uri.to_s
-    end
-  end
-
   # Create a transfer token. This can be used to transfer a session cookie securely
   # from one domain to another.
   #

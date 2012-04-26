@@ -214,6 +214,7 @@ DEPENDENCIES
   petroglyph!
   pg
   pingable
+  queryparams
   rack (~> 1.4)!
   rack-contrib
   rack-test
