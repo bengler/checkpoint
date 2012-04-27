@@ -31,7 +31,8 @@ class CheckpointV1 < Sinatra::Base
     if request.host != target.host                      
       # We are leaving the origin domain
       check_domain_is_within_current_realm(target.host)
-      redirect url_with_query_params("http://#{target.host}/transfer", :target => target.to_s, :session => current_session_key)
+      redirect url_with_query_params("http://#{target.host}/api/checkpoint/v1/transfer", 
+        :target => target.to_s, :session => current_session_key)
     else
       # We have arrived at the target domain
       set_session_key(params[:session]) if params[:session]
