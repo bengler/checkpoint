@@ -3,12 +3,20 @@ class CheckpointV1 < Sinatra::Base
   def ensure_valid_redirect_path
     return nil unless params[:redirect_to]
     begin
-      uri = URI(CGI.unescape(params[:redirect_to]))
+      uri = URI(params[:redirect_to])
     rescue => e
       halt 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
     end
-    halt 500, "Invalid value for redirect_to: '#{params[:redirect_to]}'. Please use path only." if (uri.host || uri.scheme)
+    uri.host ||= request.host
+    uri.scheme = "http"
     uri.to_s
+  end
+
+  helpers do
+    # Will execute the provided block only if we are not on the primary domain
+    def on_primary_domain?
+      request.host == current_realm.primary_domain.name 
+    end
   end
 
   # Log in anonymously
@@ -28,8 +36,23 @@ class CheckpointV1 < Sinatra::Base
   # @param [String] redirect_to where to redirect to after login is complete (optional)
   get '/login/:provider' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
-    session[:redirect_to] = params[:redirect_to] if params[:redirect_to]
-    redirect to("/auth/#{params[:provider]}")
+
+    # Make sure the target url is fully qualified with domain
+    target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
+    target_url.host ||= request.host
+    target_url.scheme = "http"
+
+    unless on_primary_domain?
+      # Proceed on primary domain rewriting the current url
+
+      url = URI.parse(request.url)
+      url.host = current_realm.primary_domain.name
+      url.query = "redirect_to=#{CGI.escape(target_uri.to_s)}"
+      redirect url
+    else
+      session[:redirect_to] = target_url.to_s
+      redirect "/auth/#{params[:provider]}"
+    end
   end
 
   # This is called directly by Omniauth as a rack method
@@ -65,7 +88,7 @@ class CheckpointV1 < Sinatra::Base
       redirect '/login/failed?message=account_in_use'
     end
 
-    redirect session[:redirect_to] || '/login/succeeded'
+    redirect session[:redirect_to]
   end
 
   get '/auth/failure' do

@@ -117,5 +117,17 @@ class CheckpointV1 < Sinatra::Base
       uri.to_s
     end
 
+    # A redirect that can redirect across domains while maintaining the current session
+    def transfer(url)
+      target_host = URI.parse(url).host
+      if target_host.nil? || target_host == request.host
+        # This can be solved with the common household redirect
+        redirect url
+      else
+        # Use the transfer mechanism to redirect across domains
+        redirect url_with_query_params("/api/checkpoint/v1/transfer", :target => url)
+      end
+    end
+
   end
 end
