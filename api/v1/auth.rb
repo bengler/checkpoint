@@ -47,11 +47,11 @@ class CheckpointV1 < Sinatra::Base
 
       url = URI.parse(request.url)
       url.host = current_realm.primary_domain.name
-      url.query = "redirect_to=#{CGI.escape(target_uri.to_s)}"
-      redirect url
+      url.query = "redirect_to=#{CGI.escape(target_url.to_s)}"
+      redirect url.to_s
     else
       session[:redirect_to] = target_url.to_s
-      redirect "/auth/#{params[:provider]}"
+      redirect to("/auth/#{params[:provider]}")
     end
   end
 
@@ -85,14 +85,15 @@ class CheckpointV1 < Sinatra::Base
       account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm, :identity => current_identity)
       log_in(account.identity)
     rescue Account::InUseError => e
-      redirect '/login/failed?message=account_in_use'
+      redirect "http://#{URI.parse(session[:redirect_to]).host}/login/failed?message=account_in_use"
+      return
     end
 
-    redirect session[:redirect_to]
+    transfer session[:redirect_to]
   end
 
   get '/auth/failure' do
-    redirect "/login/failed?message=#{params[:message]}"
+    redirect "http://#{URI.parse(session[:redirect_to].host)}/login/failed?message=#{params[:message]}"
   end
 
   # Log out
