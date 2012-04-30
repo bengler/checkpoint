@@ -17,6 +17,15 @@ class CheckpointV1 < Sinatra::Base
     def on_primary_domain?
       request.host == current_realm.primary_domain.name 
     end
+
+    def authentication_target_host
+      if session[:redirect_to]
+        URI.parse(session[:redirect_to]).host
+      else
+        request.host
+      end
+    end
+
   end
 
   # Log in anonymously
@@ -85,7 +94,7 @@ class CheckpointV1 < Sinatra::Base
       account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm, :identity => current_identity)
       log_in(account.identity)
     rescue Account::InUseError => e
-      redirect "http://#{URI.parse(session[:redirect_to]).host}/login/failed?message=account_in_use"
+      redirect "http://#{authentication_target_host}/login/failed?message=account_in_use"
       return
     end
 
@@ -93,7 +102,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/failure' do
-    redirect "http://#{URI.parse(session[:redirect_to].host)}/login/failed?message=#{params[:message]}"
+    redirect "http://#{authentication_target_host}/login/failed?message=#{params[:message]}"
   end
 
   # Log out
