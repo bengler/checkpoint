@@ -125,6 +125,7 @@ GEM
     highline (1.6.11)
     i18n (0.6.0)
     kgio (2.7.3)
+    mime-types (1.17.2)
     multi_json (1.1.0)
     multipart-post (1.1.5)
     net-scp (1.0.4)
@@ -160,6 +161,8 @@ GEM
       rack (>= 1.0)
     raindrops (0.8.0)
     rake (0.9.2.2)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.9.0)
       rspec-core (~> 2.9.0)
       rspec-expectations (~> 2.9.0)
@@ -220,6 +223,7 @@ DEPENDENCIES
   rack-contrib
   rack-test
   rake
+  rest-client
   rspec (~> 2.8)
   simplecov
   simpleidn (~> 0.0.4)

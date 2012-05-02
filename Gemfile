@@ -30,6 +30,7 @@ gem 'simpleidn', '~> 0.0.4'
 group :development do
   gem 'capistrano', '~> 2.9.0'
 	gem 'capistrano-bengler', :git => 'git@github.com:origo/capistrano-bengler.git'
+  gem 'rest-client', :require => false  # Used by origo.thor
 end
 
 group :test do
