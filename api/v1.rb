@@ -23,6 +23,9 @@ class CheckpointV1 < Sinatra::Base
     halt 500, e.message
   end
 
+  before do
+    cache_control :public, :no_cache, :max_age => -1
+  end
   after do
     current_identity.mark_as_seen if current_identity
   end
