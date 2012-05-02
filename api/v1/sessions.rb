@@ -8,8 +8,19 @@ class CheckpointV1 < Sinatra::Base
   get '/sessions/:key' do |id|
     @session = Session.find_by_key(id)
     halt 200, "{}" unless @session
-    @session.identity == current_identity or check_god_credentials(@session.identity.realm_id)
-    { session: {id: @session.key, identity_id: @session.identity_id }}.to_json
+    unless @session.identity == current_identity
+      check_god_credentials(@session.identity.realm_id)
+    end
+    pg :session, :locals => {:session => @session}
+  end
+
+  post '/sessions/:key' do |id|
+    @session = Session.find_by_key(id)
+    halt 200, "{}" unless @session
+    unless @session.identity == current_identity
+      check_god_credentials(@session.identity.realm_id)
+    end
+    pg :session, :locals => {:session => @session}
   end
 
   # Create a session
@@ -20,9 +31,11 @@ class CheckpointV1 < Sinatra::Base
     identity = Identity.find_by_id(params[:identity_id])
     identity ||= current_identity
     halt 500, "Identity not found" unless identity
-    identity == current_identity or check_god_credentials(identity.realm_id)
-    expire = (params[:expire] == 'never') ? nil : (params[:expire].try(:to_i) || 1.hour)
-    { session: {id: Session.create!(:identity => identity).key, identity_id: identity.id }}.to_json
+    unless identity == current_identity
+      check_god_credentials(identity.realm_id)
+    end
+    log_in(identity)
+    pg :session, :locals => {:session => current_session}
   end
 
   # Delete a session key
@@ -32,7 +45,9 @@ class CheckpointV1 < Sinatra::Base
   delete '/sessions/:key' do
     session = Session.find_by_key(params[:key])
     halt 500, "No such session" unless session
-    session.identity == current_identity or check_god_credentials(session.identity.realm_id)
+    unless session.identity == current_identity
+      check_god_credentials(session.identity.realm_id)
+    end
     session.destroy
     halt 204
   end

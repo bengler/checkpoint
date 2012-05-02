@@ -1,0 +1,4 @@
+node :session => session do
+  attributes :identity_id
+  node :id => session.key
+end
