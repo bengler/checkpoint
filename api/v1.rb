@@ -24,8 +24,9 @@ class CheckpointV1 < Sinatra::Base
   end
 
   before do
-    cache_control :public, :no_cache, :max_age => -1
+    cache_control :private, :no_cache, :no_store, :must_revalidate
   end
+
   after do
     current_identity.mark_as_seen if current_identity
   end
