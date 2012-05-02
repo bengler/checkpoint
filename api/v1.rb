@@ -31,6 +31,13 @@ class CheckpointV1 < Sinatra::Base
     current_identity.mark_as_seen if current_identity
   end
 
+  after do
+    if @session_is_dirty
+      @current_session.save!
+      @session_is_dirty = false
+    end
+  end
+
   helpers do 
     def current_session_key
       params[:session] || request.cookies[Session::COOKIE_NAME]
@@ -38,6 +45,10 @@ class CheckpointV1 < Sinatra::Base
 
     def current_session
       return @current_session ||= session_from_cookie || new_session
+    end
+
+    def ensure_session
+      current_session  # Forces a session
     end
 
     def session_from_cookie
@@ -52,11 +63,12 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def new_session
-      session = Session.create!(:identity => @current_identity)
+      session = Session.new(:identity => @current_identity)
       response.set_cookie(Session::COOKIE_NAME,
         :value => session.key,
         :path => '/',
         :expires => Session::DEFAULT_EXPIRY.dup)
+      @session_is_dirty = true
       session
     end
 
@@ -77,7 +89,7 @@ class CheckpointV1 < Sinatra::Base
     def log_in(identity)
       if current_identity != identity
         current_session.identity = identity
-        current_session.save!
+        @session_is_dirty = true
         @current_identity = identity
       end
     end
@@ -85,7 +97,7 @@ class CheckpointV1 < Sinatra::Base
     def log_out
       if current_session.identity and not current_session.identity.provisional?
         current_session.identity = nil
-        current_session.save!
+        @session_is_dirty = true
       end
       @current_identity = nil      
     end

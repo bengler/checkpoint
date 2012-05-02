@@ -10,6 +10,11 @@ class Session < ActiveRecord::Base
 
   DEFAULT_EXPIRY = Time.parse("2100-01-01").freeze
 
+  def key
+    key = read_attribute(:key)
+    key ||= self.key = Session.random_key
+  end
+
   def self.cache_key(key)
     "session:#{key}"
   end
@@ -43,7 +48,7 @@ class Session < ActiveRecord::Base
   private
 
     def ensure_key
-      self.key ||= Session.random_key
+      self.key  # Forces assignment
     end
 
 end

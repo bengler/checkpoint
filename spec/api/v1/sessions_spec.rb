@@ -47,6 +47,7 @@ describe "Sessions" do
 
   it "lets me creates a session for another user" do
     post "/sessions", :identity_id => someone.id, :session => somegod_session
+    last_response.status.should == 200
     session = JSON.parse(last_response.body)['session']['id']
     Session.identity_id_for_session(session).should eq someone.id
     get "/identities/me", :session => session
