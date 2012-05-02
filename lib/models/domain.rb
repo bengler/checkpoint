@@ -4,6 +4,11 @@ require 'simpleidn'
 class Domain < ActiveRecord::Base
 
   belongs_to :realm
+  has_one :primary_realm,
+    :class_name => 'Realm',
+    :foreign_key => :primary_domain_id,
+    :dependent => :nullify
+
   after_save :ensure_primary_domain
   
   validates :name, :presence => {}, :uniqueness => {}
