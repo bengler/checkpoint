@@ -25,6 +25,7 @@ gem 'pingable'
 gem 'o5-logging', :git => "git://github.com/benglerpebbles/o5-logging.git"
 gem 'queryparams'
 gem 'bengler_test_helper', :git => 'git://github.com/origo/bengler_test_helper.git'
+gem 'simpleidn', '~> 0.0.4'
 
 group :development do
   gem 'capistrano', '~> 2.9.0'
