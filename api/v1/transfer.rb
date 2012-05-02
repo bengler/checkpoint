@@ -3,6 +3,16 @@ require 'uri'
 class CheckpointV1 < Sinatra::Base
 
   helpers do
+    def parse_url(url)
+      parsed = URI.parse(url)
+      parsed.host ||= request.host
+      parsed.scheme ||= request.scheme
+      parsed.port ||= request.port
+      parsed
+    rescue URI::InvalidURIError
+      halt 400, "Invalid URL #{url.inspect}"
+    end
+
     # Checks that the provided host-name is attached to the current realm
     def check_domain_is_within_current_realm(domain_name)
       domain = Domain.find_by_name(domain_name)
@@ -19,24 +29,23 @@ class CheckpointV1 < Sinatra::Base
   # is the same.
   #
   # @param [String] target Url to redirect to
-
   get '/transfer' do
-    begin
-      target = URI.parse(params[:target])
-      target.host ||= request.host
-    rescue URI::InvalidURIError
-      halt 400, "Invalid target url #{params[:target].inspect}"
-    end    
+    target_url = parse_url(params[:target])
+
     # Are we leaving or arriving?
-    if request.host != target.host                      
+    if request.host != target_url.host
       # We are leaving the origin domain
-      check_domain_is_within_current_realm(target.host)
-      redirect url_with_query_params("http://#{target.host}/api/checkpoint/v1/transfer", 
-        :target => target.to_s, :session => current_session_key)
+      check_domain_is_within_current_realm(target_url.host)
+
+      new_url = target_url.dup
+      new_url.path = '/api/checkpoint/v1/target'
+      redirect url_with_query_params(new_url.to_s,
+        :target => target_url.to_s,
+        :session => current_session_key)
     else
       # We have arrived at the target domain
       set_session_key(params[:session]) if params[:session]
-      redirect target.to_s
+      redirect target_url.to_s
     end
   end
 
