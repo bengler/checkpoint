@@ -64,22 +64,25 @@ class CheckpointV1 < Sinatra::Base
 
     def new_session
       session = Session.new(:identity => @current_identity)
-      response.set_cookie(Session::COOKIE_NAME,
-        :value => session.key,
-        :path => '/',
-        :expires => Session::DEFAULT_EXPIRY.dup)
+      set_session_cookie!(session)
       @session_is_dirty = true
       session
     end
 
     def set_session_key(key)
       @current_session = Session.find_by_key(key)
-      return unless @current_session
+      if @current_session
+        set_session_cookie!(@current_session)
+        key
+      end
+    end
+
+    def set_session_cookie!(session)
       response.set_cookie(Session::COOKIE_NAME,
-        :value => @current_session.key,
+        :value => session.key,
+        :domain => request.host,
         :path => '/',
         :expires => Session::DEFAULT_EXPIRY.dup)
-      key
     end
 
     def current_identity
