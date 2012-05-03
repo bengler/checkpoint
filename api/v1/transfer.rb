@@ -41,7 +41,7 @@ class CheckpointV1 < Sinatra::Base
       new_url.path = '/api/checkpoint/v1/target'
       redirect url_with_query_params(new_url.to_s,
         :target => target_url.to_s,
-        :session => current_session_key)
+        :session => current_session.key)
     else
       # We have arrived at the target domain
       set_session_key(params[:session]) if params[:session]
