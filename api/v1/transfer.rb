@@ -15,7 +15,7 @@ class CheckpointV1 < Sinatra::Base
 
     # Checks that the provided host-name is attached to the current realm
     def check_domain_is_within_current_realm(domain_name)
-      domain = Domain.find_by_name(domain_name)
+      domain = Domain.resolve_from_host_name(domain_name)
       halt 403, "No realm configured for domain #{domain_name}" unless domain
       halt 400, "No origin realm for #{request.host}" unless current_realm
       halt 403, "#{domain_name} is not attached to the realm '#{current_realm.label}'." unless domain.realm_id == current_realm.id
