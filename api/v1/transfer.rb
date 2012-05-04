@@ -38,7 +38,7 @@ class CheckpointV1 < Sinatra::Base
       check_domain_is_within_current_realm(target_url.host)
 
       new_url = target_url.dup
-      new_url.path = '/api/checkpoint/v1/target'
+      new_url.path = '/api/checkpoint/v1/transfer'
       redirect url_with_query_params(new_url.to_s,
         :target => target_url.to_s,
         :session => current_session.key)
