@@ -24,7 +24,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   before do
-    cache_control :no_cache
+    cache_control :private, :no_cache, :no_store, :must_revalidate
   end
 
   after do
