@@ -32,9 +32,23 @@ class CheckpointV1 < Sinatra::Base
   end
 
   after do
-    if @session_is_dirty
-      @current_session.save!
-      @session_is_dirty = false
+    session = @current_session
+    session.save! if @session_is_dirty
+    if @session_cookie_is_dirty
+      Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|
+        if k == Session::COOKIE_NAME and v.is_a?(Array)
+          # Delete legacy cookie on wrong domain
+          response.set_cookie(Session::COOKIE_NAME,
+            :value => '',
+            :domain => ".#{request.host}",
+            :path => '/',
+            :expires => Time.now)
+        end
+      end
+      response.set_cookie(Session::COOKIE_NAME,
+        :value => session.key,
+        :path => '/',
+        :expires => Session::DEFAULT_EXPIRY.dup)
     end
   end
 
@@ -64,25 +78,17 @@ class CheckpointV1 < Sinatra::Base
 
     def new_session
       session = Session.new(:identity => @current_identity)
-      set_session_cookie!(session)
       @session_is_dirty = true
+      @session_cookie_is_dirty = true
       session
     end
 
     def set_session_key(key)
       @current_session = Session.find_by_key(key)
       if @current_session
-        set_session_cookie!(@current_session)
+        @session_cookie_is_dirty = true
         key
       end
-    end
-
-    def set_session_cookie!(session)
-      response.set_cookie(Session::COOKIE_NAME,
-        :value => session.key,
-        :domain => request.host,
-        :path => '/',
-        :expires => Session::DEFAULT_EXPIRY.dup)
     end
 
     def current_identity
