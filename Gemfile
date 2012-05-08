@@ -26,11 +26,11 @@ gem 'o5-logging', :git => "git://github.com/benglerpebbles/o5-logging.git"
 gem 'queryparams'
 gem 'bengler_test_helper', :git => 'git://github.com/origo/bengler_test_helper.git'
 gem 'simpleidn', '~> 0.0.4'
+gem 'rest-client', :require => false  # Used by origo.thor
 
 group :development do
   gem 'capistrano', '~> 2.9.0'
 	gem 'capistrano-bengler', :git => 'git@github.com:origo/capistrano-bengler.git'
-  gem 'rest-client', :require => false  # Used by origo.thor
 end
 
 group :test do
