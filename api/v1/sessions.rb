@@ -15,12 +15,12 @@ class CheckpointV1 < Sinatra::Base
   end
 
   post '/sessions/:key' do |id|
+    check_god_credentials(current_identity.try(:realm_id))
     @session = Session.find_by_key(id)
-    halt 200, "{}" unless @session
-    unless @session.identity == current_identity
-      check_god_credentials(@session.identity.realm_id)
-    end
-    pg :session, :locals => {:session => @session}
+    @session ||= Session.new(:key => id)
+    @session.identity_id = params[:identity_id]
+    @session.save!
+    halt 200
   end
 
   # Create a session
