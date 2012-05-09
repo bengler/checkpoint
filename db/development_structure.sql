@@ -305,6 +305,20 @@ CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, 
 
 
 --
+-- Name: index_accounts_on_identity_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_accounts_on_identity_id ON accounts USING btree (identity_id);
+
+
+--
+-- Name: index_accounts_on_realm_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_accounts_on_realm_id ON accounts USING btree (realm_id);
+
+
+--
 -- Name: index_domains_on_name; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -330,6 +344,13 @@ CREATE INDEX index_identities_on_realm_id ON identities USING btree (realm_id);
 --
 
 CREATE UNIQUE INDEX index_realms_on_label ON realms USING btree (label);
+
+
+--
+-- Name: index_sessions_on_key; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_key ON sessions USING btree (key);
 
 
 --
