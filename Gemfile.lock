@@ -19,9 +19,9 @@ GIT
 
 GIT
   remote: git://github.com/benglerpebbles/pebblebed.git
-  revision: 1f8516e5d0b5b6df8657de174d449ad0f238809a
+  revision: 2debe5940bd7e28a5bde1d191b7cba9bb34d3758
   specs:
-    pebblebed (0.0.12)
+    pebblebed (0.0.14)
       activesupport
       curb (~> 0.8.0)
       deepstruct
@@ -126,7 +126,7 @@ GEM
     i18n (0.6.0)
     kgio (2.7.3)
     mime-types (1.17.2)
-    multi_json (1.1.0)
+    multi_json (1.3.4)
     multipart-post (1.1.5)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
