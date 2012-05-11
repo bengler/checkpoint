@@ -49,7 +49,7 @@ class CheckpointV1 < Sinatra::Base
     # Make sure the target url is fully qualified with domain
     target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
     target_url.host ||= request.host
-    target_url.scheme = "http"
+    target_url.scheme ||= "http"
 
     unless on_primary_domain?
       # Proceed on primary domain rewriting the current url
