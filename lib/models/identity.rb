@@ -80,9 +80,11 @@ class Identity < ActiveRecord::Base
   end
 
   def mark_as_seen
-    update_count = Identity.update_all(
-      "last_seen_on = current_date", "id = #{self.id} and (last_seen_on != current_date or last_seen_on is null)")
-    invalidate_cache if update_count > 0
+    today = Date.today
+    if self.last_seen_on != today
+      self.last_seen_on = today
+      self.save(:validate => false)
+    end
   end
 
   def invalidate_cache
