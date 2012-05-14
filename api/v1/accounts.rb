@@ -32,7 +32,7 @@ class CheckpointV1 < Sinatra::Base
       *%w(identity_id realm_id provider uid token secret nickname
         name location description profile_url image_url email))
     account.attributes = params.slice(
-      *%w(identity_id realm_id provider uid token secret nickname
+      *%w(identity_id provider uid token secret nickname
         name location description profile_url image_url email))
     account.save!
     [201, pg(:account, :locals => {:account => account})]
@@ -43,7 +43,7 @@ class CheckpointV1 < Sinatra::Base
     account = Account.where(:realm_id => current_identity.realm_id, :id => id).first
     halt 404 unless account
     account.attributes = params.slice(
-      %w(identity_id realm_id provider uid token secret nickname
+      %w(identity_id provider uid token secret nickname
         name location description profile_url image_url email))
     account.save!
     [201, pg(:account, :locals => {:account => account})]
