@@ -79,6 +79,16 @@ GIT
     rack (1.4.1)
 
 GIT
+  remote: git@github.com:bengler/omniauth-vanilla.git
+  revision: 196b2a87d8d6c49e28e72f5a242a8fe5e9b30c85
+  specs:
+    omniauth-vanilla (0.0.1)
+      multi_json
+      oauth
+      omniauth (>= 1.0.0)
+      omniauth-oauth2 (>= 1.0.0)
+
+GIT
   remote: git@github.com:origo/capistrano-bengler.git
   revision: 8e3bb27d90e779b75af1dca83d71b8ad33a69c3e
   specs:
@@ -214,6 +224,7 @@ DEPENDENCIES
   omniauth-oauth (~> 1.0.0)!
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
+  omniauth-vanilla!
   pebblebed!
   petroglyph!
   pg
