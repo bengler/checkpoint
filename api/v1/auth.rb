@@ -46,21 +46,20 @@ class CheckpointV1 < Sinatra::Base
   get '/login/:provider' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
 
-    # Make sure the target url is fully qualified with domain
+    # Make sure the target URL is fully qualified with domain
     target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
     target_url.host ||= request.host
     target_url.scheme ||= "http"
 
-    unless on_primary_domain?
-      # Proceed on primary domain rewriting the current url
-
-      url = URI.parse(request.url)
-      url.host = current_realm.primary_domain.name
-      url.query = "redirect_to=#{CGI.escape(target_url.to_s)}"
-      redirect url.to_s
-    else
+    if on_primary_domain?
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
+    else
+      # Proceed on primary domain rewriting the current URL
+      uri = URI.parse(request.url)
+      uri.host = current_realm.primary_domain.name
+      redirect url_with_query_params(uri.to_s,
+        :redirect_to => target_url)
     end
   end
 
