@@ -105,10 +105,17 @@ class CheckpointV1 < Sinatra::Base
     redirect "http://#{authentication_target_host}/login/failed?message=#{params[:message]}"
   end
 
-  # Log out
+  # FIXME: Should not offer this as GET.
   get '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
     redirect request.referer
   end
+
+  post '/logout' do
+    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    log_out
+    redirect request.referer
+  end
+
 end
