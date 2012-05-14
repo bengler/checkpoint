@@ -21,7 +21,7 @@ class Realm < ActiveRecord::Base
   end
 
   def external_service_keys
-    keys = YAML.load(self.service_keys)
+    keys = YAML.load(self.service_keys) if self.service_keys.present?
     raise "Missing or malformed configuration for #<Realm:#{id} #{label}>" unless keys
     keys
   end
