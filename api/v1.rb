@@ -23,6 +23,10 @@ class CheckpointV1 < Sinatra::Base
     halt 500, e.message
   end
 
+  not_found do
+    'Not found'
+  end
+
   before do
     cache_control :private, :no_cache, :no_store, :must_revalidate
   end
