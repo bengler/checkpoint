@@ -90,9 +90,9 @@ GIT
 
 GIT
   remote: git@github.com:origo/capistrano-bengler.git
-  revision: 8e3bb27d90e779b75af1dca83d71b8ad33a69c3e
+  revision: c52bb6bd2ac1151599d89fb702d044796d8fc0ec
   specs:
-    capistrano-bengler (0.0.11)
+    capistrano-bengler (0.0.13)
       capistrano (>= 2.9)
       capistrano-ext (>= 1.2.1)
 
@@ -132,7 +132,7 @@ GEM
       rack (~> 1.1)
     futurevalue (0.0.2)
     hashie (1.2.0)
-    highline (1.6.11)
+    highline (1.6.12)
     i18n (0.6.0)
     kgio (2.7.3)
     mime-types (1.17.2)
