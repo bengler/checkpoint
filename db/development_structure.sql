@@ -361,6 +361,22 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: accounts_identity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accounts_identity_id_fkey FOREIGN KEY (identity_id) REFERENCES identities(id);
+
+
+--
+-- Name: accounts_realm_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accounts_realm_id_fkey FOREIGN KEY (realm_id) REFERENCES realms(id);
+
+
+--
 -- Name: domains_realm_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
 --
 
@@ -374,6 +390,14 @@ ALTER TABLE ONLY domains
 
 ALTER TABLE ONLY realms
     ADD CONSTRAINT realms_primary_domain_id_fkey FOREIGN KEY (primary_domain_id) REFERENCES domains(id);
+
+
+--
+-- Name: sessions_identity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_identity_id_fkey FOREIGN KEY (identity_id) REFERENCES identities(id);
 
 
 --
