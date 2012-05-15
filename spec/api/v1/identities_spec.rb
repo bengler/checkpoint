@@ -199,4 +199,18 @@ describe "Identities" do
       identity.last_seen_on.to_date.should eq Time.now.to_date
     end
   end
+
+  describe "provisional status" do
+    it "is provisional if there's no account" do
+      identity = Identity.create!(:realm => realm)
+      session = Session.create!(:identity => identity)
+      get "/identities/me", :session => session.key
+      JSON.parse(last_response.body)["identity"]["provisional"].should be_true
+    end
+
+    it "is not provisional when account is present" do
+      get "/identities/me", :session => me_session
+      JSON.parse(last_response.body)["identity"]["provisional"].should be_false
+    end
+  end
 end
