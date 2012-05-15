@@ -13,11 +13,6 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do
-    # Will execute the provided block only if we are not on the primary domain
-    def on_primary_domain?
-      request.host == current_realm.primary_domain.name 
-    end
-
     def authentication_target_host
       if session[:redirect_to]
         URI.parse(session[:redirect_to]).host
@@ -25,7 +20,6 @@ class CheckpointV1 < Sinatra::Base
         request.host
       end
     end
-
   end
 
   # Log in anonymously

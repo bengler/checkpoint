@@ -52,14 +52,26 @@ class CheckpointV1 < Sinatra::Base
     end
 
     if @session_cookie_is_dirty
+      if on_primary_domain?
+        expiry = Session::DEFAULT_EXPIRY.dup
+      else
+        # Use browser session cookie on secondary domains. This lets us control
+        # the session's lifetime using the primary domain's cookie.
+        expiry = nil
+      end
       response.set_cookie(Session::COOKIE_NAME,
         :value => session.key,
         :path => '/',
-        :expires => Session::DEFAULT_EXPIRY.dup)
+        :expires => expiry)
     end
   end
 
-  helpers do 
+  helpers do
+    # Is the current host the realm's primary domain?
+    def on_primary_domain?
+      current_realm && request.host == current_realm.primary_domain.name 
+    end
+
     def current_session_key
       params[:session] || request.cookies[Session::COOKIE_NAME]
     end
