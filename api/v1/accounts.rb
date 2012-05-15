@@ -27,10 +27,6 @@ class CheckpointV1 < Sinatra::Base
   put '/accounts' do
     check_god_credentials(current_identity.realm_id)
     account = Account.new(:realm_id => current_identity.realm_id)
-    p params
-    p params.slice(
-      *%w(identity_id realm_id provider uid token secret nickname
-        name location description profile_url image_url email))
     account.attributes = params.slice(
       *%w(identity_id provider uid token secret nickname
         name location description profile_url image_url email))
