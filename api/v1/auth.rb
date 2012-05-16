@@ -102,13 +102,13 @@ class CheckpointV1 < Sinatra::Base
   get '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
-    redirect request.referer
+    redirect params[:redirect_to] || request.referer
   end
 
   post '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
-    redirect request.referer
+    redirect params[:redirect_to] || request.referer
   end
 
 end
