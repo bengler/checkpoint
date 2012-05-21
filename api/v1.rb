@@ -114,6 +114,10 @@ class CheckpointV1 < Sinatra::Base
       return @current_identity ||= current_session.identity
     end
 
+    def transaction(&block)
+      ActiveRecord::Base.transaction(&block)
+    end
+
     def log_in(identity)
       if current_identity != identity
         current_session.identity = identity
