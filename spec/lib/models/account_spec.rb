@@ -4,6 +4,16 @@ describe Account do
 
   let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret') }
 
+  let :realm do
+    realm = Realm.create!(:label => "area51")
+    Domain.create!(:realm => realm, :name => 'example.org')
+    realm
+  end
+
+  let :identity do 
+    Identity.create!(:realm => realm)
+  end
+
   describe 'required attributes' do
     [:uid, :provider, :realm_id].each do |attribute|
       specify "#{attribute} can't be nil" do
@@ -40,17 +50,17 @@ describe Account do
 
   describe "#credentials" do
     it "finds keys for a specific identity and provider" do
-      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret', :identity_id => 37)
-      identity = stub(:id => 37)
+      keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm => realm, :token => 'token', :secret => 'secret', :identity => identity)
       account = Account.find_by_identity_id_and_provider(identity.id, :facebook)
+      account.should_not == nil
       account.credentials.should eq({:token => 'token', :secret => 'secret'})
       account.authorized?.should be_true
     end
 
     it "ignores keys where token/secret are missing" do
-      Account.create!(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :identity_id => 17)
-      identity = stub(:id => 17)
+      Account.create!(:provider => :facebook, :uid => 'abc123', :realm => realm, :identity => identity)
       account = Account.find_by_identity_id_and_provider(identity.id, :facebook)
+      account.should_not == nil
       account.credentials.should be_nil
       account.authorized?.should be_false
     end
