@@ -8,6 +8,9 @@ class Realm < ActiveRecord::Base
   belongs_to :primary_domain, :class_name => "Domain"
 
   validates_uniqueness_of :label, :allow_nil => false
+  validates_each :label do |record, attr, value|
+    record.errors.add(attr, "Realm name 'current' is reserved") if value == 'current'
+  end
 
   def self.find_by_url(url)
     search_strings_for_url(url) do |domain|

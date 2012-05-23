@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe Realm do
+
+  it 'reserves some names' do
+    realm = Realm.new(:label => 'current')
+    realm.valid?.should == false
+    realm.errors[:label].should_not == nil
+  end
+
   it "grabs all the keys" do
     keys = {
       :twitter => {:consumer_key => 'twitter_key', :consumer_secret => 'twitter_secret'},
