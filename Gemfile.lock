@@ -80,7 +80,7 @@ GIT
 
 GIT
   remote: git@github.com:bengler/omniauth-vanilla.git
-  revision: d3c9c389477b4c473e60de9afa20f992202951b0
+  revision: 13a74e0fa26149c39709dec99e9af3b90a2ab333
   specs:
     omniauth-vanilla (0.0.1)
       multi_json
@@ -126,10 +126,8 @@ GEM
     dalli (1.1.5)
     deepstruct (0.0.1)
     diff-lcs (1.1.3)
-    faraday (0.7.6)
-      addressable (~> 2.2)
+    faraday (0.8.0)
       multipart-post (~> 1.1)
-      rack (~> 1.1)
     futurevalue (0.0.2)
     hashie (1.2.0)
     highline (1.6.12)
