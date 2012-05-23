@@ -13,12 +13,32 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do
-    def authentication_target_host
-      if session[:redirect_to]
-        URI.parse(session[:redirect_to]).host
+    def url_with_params(url, params)
+      uri = URI.parse(self.url(url))
+      
+      query = CGI.parse(uri.query || '')
+      query = HashWithIndifferentAccess[*query.entries.map { |k, v| [k, v[0]] }.flatten]
+      query.merge!(params)
+
+      uri.query = query.entries.map { |k, v|
+        "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}&"
+      }.join('&')
+      uri.to_s
+    end
+
+    def url_for_failure(params = {})
+      params = {:status => 'failed'}.merge(params)
+      if (return_url = session[:redirect_to])
+        if return_url =~ /_completion/
+          # FIXME: Exception for Origo. This is supposed to be the correct behaviour,
+          #   but we do this to avoid breaking existing apps.
+          return url_with_params(return_url, params)
+        end
+        host = URI.parse(return_url).host
       else
-        request.host
+        host = request.host
       end
+      return url_with_params("http://#{host}/login/failed", params)
     end
   end
 
@@ -87,7 +107,7 @@ class CheckpointV1 < Sinatra::Base
       account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm)
       log_in(account.identity)
     rescue Account::InUseError => e
-      redirect "http://#{authentication_target_host}/login/failed?message=account_in_use"
+      redirect url_for_failure(:message => :account_in_use)
       return
     end
 
@@ -95,7 +115,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/failure' do
-    redirect "http://#{authentication_target_host}/login/failed?message=#{params[:message]}"
+    redirect url_for_failure(:message => params[:message] || 'unknown')
   end
 
   # FIXME: Should not offer this as GET.
