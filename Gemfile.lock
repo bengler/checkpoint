@@ -33,13 +33,6 @@ GIT
       yajl-ruby
 
 GIT
-  remote: git://github.com/benglerpebbles/petroglyph.git
-  revision: 325f1fcd806ef18916a6b2aa156909d164d6a321
-  specs:
-    petroglyph (0.0.2)
-      tilt
-
-GIT
   remote: git://github.com/intridea/omniauth-contrib.git
   revision: 027be2e65077eaa123992d64cff0190f634394e8
   specs:
@@ -159,6 +152,8 @@ GEM
       oauth2 (~> 0.6.0)
       omniauth (~> 1.0)
     pathbuilder (0.0.2)
+    petroglyph (0.0.2)
+      tilt
     pg (0.13.2)
     pingable (0.0.9)
       rack (>= 1.0.0)
@@ -226,7 +221,7 @@ DEPENDENCIES
   omniauth-twitter!
   omniauth-vanilla!
   pebblebed!
-  petroglyph!
+  petroglyph (~> 0.0.2)
   pg
   pingable
   queryparams
