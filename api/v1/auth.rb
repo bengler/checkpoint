@@ -65,6 +65,8 @@ class CheckpointV1 < Sinatra::Base
     target_url.host ||= request.host
     target_url.scheme ||= "http"
 
+    session[:force_dialog] = params[:force_dialog].to_s == 'true'
+
     if on_primary_domain?
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
@@ -83,6 +85,8 @@ class CheckpointV1 < Sinatra::Base
 
     strategy = request.env['omniauth.strategy']
     service_keys = current_realm.keys_for(params[:provider].to_sym)
+
+    strategy.options[:force_dialog] = session[:force_dialog]
 
     if strategy.options.respond_to?(:consumer_key)
       strategy.options.consumer_key = service_keys.consumer_key
