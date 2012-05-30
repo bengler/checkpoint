@@ -5,14 +5,7 @@ require 'net/https'
 require 'cgi'
 require 'base64'
 
-class TestCheckpointV1 < CheckpointV1
-  use Rack::Session::Cookie, :key => 'checkpoint.cookie',
-    :expire_after => 2592000, # In seconds
-    :secret => 'ice cream sandwich'
-  use OmniAuth::Builder do
-    provider :twitter, nil, nil, :setup => true
-  end
-end
+class TestCheckpointV1 < CheckpointV1; end
 
 describe "Transfers" do
 
