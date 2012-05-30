@@ -4,9 +4,19 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: postgres
+--
+
+CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
+
+
+ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
 
 SET search_path = public, pg_catalog;
 
@@ -34,8 +44,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -107,8 +117,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     last_seen_on date
 );
 
@@ -145,8 +155,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     primary_domain_id integer
 );
 
@@ -193,9 +203,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    variables text
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -226,35 +235,35 @@ ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
+ALTER TABLE accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
+ALTER TABLE domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+ALTER TABLE identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
+ALTER TABLE realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
+ALTER TABLE sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
 
 
 --
@@ -344,6 +353,13 @@ CREATE INDEX index_identities_on_realm_id ON identities USING btree (realm_id);
 --
 
 CREATE UNIQUE INDEX index_realms_on_label ON realms USING btree (label);
+
+
+--
+-- Name: index_sessions_on_identity_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_sessions_on_identity_id ON sessions USING btree (identity_id);
 
 
 --
