@@ -10,3 +10,4 @@ vendor/bundle/
 *.sublime-*
 /_trash
 /.brow
+config/site.rb
