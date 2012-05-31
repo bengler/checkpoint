@@ -1,5 +1,16 @@
 class CheckpointV1 < Sinatra::Base
 
+  # Get all accounts for an identity.
+  get '/identities/:id/accounts' do |id|
+    if id == 'me'
+      @identity = current_identity
+    else
+      @identity = Identity.find(id)
+    end
+    halt 404, "No such identity" unless @identity
+    pg :accounts, :locals => {:accounts => @identity.accounts}
+  end
+
   # Get an account for an identity
   #
   # @param [String] id the identity id. Can be a numeric id or the string 'me'
@@ -84,6 +95,20 @@ class CheckpointV1 < Sinatra::Base
       account.save!
       
       [201, pg(:account, :locals => {:account => account})]
+    end
+  end
+
+  # Deletes an account.
+  #
+  delete '/accounts/:provider/:uid' do |provider, uid|
+    transaction do
+      account = Account.where(
+        :realm_id => current_identity.realm_id,
+        :provider => provider,
+        :uid => uid).first
+      halt 404, "No such account" unless account
+      account.destroy
+      halt 200
     end
   end
 

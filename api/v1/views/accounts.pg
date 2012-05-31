@@ -1,0 +1,3 @@
+collection :accounts => accounts do |account|
+  partial :account, :account => account
+end
