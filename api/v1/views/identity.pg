@@ -1,5 +1,5 @@
 node :identity => identity do
-  attributes :id, :god
+  attributes :id, :god, :created_at
   node :realm => identity.realm.label
   node :provisional => (identity.accounts.size == 0)
 end
