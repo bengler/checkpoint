@@ -60,6 +60,14 @@ GIT
     rack (1.4.1)
 
 GIT
+  remote: git@github.com:bengler/capistrano-bengler.git
+  revision: f26ae5349f95cdf6fb35e739b9e5b326b70d278a
+  specs:
+    capistrano-bengler (0.0.14)
+      capistrano (>= 2.9)
+      capistrano-ext (>= 1.2.1)
+
+GIT
   remote: git@github.com:bengler/omniauth-vanilla.git
   revision: 13a74e0fa26149c39709dec99e9af3b90a2ab333
   specs:
@@ -68,14 +76,6 @@ GIT
       oauth
       omniauth (>= 1.0.0)
       omniauth-oauth2 (>= 1.0.0)
-
-GIT
-  remote: git@github.com:origo/capistrano-bengler.git
-  revision: 3c096b3ab81143461e6d5738f5e4131e506ea1ee
-  specs:
-    capistrano-bengler (0.0.13)
-      capistrano (>= 2.9)
-      capistrano-ext (>= 1.2.1)
 
 GEM
   remote: http://rubygems.org/
