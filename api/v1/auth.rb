@@ -20,9 +20,7 @@ class CheckpointV1 < Sinatra::Base
       query = HashWithIndifferentAccess[*query.entries.map { |k, v| [k, v[0]] }.flatten]
       query.merge!(params)
 
-      uri.query = query.entries.map { |k, v|
-        "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}&"
-      }.join('&')
+      uri.query = QueryParams.encode(query)
       uri.to_s
     end
 
@@ -50,7 +48,7 @@ class CheckpointV1 < Sinatra::Base
 
     # If this ip is hot, we need to perform a captcha-test first
     if IdentityIp.hot?(request_ip) && !passed_captcha?
-      redirect url_with_params("/api/checkpoint/v1/auth/captcha", :continue_to => request.url)
+      redirect url_with_params("/auth/captcha", :continue_to => request.url)
       return
     end
     clear_captcha!

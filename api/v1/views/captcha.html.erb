@@ -4,7 +4,7 @@
   <title>Captcha</title>
   <script 
     type="text/javascript" 
-    src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
+    src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js<%= error ? "?error=#{error}" : "" %>">
   </script>
 
    <meta name="viewport" content="initial-scale=1.0" />
@@ -138,9 +138,9 @@
 </head>
 <body>
   <div class="container">
-    <h1>Du menneske?</h1>
-    <h2>Njaa... Skeptisk! Bevis det!</h2>
-    <form action="" method="post">
+    <h1>Menneske eller maskin?</h1>
+    <h2>For å unngå juks trenger vi at du beviser at du er et menneske</h2>
+    <form action="/api/checkpoint/v1/auth/captcha" method="post">
       <div id="reCaptcha">
         <div class="imageContainer">
           <div id="recaptcha_image"></div>
@@ -177,7 +177,7 @@
       </div>
       <!-- noscript version -->
       <noscript>
-        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_"
+        <iframe src="http://www.google.com/recaptcha/api/noscript?k=<%= api_key %><%= error ? "&error=#{error}" : "" %>"
             height="300" width="500" frameborder="0">
         </iframe>
         <br/>
@@ -189,7 +189,7 @@
   </div>
   <script type="text/javascript">
     Recaptcha.create(
-      "6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_", 
+      '<%= api_key %>', 
       "reCaptcha",
       {
         theme : 'custom',
