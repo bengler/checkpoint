@@ -33,6 +33,7 @@ class CheckpointV1 < Sinatra::Base
 
   after do
     current_identity.mark_as_seen if current_identity
+    declare_session_ip
   end
 
   after do
@@ -82,6 +83,20 @@ class CheckpointV1 < Sinatra::Base
 
     def ensure_session
       current_session  # Forces a session
+    end
+
+    # Determine the current request ip
+    def request_ip
+      ip = request.env['HTTP_X_FORWARDED_FOR'] || request.ip
+      ip = ip.sub("::ffff:", "") # strip away ipv6 compatible formatting
+      ip
+    end
+
+    # Logs the current ip and session to help with fraud detection
+    def declare_session_ip
+      # Using instance variable @current_session to avoid implicitly creating a 
+      # session for requests that did not need one.
+      SessionIp.declare!(request_ip, @current_session.key) if @current_session
     end
 
     def session_from_cookie

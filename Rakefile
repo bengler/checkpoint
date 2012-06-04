@@ -45,6 +45,8 @@ namespace :maintenance do
     puts
     puts "Deleting void sessions"
     Identity.connection.execute("delete from sessions where identity_id is null and updated_at < now() - interval '24 hours'")
+    puts "Deleting old session_ips"
+    Identity.connection.execute("delete from session_ips where created_at < now() - interval '30 days'")
   end
 end
 
