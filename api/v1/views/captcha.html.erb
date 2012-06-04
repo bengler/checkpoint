@@ -1,1 +1,206 @@
-Hello from captcha. Will continue to <%= continue_to %>.
+<!doctype>
+<html>
+<head>
+  <title>Captcha</title>
+   <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+
+   <meta name="viewport" content="initial-scale=1.0" />
+   <meta name="viewport" content="minimum-scale=1.0" />
+   <meta name="viewport" content="maximum-scale=1.0" />
+   <meta name="viewport" content="user-scalable=no" />
+   <meta name="viewport" content="width=device-width" />
+   
+   <style type="text/css">
+      /* Eric meyer reset */
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, img, ins, kbd, q, s, samp,
+      small, strike, strong, sub, sup, tt, var,
+      b, u, i, center,
+      dl, dt, dd, ol, ul, li,
+      fieldset, form, label, legend,
+      table, caption, tbody, tfoot, thead, tr, th, td,
+      article, aside, canvas, details, embed, 
+      figure, figcaption, footer, header, hgroup, 
+      menu, nav, output, ruby, section, summary,
+      time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article, aside, details, figcaption, figure, 
+      footer, header, hgroup, menu, nav, section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      blockquote, q {
+        quotes: none;
+      }
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: '';
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+
+      body {
+        font-family: 'Helvetica Neue', helvetica, arial, sans-serif;
+        line-height: 24px;
+        font-size: 16px;
+        background-color: #fafafa;
+      }
+
+      h1 {
+        font-size: 48px;
+        line-height: 48px;
+      }
+      h2 {
+        font-size: 18px;
+        color: #666;
+      }
+
+      .container {
+        background-color: #fff;
+        width: 720px;
+        padding: 24px;
+        margin: 23px auto;
+        border: 1px solid #ccc;
+      }
+
+      .imageContainer {
+        padding: 11px;
+        border: 1px solid #ccc;
+        margin: 24px 0;
+      }
+
+      input {
+        display: block;
+        padding: 6px;
+        font-size: 24px;
+        border: 1px solid #999;
+        display: block;
+        margin: 0;
+      }
+
+      button {
+        display: block;
+        padding: 6px;
+        font-size: 18px;
+        margin: 24px 0;
+      }
+
+      ul { height: 24px; }
+      ul li { float: left; margin-right: 1em;}
+      ul li a { color: #666; font-size: 12px; }
+      ul li a:hover { color: #333; font-size: 12px; }
+
+      @media screen and (max-device-width: 320px)  {
+        /* Mobile */
+        body .container {
+          max-width: 100%;
+          overflow: hidden;
+          width: 100%;
+          border: none;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+          text-align: center;
+        }
+        body .imageContainer {
+          border-left: none;
+          border-right: none;
+        }        
+        fieldset.inputCaptcha input,
+        fieldset.inputCaptcha button {
+          display: inline-block;
+        }
+      } /* end mobile */
+
+   </style>
+</head>
+<body>
+  <div class="container">
+    <%= continue_to %>
+    <h1>Du menneske?</h1>
+    <h2>Njaa... Skeptisk! Bevis det!</h2>
+    <form>
+      <div id="reCaptcha">
+        <div class="imageContainer">
+          <div id="recaptcha_image"></div>
+        </div>
+        
+        <div class="recaptcha_only_if_incorrect_sol" style="color:red">
+          Feil. Prøv igjen. 
+        </div>
+
+        <span class="recaptcha_only_if_image">Skriv inn ordene ovenfor:</span>
+        <span class="recaptcha_only_if_audio">Skriv tallene du hører:</span>
+
+        <fieldset class="inputCaptcha">
+          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field">
+          <button type="submit">Se på meg, jeg er menneske!</button>
+        </fieldset>
+
+        <ul class="functions">
+          <li>
+            <a href="javascript:Recaptcha.reload()">Få en ny CAPTCHA</a>
+          </li>
+          <li class="recaptcha_only_if_image">
+            <a href="javascript:Recaptcha.switch_type('audio')">Hør en lyd-CAPTCHA</a>
+          </liv>
+          <li class="recaptcha_only_if_audio">
+            <a href="javascript:Recaptcha.switch_type('image')">Vis en bilde-CAPTCHA</a>
+          </li>
+          <li>
+            <a href="javascript:Recaptcha.showhelp()">Hjelp</a>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+  <noscript>
+    <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_"
+        height="300" width="500" frameborder="0">
+    </iframe>
+    <br/>
+    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+    <input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
+  </noscript>
+
+  <script type="text/javascript">
+    Recaptcha.create("6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_",
+      "reCaptcha",
+      {
+        theme: "custom",
+        callback: Recaptcha.focus_response_field,
+        custom_translations : {
+          instructions_visual : "Bruksanvisning visuelt:",
+          instructions_audio : "Bruksanvisning lyd:",
+          play_again : "Spill av igjen",
+          cant_hear_this : "Jeg kan ikke høre dette",
+          visual_challenge : "Visuelt",
+          audio_challenge : "Hør lyd",
+          refresh_btn : "Vis på nytt",
+          help_btn : "Hjelp",
+          incorrect_try_again : "Beklager. feil. Prøv igjen",
+        }
+      }
+    );
+  </script>
+</body>
+</html>
