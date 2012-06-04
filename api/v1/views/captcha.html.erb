@@ -71,8 +71,11 @@
         line-height: 48px;
       }
       h2 {
+        display: block;
         font-size: 18px;
         color: #666;
+        margin-bottom: 24px;
+        clear: both;
       }
 
       .container {
@@ -85,8 +88,20 @@
 
       .imageContainer {
         padding: 11px;
-        border: 1px solid #ccc;
-        margin: 24px 0;
+        border: 1px solid #999;
+        margin: 0 0 0 0;
+      }
+
+      body .recaptcha_only_if_incorrect_sol {
+        border: 1px solid red;
+        background-color: #fff3f3;
+        padding: 11px;
+        color: #c00;
+        margin-bottom: 24px;
+      }
+
+      body .recaptcha_nothad_incorrect_sol .recaptcha_only_if_incorrect_sol {
+        display: block !important;
       }
 
       input {
@@ -102,13 +117,13 @@
         display: block;
         padding: 6px;
         font-size: 18px;
-        margin: 24px 0;
+        margin: 12px 0;
       }
 
-      ul { height: 24px; }
-      ul li { float: left; margin-right: 1em;}
-      ul li a { color: #666; font-size: 12px; }
-      ul li a:hover { color: #333; font-size: 12px; }
+      ul { height: 24px; background-color: #999; display: block;}
+      ul li { float: right; margin-right: 1em;}
+      ul li a { color: #eee; font-size: 12px; text-decoration: none;}
+      ul li a:hover { color: #fff; font-size: 12px; }
 
       @media screen and (max-device-width: 320px)  {
         /* Mobile */
@@ -124,10 +139,21 @@
         body {
           text-align: center;
         }
+        body .recaptcha_only_if_incorrect_sol {
+          border-right: 0;
+          border-left: 0;
+          margin-bottom: 0;
+          border-bottom: 0;
+        }
         body .imageContainer {
           border-left: none;
           border-right: none;
-        }        
+          padding: 6px;
+          margin-bottom: 6px;
+        }
+        label {
+          display: none !important;
+        }
         fieldset.inputCaptcha input,
         fieldset.inputCaptcha button {
           display: inline-block;
@@ -142,23 +168,10 @@
     <h2>For å unngå misbruk må vi dessverre sjekke at du er et menneske</h2>
     <form action="/api/checkpoint/v1/auth/captcha" method="post">
       <div id="reCaptcha">
-        <div class="imageContainer">
-          <div id="recaptcha_image"></div>
-        </div>
-        
-        <div class="recaptcha_only_if_incorrect_sol" style="color:red">
+
+        <div class="recaptcha_only_if_incorrect_sol">
           Feil. Prøv igjen. 
         </div>
-
-        <input type="hidden" value="<%= continue_to %>" name="continue_to" id="recaptcha_continue_to"/>
-
-        <span class="recaptcha_only_if_image">Skriv inn ordene ovenfor:</span>
-        <span class="recaptcha_only_if_audio">Skriv tallene du hører:</span>
-
-        <fieldset class="inputCaptcha">
-          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
-          <button type="submit">Se på meg, jeg er menneske!</button>
-        </fieldset>
 
         <ul class="functions">
           <li>
@@ -174,6 +187,21 @@
             <a href="javascript:Recaptcha.showhelp()">Hjelp</a>
           </li>
         </ul>
+        <div class="imageContainer">
+          <div id="recaptcha_image"></div>
+        </div>
+
+        <input type="hidden" value="<%= continue_to %>" name="continue_to" id="recaptcha_continue_to"/>
+
+        <label for="recaptcha_response_field" class="recaptcha_only_if_image">Skriv inn ordene ovenfor:</label>
+        <label for="recaptcha_response_field" class="recaptcha_only_if_audio">Skriv tallene du hører:</label>
+
+        <fieldset class="inputCaptcha">
+          <input placeholder="Skriv inn her" type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
+          <button type="submit">Se på meg, jeg er menneske!</button>
+        </fieldset>
+
+        
       </div>
       <!-- noscript version -->
       <noscript>
