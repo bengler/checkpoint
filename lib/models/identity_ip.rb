@@ -1,5 +1,6 @@
 # Keeps track of which ip-addresses a certain identity has been acessing
-# the service from. Used for fraud detection.
+# the service from. Used for fraud detection. Only creates an entry when
+# an identity is seen for the first time on a specific ip.
 
 class IdentityIp < ActiveRecord::Base
   def self.declare!(address, identity_id)
@@ -9,8 +10,8 @@ class IdentityIp < ActiveRecord::Base
     record
   end
 
-  # A hot address is an address that has originated a great number of 
-  # new sessions recently. options[:minutes] specifies the time frame,
+  # A hot address is an address that has seen a great number of 
+  # new identities recently. options[:minutes] specifies the time frame,
   # and options[:count] specifies the number of sessions that can 
   # be created within that time frame before the address is "hot".
 
