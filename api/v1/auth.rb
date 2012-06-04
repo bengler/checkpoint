@@ -47,6 +47,14 @@ class CheckpointV1 < Sinatra::Base
   # @param [String] redirect_to where to redirect to
   get '/login/anonymous' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
+
+    # If this ip is hot, we need to perform a captcha-test first
+    if IdentityIp.hot?(request_ip) && !passed_captcha?
+      redirect url_with_params("/api/checkpoint/v1/auth/captcha", :continue_to => request.url)
+      return
+    end
+    clear_captcha!
+
     redirect_to_path = ensure_valid_redirect_path || '/'
     anonymous_identity = Identity.find_by_session_key(current_session_key) || Identity.create!(:realm => current_realm)
     log_in(anonymous_identity)

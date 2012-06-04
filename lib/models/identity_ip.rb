@@ -19,6 +19,6 @@ class IdentityIp < ActiveRecord::Base
     minutes = options[:minutes] || 30
     count = options[:count] || 2
     new_sessions = self.where(:address => address).where("created_at > ?", Time.now-(minutes*60)).count
-    (new_sessions > count)
+    (new_sessions >= count)
   end
 end
