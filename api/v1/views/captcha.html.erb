@@ -2,7 +2,10 @@
 <html>
 <head>
   <title>Captcha</title>
-   <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+  <script 
+    type="text/javascript" 
+    src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
+  </script>
 
    <meta name="viewport" content="initial-scale=1.0" />
    <meta name="viewport" content="minimum-scale=1.0" />
@@ -138,7 +141,7 @@
     <%= continue_to %>
     <h1>Du menneske?</h1>
     <h2>Njaa... Skeptisk! Bevis det!</h2>
-    <form>
+    <form action="" method="post">
       <div id="reCaptcha">
         <div class="imageContainer">
           <div id="recaptcha_image"></div>
@@ -152,7 +155,7 @@
         <span class="recaptcha_only_if_audio">Skriv tallene du hører:</span>
 
         <fieldset class="inputCaptcha">
-          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field">
+          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
           <button type="submit">Se på meg, jeg er menneske!</button>
         </fieldset>
 
@@ -171,22 +174,24 @@
           </li>
         </ul>
       </div>
+      <!-- noscript version -->
+      <noscript>
+        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_"
+            height="300" width="500" frameborder="0">
+        </iframe>
+        <br/>
+        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+        <input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
+      </noscript>
+      <!-- end of - noscript version -->
     </form>
   </div>
-  <noscript>
-    <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_"
-        height="300" width="500" frameborder="0">
-    </iframe>
-    <br/>
-    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-    <input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
-  </noscript>
-
   <script type="text/javascript">
-    Recaptcha.create("6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_",
+    Recaptcha.create(
+      "6LefR9ISAAAAAE1vaqeUrlLlWDQINn4fT8WtIXy_", 
       "reCaptcha",
       {
-        theme: "custom",
+        theme : 'custom',
         callback: Recaptcha.focus_response_field,
         custom_translations : {
           instructions_visual : "Bruksanvisning visuelt:",
@@ -197,7 +202,7 @@
           audio_challenge : "Hør lyd",
           refresh_btn : "Vis på nytt",
           help_btn : "Hjelp",
-          incorrect_try_again : "Beklager. feil. Prøv igjen",
+          incorrect_try_again : "Beklager. feil. Prøv igjen"
         }
       }
     );
