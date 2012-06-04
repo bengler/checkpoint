@@ -151,6 +151,42 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: identity_ips; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE identity_ips (
+    id integer NOT NULL,
+    address text NOT NULL,
+    identity_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.identity_ips OWNER TO checkpoint;
+
+--
+-- Name: identity_ips_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE identity_ips_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.identity_ips_id_seq OWNER TO checkpoint;
+
+--
+-- Name: identity_ips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE identity_ips_id_seq OWNED BY identity_ips.id;
+
+
+--
 -- Name: realms; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -198,42 +234,6 @@ CREATE TABLE schema_migrations (
 
 
 ALTER TABLE public.schema_migrations OWNER TO checkpoint;
-
---
--- Name: session_ips; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE TABLE session_ips (
-    id integer NOT NULL,
-    address text NOT NULL,
-    key text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE public.session_ips OWNER TO checkpoint;
-
---
--- Name: session_ips_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
---
-
-CREATE SEQUENCE session_ips_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.session_ips_id_seq OWNER TO checkpoint;
-
---
--- Name: session_ips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
---
-
-ALTER SEQUENCE session_ips_id_seq OWNED BY session_ips.id;
-
 
 --
 -- Name: sessions; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
@@ -296,14 +296,14 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
+ALTER TABLE ONLY identity_ips ALTER COLUMN id SET DEFAULT nextval('identity_ips_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY session_ips ALTER COLUMN id SET DEFAULT nextval('session_ips_id_seq'::regclass);
+ALTER TABLE ONLY realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
 
 
 --
@@ -338,19 +338,19 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: identity_ips_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY identity_ips
+    ADD CONSTRAINT identity_ips_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: realms_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
 ALTER TABLE ONLY realms
     ADD CONSTRAINT realms_pkey PRIMARY KEY (id);
-
-
---
--- Name: session_ips_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-ALTER TABLE ONLY session_ips
-    ADD CONSTRAINT session_ips_pkey PRIMARY KEY (id);
 
 
 --
@@ -404,24 +404,24 @@ CREATE INDEX index_identities_on_realm_id ON identities USING btree (realm_id);
 
 
 --
+-- Name: index_identity_ips_on_address; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_identity_ips_on_address ON identity_ips USING btree (address);
+
+
+--
+-- Name: index_identity_ips_on_identity_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_identity_ips_on_identity_id ON identity_ips USING btree (identity_id);
+
+
+--
 -- Name: index_realms_on_label; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_realms_on_label ON realms USING btree (label);
-
-
---
--- Name: index_session_ips_on_address; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE INDEX index_session_ips_on_address ON session_ips USING btree (address);
-
-
---
--- Name: index_session_ips_on_key; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE INDEX index_session_ips_on_key ON session_ips USING btree (key);
 
 
 --

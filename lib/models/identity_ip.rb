@@ -1,12 +1,12 @@
-# Keeps track of which ip-addresses a certain session has been acessed from
-# to support fraud detection.
+# Keeps track of which ip-addresses a certain identity has been acessing
+# the service from. Used for fraud detection.
 
-class SessionIp < ActiveRecord::Base
-  def self.declare!(address, key)
-    attributes = {:address => address, :key => key}
-    session_ip = SessionIp.where(attributes).first
-    session_ip ||= SessionIp.create!(attributes)
-    session_ip
+class IdentityIp < ActiveRecord::Base
+  def self.declare!(address, identity_id)
+    attributes = {:address => address, :identity_id => identity_id}
+    record = self.where(attributes).first
+    record ||= self.create!(attributes)
+    record
   end
 
   # A hot address is an address that has originated a great number of 

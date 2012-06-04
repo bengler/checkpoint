@@ -16,9 +16,9 @@ class CheckpointV1 < Sinatra::Base
   end
 
   error Exception do |e|
-    $logger.error e.message
+    LOGGER.error e.message
     e.backtrace.each do |line|
-      $logger.error line
+      LOGGER.error line
     end
     halt 500, e.message
   end
@@ -33,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
 
   after do
     current_identity.mark_as_seen if current_identity
-    declare_session_ip
+    log_ip
   end
 
   after do
@@ -92,11 +92,9 @@ class CheckpointV1 < Sinatra::Base
       ip
     end
 
-    # Logs the current ip and session to help with fraud detection
-    def declare_session_ip
-      # Using instance variable @current_session to avoid implicitly creating a 
-      # session for requests that did not need one.
-      SessionIp.declare!(request_ip, @current_session.key) if @current_session
+    # Logs the current ip and identity_id to help with fraud detection
+    def log_ip
+      IdentityIp.declare!(request_ip, current_identity.id) if current_identity
     end
 
     def session_from_cookie

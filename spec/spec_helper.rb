@@ -15,12 +15,13 @@ require 'api/v1'
 require 'rack/test'
 require 'vcr'
 
-$logger.level = Logger::ERROR  # Avoid most output in tests
-
 VCR.config do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.stub_with :webmock 
 end
+
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger.level = Logger::INFO
 
 set :environment, :test
 
