@@ -169,9 +169,11 @@
     <form action="/api/checkpoint/v1/auth/captcha" method="post">
       <div id="reCaptcha">
 
+        <% if error %>
         <div class="recaptcha_only_if_incorrect_sol">
           Feil. Prøv igjen. 
         </div>
+        <% end %>
 
         <ul class="functions">
           <li>
