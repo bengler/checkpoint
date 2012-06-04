@@ -138,7 +138,6 @@
 </head>
 <body>
   <div class="container">
-    <%= continue_to %>
     <h1>Du menneske?</h1>
     <h2>Njaa... Skeptisk! Bevis det!</h2>
     <form action="" method="post">
@@ -150,6 +149,8 @@
         <div class="recaptcha_only_if_incorrect_sol" style="color:red">
           Feil. Prøv igjen. 
         </div>
+
+        <input type="hidden" value="<%= continue_to %>" name="continue_to" id="recaptcha_continue_to"/>
 
         <span class="recaptcha_only_if_image">Skriv inn ordene ovenfor:</span>
         <span class="recaptcha_only_if_audio">Skriv tallene du hører:</span>
