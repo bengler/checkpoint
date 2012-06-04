@@ -71,7 +71,7 @@ GIT
 
 GIT
   remote: git@github.com:origo/capistrano-bengler.git
-  revision: c52bb6bd2ac1151599d89fb702d044796d8fc0ec
+  revision: 3c096b3ab81143461e6d5738f5e4131e506ea1ee
   specs:
     capistrano-bengler (0.0.13)
       capistrano (>= 2.9)
@@ -122,7 +122,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.3.0)
+    net-ssh (2.5.2)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
     nokogiri (1.5.2)
