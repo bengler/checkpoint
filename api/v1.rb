@@ -37,33 +37,34 @@ class CheckpointV1 < Sinatra::Base
   end
 
   after do
-    session = @current_session
-    session.save! if @session_is_dirty
+    if (session = @current_session)
+      session.save! if session.changed? or session.new_record?
 
-    # Delete legacy cookie on wrong domain
-    Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|
-      if k == Session::COOKIE_NAME and v.is_a?(Array)
+      # Delete legacy cookie on wrong domain
+      Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|
+        if k == Session::COOKIE_NAME and v.is_a?(Array)
+          response.set_cookie(Session::COOKIE_NAME,
+            :value => '',
+            :domain => ".#{request.host}",
+            :path => '/',
+            :expires => Time.now)
+          @session_cookie_is_dirty = true
+        end
+      end
+
+      if @session_cookie_is_dirty
+        if on_primary_domain?
+          expiry = Session::DEFAULT_EXPIRY.dup
+        else
+          # Use browser session cookie on secondary domains. This lets us control
+          # the session's lifetime using the primary domain's cookie.
+          expiry = nil
+        end
         response.set_cookie(Session::COOKIE_NAME,
-          :value => '',
-          :domain => ".#{request.host}",
+          :value => session.key,
           :path => '/',
-          :expires => Time.now)
-        @session_cookie_is_dirty = true
+          :expires => expiry)
       end
-    end
-
-    if @session_cookie_is_dirty
-      if on_primary_domain?
-        expiry = Session::DEFAULT_EXPIRY.dup
-      else
-        # Use browser session cookie on secondary domains. This lets us control
-        # the session's lifetime using the primary domain's cookie.
-        expiry = nil
-      end
-      response.set_cookie(Session::COOKIE_NAME,
-        :value => session.key,
-        :path => '/',
-        :expires => expiry)
     end
   end
 
@@ -111,13 +112,13 @@ class CheckpointV1 < Sinatra::Base
 
     def new_session
       session = Session.new(:identity => @current_identity)
-      @session_is_dirty = true
       @session_cookie_is_dirty = true
       session
     end
 
     def set_session_key(key)
       @current_session = Session.find_by_key(key)
+      @current_session ||= Session.new(:key => key, :identity => @current_identity)
       if @current_session
         @session_cookie_is_dirty = true
         key
@@ -135,7 +136,6 @@ class CheckpointV1 < Sinatra::Base
     def log_in(identity)
       if current_identity != identity
         current_session.identity = identity
-        @session_is_dirty = true
         @current_identity = identity
       end
     end
@@ -143,7 +143,6 @@ class CheckpointV1 < Sinatra::Base
     def log_out
       if current_session.identity and not current_session.identity.provisional?
         current_session.identity = nil
-        @session_is_dirty = true
       end
       @current_identity = nil      
     end

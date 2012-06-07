@@ -95,5 +95,13 @@ describe "Transfers" do
       last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=specialsecretsession/
       last_response.location.should eq target_url
     end
+
+    it "receives a transfer at the destination domain, sets the session key even if it's invalid, and redirects to the final target" do
+      get "/transfer", {:target => target_url, :session => 'i_do_not_exist'},
+        {'HTTP_HOST' => target_domain.name}
+      last_response.status.should eq 302
+      last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=i_do_not_exist/
+      last_response.location.should eq target_url
+    end
   end
 end
