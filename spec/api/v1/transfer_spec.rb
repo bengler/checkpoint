@@ -27,6 +27,10 @@ describe "Transfers" do
     Domain.create!(:name => "example.com", :realm => realm)
   end
 
+  let :target_url do
+    "http://#{target_domain.name}/bananas"
+  end
+
   let :foreign_domain do
     Domain.create!(:name => "example.net", :realm => Realm.create!(:label => "route66"))
   end
@@ -71,7 +75,6 @@ describe "Transfers" do
 
       origin_domain # Force creation of origin domain instance
 
-      target_url = "http://#{target_domain.name}/bananas"
       get "/transfer", :target => target_url
 
       last_response.status.should eq 302
@@ -85,9 +88,9 @@ describe "Transfers" do
       app.filters[:before].pop 
     end
 
-    it "recieves a transfer at the destination domain, sets the session key and redirects to the final target" do
-      target_url = "http://#{origin_domain.name}/bananas"
-      get "/transfer", :target => target_url, :session => session.key
+    it "receives a transfer at the destination domain, sets the session key and redirects to the final target" do
+      get "/transfer", {:target => target_url, :session => session.key},
+        {'HTTP_HOST' => target_domain.name}
       last_response.status.should eq 302
       last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=specialsecretsession/
       last_response.location.should eq target_url
