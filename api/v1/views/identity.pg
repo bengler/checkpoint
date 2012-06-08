@@ -2,6 +2,7 @@ node :identity => identity do
   attributes :id, :god, :created_at
   node :realm => identity.realm.label
   node :provisional => (identity.accounts.size == 0)
+  node :fingerprints => identity.fingerprints
 end
 
 node :accounts => identity.accounts.map(&:provider)

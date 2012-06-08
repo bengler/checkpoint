@@ -57,6 +57,12 @@ To check the identity for a specific session, this call to checkpoint could be u
 
 Pebbles expect to find the session string in one of two places. First it looks for a url-parameter named 'session', if it is not found there it will attempt to retrieve it from a cookie named 'checkpoint.session'. If neither of these are present the request will be processed without authentication.
 
+## Fingerprinting
+
+For each account registered with an identity, one or more *fingerprints* are recorded for posterity based on the accont information. The fingerprint is an SHA-256 hash computed from the immutable parts of the account information, such as one's Twitter UID, mobile number or similar.
+
+The fingerprint obscures the original details but still permits the application to determine if a future credential has been fingerprinted, thus making it possible to ban Twitter users, mobile numbers, etc. without having the original information at hand.
+
 ## Known weaknesses
 
 * The service defines a criticial single point of failure. Infrastructure should be put in place for a redundant solution – either a clustered Redis if one should become available, multiple Redis installations or a separate key-value store.

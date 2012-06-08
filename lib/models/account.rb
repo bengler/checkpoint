@@ -8,6 +8,9 @@ class Account < ActiveRecord::Base
   after_destroy :update_identity_primary_account
   
   after_save :invalidate_cache
+  after_save lambda {
+    self.identity.update_fingerprints_from_account!(self) if self.identity
+  }
   before_destroy :invalidate_cache
 
   validates_presence_of :uid, :provider, :realm_id
@@ -72,6 +75,19 @@ class Account < ActiveRecord::Base
   def credentials
     return nil unless token && secret
     {:token => token, :secret => secret}
+  end
+
+  # Computes one or more hashes of the permanent components of the account 
+  # data, which can function as a fingerprint to recognize future duplicate
+  # accounts. This makes it possible to ban accounts purely based on
+  # fingerprints.
+  def fingerprints
+    # Note: Fingerprints must always be lowercase due to current limitations in 
+    # ar-tsvectors and Postgres indexing.
+    digest = Digest::SHA256.new
+    digest.update(self.provider.to_s)
+    digest.update(self.uid.to_s)
+    [digest.digest.unpack("H*")[0].hex.to_s(36)]
   end
 
   private

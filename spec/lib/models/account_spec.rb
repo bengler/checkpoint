@@ -48,6 +48,44 @@ describe Account do
     end
   end
 
+  describe '#fingerprint' do
+    it 'returns fingerprint' do
+      account.fingerprints.length.should > 0
+      account.fingerprints.each do |f|
+        f.should =~ /\A[a-z0-9]+\z/
+      end
+    end
+
+    it 'changes when uid changes' do
+      old_fingerprints = account.fingerprints
+      account.uid = "barsoom"
+      account.fingerprints.should_not == old_fingerprints
+    end
+
+    it 'changes when provider changes' do
+      old_fingerprints = account.fingerprints
+      account.provider = "barsoom"
+      account.fingerprints.should_not == old_fingerprints
+    end
+
+    it 'changes only according to uid and provider' do
+      old_fingerprints = account.fingerprints
+      account.attributes.each do |k, v|
+        unless %(uid provider).include?(k.to_s)
+          case v
+            when String
+              account.attributes[k] = "#{v}barsoom"
+            when Fixnum
+              account.attributes[k] = v + 1
+            else
+              account.attributes[k] = "barsoom"
+          end
+        end
+      end
+      account.fingerprints.should == old_fingerprints
+    end
+  end
+
   describe "#credentials" do
     it "finds keys for a specific identity and provider" do
       keys = Account.create!(:provider => :facebook, :uid => 'abc123', :realm => realm, :token => 'token', :secret => 'secret', :identity => identity)

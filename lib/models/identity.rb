@@ -2,7 +2,8 @@ class Identity < ActiveRecord::Base
 
   class NotAuthorized < Exception; end
 
-  has_many :accounts, :dependent => :destroy  
+  has_many :accounts, :dependent => :destroy,
+    :after_add => :update_fingerprints_from_account!
   has_many :sessions, :dependent => :destroy
   belongs_to :primary_account, :class_name => 'Account'
   belongs_to :realm
@@ -12,6 +13,8 @@ class Identity < ActiveRecord::Base
   before_update :invalidate_cache
 
   validates_presence_of :realm_id
+
+  ts_vector :fingerprints
 
   scope :having_realm, lambda { |realm|
     where(:realm_id => realm.id)
@@ -91,10 +94,18 @@ class Identity < ActiveRecord::Base
     $memcached.delete(self.cache_key)
   end
 
+  def update_fingerprints_from_account!(account)
+    if account and (fingerprints = account.fingerprints)
+      self.fingerprints ||= []
+      self.fingerprints |= fingerprints
+      save(:validate => false) unless new_record?
+    end
+  end
+
   private
 
-  def initialize_last_seen
-    self.last_seen_on ||= Time.now.to_date
-  end
+    def initialize_last_seen
+      self.last_seen_on ||= Time.now.to_date
+    end
 
 end

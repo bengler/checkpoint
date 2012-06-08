@@ -130,7 +130,13 @@ describe "Identities" do
     it "hands me a list of a single identity if I ask for it using a comma" do
       get "/identities/#{god.id},", :session => me_session
       result = JSON.parse(last_response.body)
-      JSON.parse(last_response.body)['identities'].first['identity']['id'].should eq god.id
+      result['identities'].first['identity']['id'].should eq god.id
+    end
+
+    it 'includes fingerprints' do
+      get "/identities/#{me.id}", :session => me_session
+      result = JSON.parse(last_response.body)
+      result['identity']['fingerprints'].sort.should eq me.fingerprints.sort
     end
 
   end

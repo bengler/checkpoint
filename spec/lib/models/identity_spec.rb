@@ -93,6 +93,42 @@ describe Identity do
       Identity.anonymous.all.size.should eq 0
     end
 
+    describe "#fingerprints" do
+      let :identity do
+        Identity.new(:realm => realm)
+      end
+
+      it 'is empty if no accounts' do
+        identity.accounts.should == []
+        identity.fingerprints.should == []
+      end
+
+      it 'collects fingerprints from all accounts (when adding accounts directly)' do
+        identity.accounts << Account.new(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
+        identity.accounts << Account.new(:identity => identity, :uid => 234, :provider => 'twitter', :realm => realm)
+        identity.fingerprints.length.should >= identity.accounts.length
+        identity.fingerprints.sort.should == identity.accounts.map { |a| a.fingerprints }.flatten.sort
+      end
+
+      it 'collects fingerprints from all accounts (when creating accounts independently)' do
+        Account.create!(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
+        Account.create!(:identity => identity, :uid => 234, :provider => 'twitter', :realm => realm)
+        identity.reload
+        identity.fingerprints.length.should >= identity.accounts.length
+        identity.fingerprints.sort.should == identity.accounts.map { |a| a.fingerprints }.flatten.sort
+      end
+
+      it 'preserves fingerprint after account is deleted' do
+        account = Account.create!(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
+        identity.reload
+        old_fingerprints = identity.fingerprints.dup
+        account.destroy
+
+        identity.reload
+        identity.fingerprints.should == old_fingerprints
+      end
+    end
+
     describe "#root?" do
       let(:root) { Realm.create!(:label => 'root') }
 
