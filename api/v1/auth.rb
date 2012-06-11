@@ -93,7 +93,7 @@ class CheckpointV1 < Sinatra::Base
 
     strategy = request.env['omniauth.strategy']
 
-    service_keys = Realm.environment_specific_service_keys_for(current_realm.name, params[:provider])
+    service_keys = Realm.environment_specific_service_keys_for(current_realm.label, params[:provider])
     service_keys = current_realm.keys_for(params[:provider].to_sym)
 
     strategy.options[:force_dialog] = session[:force_dialog]
