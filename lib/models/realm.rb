@@ -12,6 +12,35 @@ class Realm < ActiveRecord::Base
     record.errors.add(attr, "Realm name 'current' is reserved") if value == 'current'
   end
 
+  class << self
+    def environment_specific_service_keys_for(realm_name, provider)
+      environment_specific_services.fetch(realm_name.to_s, {})[provider.to_s]
+    end
+
+    def environment_specific_services
+      @environment_specific_services ||= load_environment_specific_services
+    end
+
+    def load_environment_specific_services
+      file_name = File.expand_path('../../../config/service_keys.yml', __FILE__)
+      config = load_environment_specific_services_from(file_name)
+      if config.any?
+        LOGGER.info "Loaded environment-specific service configuration from #{file_name}"
+      end
+      config
+    end
+
+    def load_environment_specific_services_from(file_name, env = ENV['RACK_ENV'])
+      config = HashWithIndifferentAccess.new
+      begin
+        config.merge!((YAML.load(File.open(file_name, 'r:utf-8')) || {}).fetch(env, {}))
+      rescue Errno::ENOENT
+        # Ignore
+      end
+      config
+    end
+  end
+
   def self.find_by_url(url)
     search_strings_for_url(url) do |domain|
       result = joins(:domains).where('domains.name = ?', domain).first
