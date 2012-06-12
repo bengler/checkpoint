@@ -13,24 +13,20 @@ class Realm < ActiveRecord::Base
   end
 
   class << self
-    def environment_specific_service_keys_for(realm_name, provider)
-      environment_specific_services.fetch(realm_name.to_s, {})[provider.to_s]
+    def environment_overrides
+      @environment_overrides ||= load_environment_overrides
     end
 
-    def environment_specific_services
-      @environment_specific_services ||= load_environment_specific_services
-    end
-
-    def load_environment_specific_services
-      file_name = File.expand_path('../../../config/service_keys.yml', __FILE__)
-      config = load_environment_specific_services_from(file_name)
+    def load_environment_overrides
+      file_name = File.expand_path('../../../config/overrides.yml', __FILE__)
+      config = load_environment_overrides_from(file_name)
       if config.any?
-        LOGGER.info "Loaded environment-specific service configuration from #{file_name}"
+        LOGGER.info "Loaded environment configuration overrides from #{file_name}"
       end
       config
     end
 
-    def load_environment_specific_services_from(file_name, env = ENV['RACK_ENV'])
+    def load_environment_overrides_from(file_name, env = ENV['RACK_ENV'])
       config = HashWithIndifferentAccess.new
       begin
         config.merge!((YAML.load(File.open(file_name, 'r:utf-8')) || {}).fetch(env, {}))
@@ -48,22 +44,30 @@ class Realm < ActiveRecord::Base
     end
   end
 
+  def primary_domain_name
+    name = self.class.environment_overrides.fetch(self.label, {})[:primary_domain]
+    name ||= self.primary_domain.try(:name)
+  end
+
   def god_sessions
     Session.where("sessions.identity_id in (select id from identities where god and realm_id = ?)", id)
   end
 
   def external_service_keys
+    keys = HashWithIndifferentAccess.new
     if self.service_keys.present?
-      keys = YAML.load(self.service_keys)
-      raise "Missing or malformed configuration for #<Realm:#{id} #{label}>" unless keys
-    else
-      keys = {}
+      if (yaml = YAML.load(self.service_keys))
+        keys.merge!(yaml)
+      else
+        raise "Missing or malformed configuration for #<Realm:#{id} #{label}>"
+      end
     end
+    keys.merge!(self.class.environment_overrides.fetch(self.label, {}).fetch(:services, {}))
     keys
   end
 
   def keys_for(provider)
-    OpenStruct.new(external_service_keys.fetch(provider))
+    OpenStruct.new(external_service_keys[provider])
   end
 
   private

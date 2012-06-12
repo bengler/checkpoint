@@ -71,7 +71,7 @@ class CheckpointV1 < Sinatra::Base
   helpers do
     # Is the current host the realm's primary domain?
     def on_primary_domain?
-      current_realm && request.host == current_realm.primary_domain.name 
+      current_realm && request.host == current_realm.primary_domain_name 
     end
 
     def current_session_key
