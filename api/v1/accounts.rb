@@ -42,70 +42,27 @@ class CheckpointV1 < Sinatra::Base
   # no current identity, then a new identity is created, unless
   # `identity_id` is provided.
   #
-  put '/accounts/:provider/:uid' do |provider, uid|
+  post '/identities/:id/accounts/:provider/:uid' do |id, provider, uid|
     transaction do
-      account = Account.where(
-        :realm_id => current_identity.realm_id,
-        :provider => provider,
-        :uid => uid).first
-      if account
-        # Account exists, we will be updating it
-        unless account.identity == current_identity
-          check_god_credentials(current_identity.realm_id)
-        end
-      else
-        # New account, find an identity to assign it to
-        if (identity_id = params[:identity_id])
-          identity = Identity.where(:id => identity_id).first
-          halt 400, 'Identity not found' unless identity
-          unless identity == current_identity
-            check_god_credentials(current_identity.realm_id)
-          end
-        else
-          identity = current_identity
-          identity ||= Identity.new(:realm_id => current_realm.id)
-        end
-        account = Account.new(
-          :realm_id => current_realm.id,
-          :provider => provider,
-          :uid => uid,
-          :identity => identity)
-      end
+      identity = (id == 'me') ? current_identity : Identity.find(id)
+      check_god_credentials(current_identity.realm_id) unless identity == current_identity
+      account = identity.accounts.where(:provider => provider, :uid => uid).first
+      account ||= identity.accounts.new(:provider => provider, :uid => uid, :realm => current_realm)
       account.attributes = params.slice(
         *%w(token secret nickname
           name location description profile_url image_url email))
       account.save!
-
-      [201, pg(:account, :locals => {:account => account})]
-    end
-  end
-
-  # Updates an account.
-  #
-  post '/accounts/:provider/:uid' do |provider, uid|
-    transaction do
-      account = Account.where(
-        :realm_id => current_identity.realm_id,
-        :provider => provider,
-        :uid => uid).first
-      halt 404, "No such account" unless account
-      account.attributes = params.slice(
-        %w(token secret nickname
-          name location description profile_url image_url email))
-      account.save!
-      
       [201, pg(:account, :locals => {:account => account})]
     end
   end
 
   # Deletes an account.
   #
-  delete '/accounts/:provider/:uid' do |provider, uid|
+  delete '/identities/:id/accounts/:provider/:uid' do |provider, uid|
     transaction do
-      account = Account.where(
-        :realm_id => current_identity.realm_id,
-        :provider => provider,
-        :uid => uid).first
+      identity = (id == 'me') ? current_identity : Identity.find(id)
+      check_god_credentials(current_identity.realm_id) unless identity == current_identity
+      account = identity.accounts.where(:provider => provider, :uid => uid).first
       halt 404, "No such account" unless account
       account.destroy
       halt 200
