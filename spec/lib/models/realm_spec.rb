@@ -12,7 +12,7 @@ describe Realm do
     keys = {
       :twitter => {:consumer_key => 'twitter_key', :consumer_secret => 'twitter_secret'},
       :facebook => {:client_id => 'facebook_id', :client_secret => 'facebook_secret'}
-    }
+    }.with_indifferent_access
 
     realm = Realm.create!(:label => 'realm', :service_keys => keys.to_yaml)
     realm.external_service_keys.should eq(keys)
