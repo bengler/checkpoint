@@ -145,7 +145,11 @@ class CheckpointV1 < Sinatra::Base
         vanilla_keys = identity.realm.keys_for(:vanilla)
         if vanilla_keys and (vanilla_store = vanilla_keys.store)
           identity.accounts.where(:provider => 'vanilla').each do |account|
-            pebbles.vanilla.post("/#{vanilla_store}/logout/#{account.uid}")
+            begin
+              pebbles.vanilla.post("/#{vanilla_store}/logout/#{account.uid}")
+            rescue Pebblebed::HttpError => e
+              raise unless e.status == 404
+            end
           end
         end
         unless identity.provisional?
