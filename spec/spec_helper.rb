@@ -13,6 +13,7 @@ require 'config/environment'
 require 'api/v1'
 
 require 'rack/test'
+require 'webmock/rspec'
 require 'vcr'
 
 VCR.config do |c|
@@ -28,6 +29,9 @@ set :environment, :test
 # Run all examples in a transaction
 RSpec.configure do |c|
   c.mock_with :rspec
+  c.before :each do
+    WebMock.reset!
+  end
   c.around(:each) do |example|
     clear_cookies if respond_to?(:clear_cookies)
     $memcached = Mockcached.new

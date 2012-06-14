@@ -141,8 +141,16 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def log_out
-      if current_session.identity and not current_session.identity.provisional?
-        current_session.identity = nil
+      if (identity = current_session.identity)
+        vanilla_keys = identity.realm.keys_for(:vanilla)
+        if vanilla_keys and (vanilla_store = vanilla_keys.store)
+          identity.accounts.where(:provider => 'vanilla').each do |account|
+            pebbles.vanilla.post("/#{vanilla_store}/logout/#{account.uid}")
+          end
+        end
+        unless identity.provisional?
+          current_session.identity = nil
+        end
       end
       @current_identity = nil      
     end
