@@ -147,7 +147,7 @@ class CheckpointV1 < Sinatra::Base
           identity.accounts.where(:provider => 'vanilla').each do |account|
             if account.token.present?
               response = Curl::Easy.http_post(
-                "http://#{OmniAuth::Strategies::Vanilla.host}/vanilla/v1" \
+                "http://#{OmniAuth::Strategies::Vanilla.host}/api/vanilla/v1" \
                 "/#{vanilla_store}/logout/#{account.uid}" \
                 "?oauth_token=#{URI.escape(account.token)}")
               if (status = response.response_code.to_i) and status != 200
