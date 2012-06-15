@@ -199,6 +199,7 @@ DEPENDENCIES
   bengler_test_helper!
   capistrano (~> 2.9.0)
   capistrano-bengler!
+  curb (>= 0.7.14)
   dalli
   omniauth (~> 1.0.2)
   omniauth-contrib (~> 1.0.0)!

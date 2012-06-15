@@ -145,10 +145,17 @@ class CheckpointV1 < Sinatra::Base
         vanilla_keys = identity.realm.keys_for(:vanilla)
         if vanilla_keys and (vanilla_store = vanilla_keys.store)
           identity.accounts.where(:provider => 'vanilla').each do |account|
-            begin
-              pebbles.vanilla.post("/#{vanilla_store}/logout/#{account.uid}")
-            rescue Pebblebed::HttpError => e
-              raise unless e.status == 404
+            if account.token.present?
+              response = Curl::Easy.http_post(
+                "http://#{OmniAuth::Strategies::Vanilla.host}/vanilla/v1" \
+                "/#{vanilla_store}/logout/#{account.uid}" \
+                "?oauth_token=#{URI.escape(account.token)}")
+              if (status = response.response_code.to_i) and status != 200
+                LOGGER.error("HTTP error #{status} logging out Vanilla user")
+                if status >= 500
+                  raise "HTTP error #{status} logging out Vanilla user"
+                end
+              end
             end
           end
         end
