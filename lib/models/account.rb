@@ -53,6 +53,7 @@ class Account < ActiveRecord::Base
         :location =>     auth_data['info']['location'],
         :image_url =>    auth_data['info']['image'],
         :description =>  auth_data['info']['description'],
+        :email =>        auth_data['info']['email'],
         :profile_url =>  (auth_data['info']['urls'] || {})['Twitter']
       }
       account.save!
