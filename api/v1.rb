@@ -142,6 +142,8 @@ class CheckpointV1 < Sinatra::Base
 
     def log_out
       if (identity = current_session.identity)
+# TODO: Probably no longer necessary
+if false
         vanilla_keys = identity.realm.keys_for(:vanilla)
         if vanilla_keys and (vanilla_store = vanilla_keys.store)
           identity.accounts.where(:provider => 'vanilla').each do |account|
@@ -159,6 +161,7 @@ class CheckpointV1 < Sinatra::Base
             end
           end
         end
+end
         unless identity.provisional?
           current_session.identity = nil
         end
