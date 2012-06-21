@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git@github.com:bengler/capistrano-bengler.git
-  revision: f84abaee44b6d8872a243f1b9bad6f6c6c0d7371
+  revision: 0779088ff74dddf92df0dbd1bd69102df31c1fc6
   specs:
     capistrano-bengler (0.0.17)
       capistrano (>= 2.9)
@@ -113,7 +113,7 @@ GEM
       multipart-post (~> 1.1)
     futurevalue (0.0.2)
     hashie (1.2.0)
-    highline (1.6.12)
+    highline (1.6.13)
     httpauth (0.1)
     i18n (0.6.0)
     kgio (2.7.3)
