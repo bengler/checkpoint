@@ -215,5 +215,11 @@ end
       end
     end
 
+    def redirect_with_logging(url)
+      LOGGER.info "Redirecting to #{url}"
+      redirect_without_logging(url)
+    end
+    alias_method_chain :redirect, :logging
+
   end
 end
