@@ -29,6 +29,9 @@ class CheckpointV1 < Sinatra::Base
 
   before do
     cache_control :private, :no_cache, :no_store, :must_revalidate
+
+    # IE compatibility to allow cookies to be saved across domains
+    headers('P3P' => 'CP="DSP IDC CUR ADM DELi STP NAV COM UNI INT PHY DEM"')
   end
 
   after do
