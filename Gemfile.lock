@@ -138,10 +138,9 @@ GEM
       rack
     omniauth-facebook (1.2.0)
       omniauth-oauth2 (~> 1.0.0)
-    omniauth-google (1.0.1)
-      multi_json
-      omniauth (~> 1.0.0)
-      omniauth-oauth
+    omniauth-google-oauth2 (0.1.10)
+      omniauth (~> 1.0)
+      omniauth-oauth2
     omniauth-oauth2 (1.0.2)
       oauth2 (~> 0.6.0)
       omniauth (~> 1.0)
@@ -208,7 +207,7 @@ DEPENDENCIES
   omniauth (~> 1.0.2)
   omniauth-contrib (~> 1.0.0)!
   omniauth-facebook (~> 1.2.0)
-  omniauth-google (~> 1.0.1)
+  omniauth-google-oauth2 (~> 0.1.10)
   omniauth-oauth (~> 1.0.0)!
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
