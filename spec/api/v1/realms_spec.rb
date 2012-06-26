@@ -47,6 +47,15 @@ describe "Realms" do
     result['realms'].sort.should eq ['hell', 'area51'].sort
   end
 
+  it "gives me the realm of a domain" do
+    realm = Realm.create!(:label => 'hell')
+    Domain.create!(:name => 'example.org', :realm => realm)
+    get "/domains/example.org/realm"
+    result = JSON.parse(last_response.body)
+    result['realm']['label'].should eq 'hell'
+    result['realm']['domains'].should eq ['example.org']
+  end
+
   describe "GET /realms/:realm" do
     context "without identity" do
       it "provides details for any realm" do

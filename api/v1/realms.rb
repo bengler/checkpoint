@@ -32,4 +32,15 @@ class CheckpointV1 < Sinatra::Base
     end
     pg :realm, :locals => {:realm => realm, :identity => nil, :sessions => sessions}
   end
+  
+  # Get a realm by its domain name (Oh, inverted world)
+  #
+  # @param [String] name the domain name
+  # @return [JSON] the realm
+  get '/domains/:name/realm' do |name|
+    domain = Domain.find_by_name(name)
+    halt 404, "Not found" unless domain
+    pg :realm, :locals => {:realm => domain.realm, :identity => nil, :sessions => nil}
+  end
+  
 end
