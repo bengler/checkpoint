@@ -77,6 +77,14 @@ GIT
       omniauth (>= 1.0.0)
       omniauth-oauth2 (>= 1.0.0)
 
+GIT
+  remote: git@github.com:bengler/pebbles-cors.git
+  revision: a36b07603714de814eb2d885fc69a9a6d274625e
+  specs:
+    pebbles-cors (0.0.1)
+      pebblebed
+      rack
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -213,6 +221,7 @@ DEPENDENCIES
   omniauth-twitter!
   omniauth-vanilla!
   pebblebed!
+  pebbles-cors!
   petroglyph (~> 0.0.2)
   pg
   queryparams
