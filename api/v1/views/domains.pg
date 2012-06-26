@@ -1,0 +1,7 @@
+collection :domains => domains do |domain|
+  if domain
+    partial :domain, :domain=> domain
+  else
+    node :domain => {}
+  end  
+end

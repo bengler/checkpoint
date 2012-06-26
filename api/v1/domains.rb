@@ -1,5 +1,24 @@
 class CheckpointV1 < Sinatra::Base
 
+  # Get a domain by its domain name
+  #
+  # @param [String] name the domain name
+  # @return [JSON] the domain
+  get '/domains/:name' do
+    domain = Domain.find_by_name(params[:name])
+    halt 404, "Not found" unless domain
+    pg :domain, :locals => {:domain => domain}
+  end
+
+  # Get a list of domains connected to a realm
+  #
+  # @param [String] label the label of the realm.
+  # @return [JSON] list of domains
+  get '/realms/:label/domains' do |label|
+    domains = Realm.find_by_label(label).domains
+    pg :domains, :locals => {:domains => domains}
+  end
+
   # Get a domain
   #
   # @param [String] label the label of the realm. (can be '*')
@@ -7,6 +26,7 @@ class CheckpointV1 < Sinatra::Base
   # @return [JSON] the domain
   get '/realms/:label/domains/:name' do
     domain = Domain.find_by_name(params[:name])
+    halt 404, "Not found" unless domain
     pg :domain, :locals => {:domain => domain}
   end
 
