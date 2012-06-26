@@ -42,6 +42,16 @@ describe "Domains" do
   it "provides details for a specific domain" do
     realm = Realm.create!(:label => 'area51')
     Domain.create!(:name => 'example.org', :realm => realm)
+    get "/domains/example.org"
+    result = JSON.parse(last_response.body)
+    result['domain']['name'].should eq 'example.org'
+    result['domain']['realm'].should eq 'area51'
+  end  
+
+  # Deprecated. Remove when verified that it is not in use
+  it "provides details for a specific domain" do
+    realm = Realm.create!(:label => 'area51')
+    Domain.create!(:name => 'example.org', :realm => realm)
     get "/realms/area51/domains/example.org"
     result = JSON.parse(last_response.body)
     result['domain']['name'].should eq 'example.org'
