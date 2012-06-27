@@ -69,9 +69,9 @@ GIT
 
 GIT
   remote: git@github.com:bengler/omniauth-vanilla.git
-  revision: 3213d4125a669d786c976ce9a4eb59c8634e4665
+  revision: cad8db780a3391253d8369ba0c2b6b207582e4da
   specs:
-    omniauth-vanilla (0.0.6)
+    omniauth-vanilla (0.0.7)
       multi_json
       oauth
       omniauth (>= 1.0.0)

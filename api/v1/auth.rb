@@ -96,6 +96,7 @@ class CheckpointV1 < Sinatra::Base
     service_keys = current_realm.keys_for(params[:provider].to_sym)
 
     strategy.options[:force_dialog] = session[:force_dialog]
+    strategy.options[:target_url] = session[:redirect_to]
 
     if strategy.options.respond_to?(:consumer_key)
       strategy.options.consumer_key = service_keys.consumer_key
