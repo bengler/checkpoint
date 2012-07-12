@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: git@github.com:bengler/capistrano-bengler.git
-  revision: 0779088ff74dddf92df0dbd1bd69102df31c1fc6
+  revision: a6ff1c753efbe10d80199596711e418644390f1d
   specs:
     capistrano-bengler (0.0.17)
       capistrano (>= 2.9)
