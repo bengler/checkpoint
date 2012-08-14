@@ -14,7 +14,7 @@ gem 'omniauth-oauth', '~> 1.0.0', :git => 'git://github.com/intridea/omniauth-oa
 gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/origo/omniauth-origo.git'
 gem 'omniauth-vanilla', :git => 'git@github.com:bengler/omniauth-vanilla.git'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
-gem 'pebblebed', :git => 'git://github.com/benglerpebbles/pebblebed.git'
+gem 'pebblebed'
 gem 'pebbles-cors', :git => 'git@github.com:bengler/pebbles-cors.git'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'dalli'
