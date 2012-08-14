@@ -24,7 +24,7 @@ gem 'petroglyph', :git => 'git://github.com/benglerpebbles/petroglyph.git'
 gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'queryparams'
-gem 'bengler_test_helper', :git => 'git://github.com/origo/bengler_test_helper.git'
+gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
 gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
 gem 'ar-tsvectors', '~> 0.0.1', :require => 'activerecord_tsvectors'
