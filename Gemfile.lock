@@ -12,6 +12,16 @@ GIT
     bengler_test_helper (0.0.2)
 
 GIT
+  remote: git://github.com/bengler/omniauth-origo.git
+  revision: 0302d7eb382060d6ddb2a8a528ca2fe203e72464
+  specs:
+    omniauth-origo (1.0.0)
+      multi_json
+      oauth
+      omniauth (>= 1.0.0)
+      omniauth-oauth2 (>= 1.0.0)
+
+GIT
   remote: git://github.com/intridea/omniauth-contrib.git
   revision: 027be2e65077eaa123992d64cff0190f634394e8
   specs:
@@ -27,16 +37,6 @@ GIT
     omniauth-oauth (1.0.1)
       oauth
       omniauth (~> 1.0)
-
-GIT
-  remote: git://github.com/origo/omniauth-origo.git
-  revision: 0f0a9573ef17484cb50c1234d065a51ffda9f907
-  specs:
-    omniauth-origo (1.0.0)
-      multi_json
-      oauth
-      omniauth (~> 1.0.0)
-      omniauth-oauth2 (~> 1.0.0)
 
 GIT
   remote: git://github.com/rack/rack.git
