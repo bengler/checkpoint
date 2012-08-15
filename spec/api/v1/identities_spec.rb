@@ -15,7 +15,7 @@ describe "Identities" do
     realm
   end
 
-  let :me do 
+  let :me do
     identity = Identity.create!(:realm => realm)
     account = Account.create!(:identity => identity,
       :realm => realm,
@@ -48,7 +48,7 @@ describe "Identities" do
 
   describe "GET /identities/me" do
 
-    it "is possible to set current session with a http parameter" do 
+    it "is possible to set current session with a http parameter" do
       get "/identities/me", :session => me_session
       identity = JSON.parse(last_response.body)['identity']
       identity['id'].should eq me.id
@@ -181,6 +181,22 @@ describe "Identities" do
       post '/identities', parameters
       last_response.status.should eq(403)
     end
+  end
+
+  describe "PUT /identities/:id" do
+
+    it "requires god powers" do
+      put "/identities/#{me.id}", :identity => {:god => true}, :session => me_session
+      last_response.status.should eq(403)
+    end
+
+    it "will level you up" do
+      put "/identities/#{me.id}", :identity => {:god => true}, :session => god_session
+      last_response.status.should eq(200)
+
+      JSON.parse(last_response.body)["identity"]["god"].should == true
+    end
+
   end
 
   describe "last_seen_on" do

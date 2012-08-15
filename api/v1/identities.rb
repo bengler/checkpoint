@@ -31,6 +31,13 @@ class CheckpointV1 < Sinatra::Base
     pg :identity, :locals => {:identity => identity}
   end
 
+  put '/identities/:id' do |id|
+    check_god_credentials(current_realm.id)
+    identity = Identity.cached_find_all_by_id([id]).first
+    identity.update_attributes!(params[:identity])
+    pg :identity, :locals => {:identity => identity}
+  end
+
   # Retrieve one or more identities
   #
   # @param [String] id the id or a comma separated list of ids. One id with a trailing comma will return a list of one.

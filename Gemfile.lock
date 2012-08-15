@@ -190,8 +190,8 @@ GEM
       rack
       raindrops (~> 0.6)
     vcr (1.11.3)
-    webmock (1.8.3)
-      addressable (>= 2.2.7)
+    webmock (1.8.8)
+      addressable (~> 2.2.8)
       crack (>= 0.1.7)
     yajl-ruby (1.1.0)
 

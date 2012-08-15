@@ -32,14 +32,14 @@ gem 'curb', '>= 0.7.14'
 
 group :development do
   gem 'capistrano', '~> 2.9.0'
-	gem 'capistrano-bengler', :git => 'git@github.com:bengler/capistrano-bengler.git'
+  gem 'capistrano-bengler', :git => 'git@github.com:bengler/capistrano-bengler.git'
 end
 
-group :test do
-  gem 'rspec', '~> 2.8'
+group :development, :test do
   gem 'simplecov'
+  gem 'rspec', '~> 2.8'
+  gem 'webmock'
+  gem 'vcr', '~> 1.11'
   gem 'rack-test'
   gem 'timecop'
-  gem 'vcr', '~> 1.11'
-  gem 'webmock'
 end
