@@ -33,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
 
   put '/identities/:id' do |id|
     check_god_credentials(current_realm.id)
-    identity = Identity.cached_find_all_by_id([id]).first
+    identity = Identity.find(id)
     identity.update_attributes!(params[:identity])
     pg :identity, :locals => {:identity => identity}
   end
