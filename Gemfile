@@ -32,7 +32,7 @@ gem 'curb', '>= 0.7.14'
 
 group :development do
   gem 'capistrano', '~> 2.9.0', :require => false
-  gem 'capistrano-bengler', :git => 'git@github.com:bengler/capistrano-bengler.git, :require => false'
+  gem 'capistrano-bengler', :git => 'git@github.com:bengler/capistrano-bengler.git', :require => false
 end
 
 group :development, :test do
