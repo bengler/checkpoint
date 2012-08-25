@@ -16,7 +16,7 @@ In a next iteration, logging in is going to be extracted into a frontend pebble.
 
 To initiate authentication, you first need to have a realm with a domain set up for your application:
 
-    bundle exec ./bin/checkpoint create example -t "Example Security Realm" -d example.org
+    $ bundle exec ./bin/checkpoint create example -t "Example Security Realm" -d example.org
 
 Checkpoint is provided as a http-service and needs to be mapped into the url-space of your application using some proxy mechanism. The standard root url for checkpoint is:
 
@@ -71,26 +71,8 @@ The fingerprint obscures the original details but still permits the application 
 
 ### Get the code
 
-* Clone project from GitHub.
-* (RVM) bundle install
+    git clone git@github.com:bengler/checkpoint.git
 
-### Set up database
+### Bootstrap
 
-    $ rake db:bootstrap
-    $ rake db:seed
-    $ rake db:test:prepare
-
-This creates the postgreSQL user for the project. Notice how we're giving the user not only superpowers, but the ability to create databases. This is for automated testing purposes.
-
-### Add domains and realms
-
-The application comes with a default development realm `pebbles` (domain: `pebbles.dev`).
-
-You can add domains to this using the `checkpoint` executable:
-
-    $ bin/checkpoint add_domain rocks.dev --realm pebbles
-
-If you need your own realm use `create`:
-
-    $ bin/checkpoint create pets --title "Animal Farm" --domain hamsters.dev
-
+    ./bin/bootstrap
