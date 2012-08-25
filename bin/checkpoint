@@ -4,4 +4,6 @@ require 'rubygems'
 require 'thor'
 require_relative '../config/environment'
 
+ActiveRecord::Base.logger.level = Logger::INFO
 Checkpoint::CLI.start
+
