@@ -41,5 +41,4 @@ group :development, :test do
   gem 'webmock'
   gem 'vcr', '~> 1.11'
   gem 'rack-test'
-  gem 'timecop'
 end
