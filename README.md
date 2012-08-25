@@ -2,7 +2,7 @@
 
 Centralized authentication broker for web applications that supports a number of authentication mechanisms and is provided via a http-interface. Checkpoint can take care of logging your users into your application and keep track of session and access privileges across services.
 
-In a next iteration, logging in is going to be extracted into a frontend pebble. This is partly for performance purposes (identity store vs logging in have very differente usage patterns), and partly because they're different things and should, therefore, live in different places. However, that is going to happen after we've gotten the bare bones of our Cahootsware project working.
+In a next iteration, logging in is going to be extracted into a frontend pebble. This is partly for performance purposes (identity store vs logging in have very different usage patterns), and partly because they're different things and should, therefore, live in different places. However, that is going to happen after we've gotten the bare bones of our Cahootsware project working.
 
 ## Concepts
 
@@ -16,9 +16,7 @@ In a next iteration, logging in is going to be extracted into a frontend pebble.
 
 To initiate authentication, you first need to have a realm with a domain set up for your application:
 
-    require './config/environment'
-    realm = Realm.create!(:label => 'example')
-    Domain.create!(:realm => realm, :name => 'example.org')
+    bundle exec ./bin/checkpoint create example -t "Example Security Realm" -d example.org
 
 Checkpoint is provided as a http-service and needs to be mapped into the url-space of your application using some proxy mechanism. The standard root url for checkpoint is:
 
