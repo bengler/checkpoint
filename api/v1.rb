@@ -41,7 +41,7 @@ class CheckpointV1 < Sinatra::Base
 
   after do
     if (session = @current_session)
-      session.save! if session.changed? or session.new_record?
+      session.save! if session.changed? or (session.new_record? && session.identity_id)
 
       # Delete legacy cookie on wrong domain
       Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|
@@ -74,7 +74,7 @@ class CheckpointV1 < Sinatra::Base
   helpers do
     # Is the current host the realm's primary domain?
     def on_primary_domain?
-      current_realm && request.host == current_realm.primary_domain_name 
+      current_realm && request.host == current_realm.primary_domain_name
     end
 
     def current_session_key
@@ -169,7 +169,7 @@ end
           current_session.identity = nil
         end
       end
-      @current_identity = nil      
+      @current_identity = nil
     end
 
     def check_god_credentials(realm_id)
