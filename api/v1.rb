@@ -41,7 +41,8 @@ class CheckpointV1 < Sinatra::Base
 
   after do
     if (session = @current_session)
-      session.save! if session.changed? or (session.new_record? && session.identity_id)
+      # Sessions that are never assigned an identity will not be persisted
+      session.save! if session.should_be_persisted?
 
       # Delete legacy cookie on wrong domain
       Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|

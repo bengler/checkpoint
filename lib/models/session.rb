@@ -15,6 +15,13 @@ class Session < ActiveRecord::Base
     key ||= self.key = Session.random_key
   end
 
+  # Sessions need not be persisted if they are new and never have been assign an
+  # identity_id. This avoids millions of blank sessions created as people who never
+  # actually log in are assigned sessions keys.
+  def should_be_persisted?
+    changed? || (new_record? && identity_id)
+  end
+
   def self.cache_key(key)
     "session:#{key}"
   end
