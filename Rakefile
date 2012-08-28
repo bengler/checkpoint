@@ -1,7 +1,7 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'sinatra/activerecord/rake'
-require 'bengler_test_helper/tasks'
+require 'bengler_test_helper/tasks' unless ENV['RACK_ENV'] == 'production' or ENV['RACK_ENV'] == 'staging'
 
 task :environment do
   require 'config/environment'

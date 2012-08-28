@@ -24,13 +24,13 @@ gem 'petroglyph', :git => 'git://github.com/benglerpebbles/petroglyph.git'
 gem 'rake'
 gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'queryparams'
-gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
 gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
 gem 'ar-tsvectors', '~> 0.0.1', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
 
 group :development do
+  gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
   gem 'capistrano', '~> 2.9.0', :require => false
   gem 'capistrano-bengler', :git => 'git@github.com:bengler/capistrano-bengler.git', :require => false
 end
