@@ -6,18 +6,6 @@ GIT
       omniauth-oauth (~> 1.0)
 
 GIT
-  remote: git://github.com/bengler/hupper.git
-  revision: 4eb51c501d62be1d84e6cd845e4122e21c4b0b62
-  specs:
-    hupper (0.0.1)
-
-GIT
-  remote: git://github.com/benglerpebbles/o5-logging.git
-  revision: db9686026912448e19fa0512e46f66c871a45da7
-  specs:
-    o5-logging (0.0.1)
-
-GIT
   remote: git://github.com/benglerpebbles/pebblebed.git
   revision: 2debe5940bd7e28a5bde1d191b7cba9bb34d3758
   specs:
@@ -155,8 +143,6 @@ GEM
     petroglyph (0.0.2)
       tilt
     pg (0.13.2)
-    pingable (0.0.9)
-      rack (>= 1.0.0)
     queryparams (0.0.3)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
@@ -211,8 +197,6 @@ DEPENDENCIES
   capistrano (~> 2.9.0)
   capistrano-bengler!
   dalli
-  hupper!
-  o5-logging!
   omniauth (~> 1.0.2)
   omniauth-contrib (~> 1.0.0)!
   omniauth-facebook (~> 1.2.0)
@@ -223,7 +207,6 @@ DEPENDENCIES
   pebblebed!
   petroglyph (~> 0.0.2)
   pg
-  pingable
   queryparams
   rack (~> 1.4)!
   rack-contrib
