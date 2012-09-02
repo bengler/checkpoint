@@ -164,7 +164,7 @@ GEM
       kgio (~> 2.4)
       rack
       raindrops (~> 0.6)
-    vcr (1.11.3)
+    vcr (2.2.4)
     webmock (1.8.8)
       addressable (~> 2.2.8)
       crack (>= 0.1.7)
@@ -190,7 +190,7 @@ DEPENDENCIES
   omniauth-vanilla!
   pebblebed
   pebbles-cors!
-  petroglyph (~> 0.0.2)
+  petroglyph
   pg
   queryparams
   rack (~> 1.4)!
@@ -205,6 +205,6 @@ DEPENDENCIES
   sinatra-activerecord
   thor
   unicorn (~> 4.1.1)
-  vcr (~> 1.11)
+  vcr
   webmock
   yajl-ruby

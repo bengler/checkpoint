@@ -16,9 +16,14 @@ require 'rack/test'
 require 'webmock/rspec'
 require 'vcr'
 
-VCR.config do |c|
+keys = Realm.environment_overrides['valid_realm']
+
+VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
-  c.stub_with :webmock 
+  c.hook_into :webmock
+  c.filter_sensitive_data("REDACTED:TWITTER_PASSWORD") { ENV['CHECKPOINT_TWITTER_PASSWORD'] }
+  c.filter_sensitive_data("REDACTED:TWITTER_OAUTH_KEY") { if keys then keys['services']['twitter']['consumer_key'] end }
+  c.filter_sensitive_data("REDACTED:TWITTER_OAUTH_SECRET") { if keys then keys['services']['twitter']['consumer_secret'] end }
 end
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)

@@ -11,3 +11,6 @@ vendor/bundle/
 /_trash
 /.brow
 config/site.rb
+config/database.yml
+config/overrides.yml
+config/recaptcha.yml

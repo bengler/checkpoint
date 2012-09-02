@@ -1,0 +1,20 @@
+# These override any keys specified in the realm.
+development:
+  apdm:
+    primary_domain: area51.dev
+    services:
+      vanilla:
+        client_id: AAECCFCFBDBEFBCEEEED
+        client_secret: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+        store: area51
+      google_oauth2:
+        consumer_key: tunnel.example.com
+        secret_key: 1a421e4919b1674defaf1ea063893fe198fe5dd8
+      facebook:
+        client_id: 648909034062420521
+        client_secret: cbe648909034c0624c205fe219d3fbd10052c715
+        scope: "email,offline_access"
+      twitter:
+        consumer_key: db3E7C41ee96f8B5FB1cb3
+        consumer_secret: 8a1621dae39bf1d91d372c77f441e80b8f68b9b6
+

@@ -1,0 +1,133 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.twitter.com/oauth/request_token
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OAuth gem v0.4.6
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Authorization:
+      - OAuth oauth_callback="http%3A%2F%2Fexample.org%2Fauth%2Ftwitter%2Fcallback",
+        oauth_consumer_key="REDACTED:TWITTER_OAUTH_KEY", oauth_nonce="lf6slHkKbSofcq21EiZjm5t5m1JMQQsqPAhazfaI30",
+        oauth_signature="obsO1QfUL6gaD2oAatpUXZkIsC0%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1346671108", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 03 Sep 2012 11:18:30 GMT
+      Status:
+      - 200 OK
+      Etag:
+      - ! '"6f6a2d0d51cebf5e85060bbb6080786e"'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Transaction:
+      - f9534e8034bb1148
+      X-Mid:
+      - 53ee1b97b9a39b627102da5d90478aa62dce8967
+      X-Runtime:
+      - '0.02387'
+      Last-Modified:
+      - Mon, 03 Sep 2012 11:18:30 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Pragma:
+      - no-cache
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      Content-Length:
+      - '147'
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Set-Cookie:
+      - _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCE1p2os5ASIKZmxhc2hJQzonQWN0aW9uQ29u%250AdHJvbGxlcjo6Rmxhc2g6OkZsYXNoSGFzaHsABjoKQHVzZWR7ADoHaWQiJWIx%250AMzhlMWMwYjc4NjJjNjFmYzY4ZmU1NDdmOGU4MmZk--41257dff42f43085400a063ca6a801ce0f593525;
+        domain=.twitter.com; path=/; HttpOnly
+      - guest_id=v1%3A134667111047690552; domain=.twitter.com; path=/; expires=Wed,
+        03-Sep-2014 23:18:30 GMT
+      - k=10.36.31.121.1346671110465263; path=/; expires=Mon, 10-Sep-12 11:18:30 GMT;
+        domain=.twitter.com
+      Vary:
+      - Accept-Encoding
+      Server:
+      - tfe
+    body:
+      encoding: US-ASCII
+      string: oauth_token=Q6oI20v09Kc02ohdJSZyaZYqKdkiTA9CsWtRcs1sDws&oauth_token_secret=bqEjUz2VAk6y71l30BOLQsvLgo6tAlxdUKMhwyI2DM&oauth_callback_confirmed=true
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:30 GMT
+- request:
+    method: post
+    uri: https://api.twitter.com/oauth/access_token
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OAuth gem v0.4.6
+      Content-Length:
+      - '0'
+      Authorization:
+      - OAuth oauth_body_hash="2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D", oauth_consumer_key="REDACTED:TWITTER_OAUTH_KEY",
+        oauth_nonce="6I5zBW6wu622c0s8bjWHRd5uFeTsuSuzkh0WOwNPBA", oauth_signature="s6IKcyoSxg9SYbRb9Z6z3WT688w%3D",
+        oauth_signature_method="HMAC-SHA1", oauth_timestamp="1346671110", oauth_token="Q6oI20v09Kc02ohdJSZyaZYqKdkiTA9CsWtRcs1sDws",
+        oauth_version="1.0"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Mon, 03 Sep 2012 11:18:32 GMT
+      Status:
+      - 401 Unauthorized
+      X-Mid:
+      - c8ffb38148815dad8b284ff99f4c49ff96efe0dd
+      X-Transaction:
+      - 246da739daa0f868
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Last-Modified:
+      - Mon, 03 Sep 2012 11:18:32 GMT
+      Content-Length:
+      - '1'
+      X-Runtime:
+      - '0.01470'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/html; charset=utf-8
+      Set-Cookie:
+      - _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCD9v2os5ASIKZmxhc2hJQzonQWN0aW9uQ29u%250AdHJvbGxlcjo6Rmxhc2g6OkZsYXNoSGFzaHsABjoKQHVzZWR7ADoHaWQiJWQ5%250AMTI1Yzg0NWE0OTZmNWMwODJjMTFhYTRkMDIzYmM5--eb2fc537e00b33a8e403160f730f14f05c59d4bf;
+        domain=.twitter.com; path=/; HttpOnly
+      - guest_id=v1%3A134667111199865476; domain=.twitter.com; path=/; expires=Wed,
+        03-Sep-2014 23:18:31 GMT
+      - k=10.35.53.138.1346671111988662; path=/; expires=Mon, 10-Sep-12 11:18:31 GMT;
+        domain=.twitter.com
+      Vary:
+      - Accept-Encoding
+      Server:
+      - tfe
+    body:
+      encoding: US-ASCII
+      string: ! ' '
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:32 GMT
+recorded_with: VCR 2.2.4

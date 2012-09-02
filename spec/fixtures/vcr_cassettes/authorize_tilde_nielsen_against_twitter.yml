@@ -1,0 +1,685 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.twitter.com/oauth/request_token
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OAuth gem v0.4.6
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Authorization:
+      - OAuth oauth_callback="http%3A%2F%2Fexample.org%2Fauth%2Ftwitter%2Fcallback",
+        oauth_consumer_key="REDACTED:TWITTER_OAUTH_KEY", oauth_nonce="TDg9ltL2sfhC26MKwHi9fgqCCzHUczyCp9IzSTCICg",
+        oauth_signature="I%2FU5yFYRvc1BwUI2g1dGRYIkhlc%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1346671112", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 03 Sep 2012 11:18:34 GMT
+      Status:
+      - 200 OK
+      X-Runtime:
+      - '0.01858'
+      Pragma:
+      - no-cache
+      X-Transaction:
+      - 63849e88412a9a76
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      Content-Length:
+      - '145'
+      Etag:
+      - ! '"d813a81cebb47de08a9062a94ca81968"'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Mid:
+      - ee2d76b92572eb48d37c46685a7a152b0cbc1dbc
+      Last-Modified:
+      - Mon, 03 Sep 2012 11:18:34 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Set-Cookie:
+      - _twitter_sess=BAh7CCIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7ADoPY3JlYXRlZF9hdGwrCJR42os5AToHaWQiJWFj%250AZDdlYzczNGVkOThiMzFjYmYyYmFhYjg0NjcwNDZi--a7ba3d37a3fedbf805a670b3add28bb59f27e19d;
+        domain=.twitter.com; path=/; HttpOnly
+      - guest_id=v1%3A134667111438763869; domain=.twitter.com; path=/; expires=Wed,
+        03-Sep-2014 23:18:34 GMT
+      - k=10.36.31.130.1346671114377808; path=/; expires=Mon, 10-Sep-12 11:18:34 GMT;
+        domain=.twitter.com
+      Vary:
+      - Accept-Encoding
+      Server:
+      - tfe
+    body:
+      encoding: US-ASCII
+      string: oauth_token=ew6TxnNbmYE3quIKGT5q6Yg1sorcd0CLyy6SSyG7U&oauth_token_secret=gvY7dts4Ymxgzm5bcidH4X5oL3wXF5V3YlNlCCAiLI&oauth_callback_confirmed=true
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:34 GMT
+- request:
+    method: get
+    uri: https://api.twitter.com/oauth/authenticate?oauth_token=ew6TxnNbmYE3quIKGT5q6Yg1sorcd0CLyy6SSyG7U
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: !binary |-
+        T0s=
+    headers:
+      !binary "RGF0ZQ==":
+      - !binary |-
+        TW9uLCAwMyBTZXAgMjAxMiAxMToxODozNyBHTVQ=
+      !binary "U3RhdHVz":
+      - !binary |-
+        MjAwIE9L
+      !binary "Q29udGVudC1MZW5ndGg=":
+      - !binary |-
+        Njc3Mw==
+      !binary "Q2FjaGUtQ29udHJvbA==":
+      - !binary |-
+        bm8tY2FjaGUsIG5vLXN0b3JlLCBtdXN0LXJldmFsaWRhdGUsIHByZS1jaGVj
+        az0wLCBwb3N0LWNoZWNrPTA=
+      !binary "WC1GcmFtZS1PcHRpb25z":
+      - !binary |-
+        U0FNRU9SSUdJTg==
+      !binary "WC1NaWQ=":
+      - !binary |-
+        ZjUxNmFhODcwNzliMTYxYjlmZjg4Mjk5MjI0MjFmNWExYzYxM2QyMQ==
+      !binary "RXhwaXJlcw==":
+      - !binary |-
+        VHVlLCAzMSBNYXIgMTk4MSAwNTowMDowMCBHTVQ=
+      !binary "WC1SdW50aW1l":
+      - !binary |-
+        MC4wMzE5Mw==
+      !binary "RXRhZw==":
+      - !binary |-
+        IjM1NjAxNWVjYmI0Njk2YjE3OWRlMWI4OTU1YzkxM2JlIg==
+      !binary "UHJhZ21h":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "WC1UcmFuc2FjdGlvbg==":
+      - !binary |-
+        YjdjYWU2OWI0MmZhMjRlMg==
+      !binary "Q29udGVudC1UeXBl":
+      - !binary |-
+        dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04
+      !binary "TGFzdC1Nb2RpZmllZA==":
+      - !binary |-
+        TW9uLCAwMyBTZXAgMjAxMiAxMToxODozNyBHTVQ=
+      !binary "U2V0LUNvb2tpZQ==":
+      - !binary |-
+        X3R3aXR0ZXJfc2Vzcz1CQWg3Q2pvT2NtVjBkWEp1WDNSdkltVm9kSFJ3Y3pv
+        dkwyRndhUzUwZDJsMGRHVnlMbU52YlM5dllYVjAlMjUwQWFDOWhkWFJvWlc1
+        MGFXTmhkR1UlMjUyRmIyRjFkR2hmZEc5clpXNDlaWGMyVkhodVRtSnRXVVV6
+        Y1hWSlMwZFUlMjUwQU5YRTJXV2N4YzI5eVkyUXdRMHg1ZVRaVFUzbEhOMVU2
+        RDJOeVpXRjBaV1JmWVhSc0t3aGRnOXFMT1FFNiUyNTBBREdOemNtWmZhV1Fp
+        SldJMllUazROR1kyWm1NME9XVXlNRE0wTVdObU16SmtNakF5WkRrME5qRXdJ
+        Z3BtJTI1MEFiR0Z6YUVsRE9pZEJZM1JwYjI1RGIyNTBjbTlzYkdWeU9qcEdi
+        R0Z6YURvNlJteGhjMmhJWVhOb2V3QUclMjUwQU9ncEFkWE5sWkhzQU9nZHBa
+        Q0lsTURFMU16QXpOVEEyT0RJNU5qWmhaRGN4T0dReFpHRmlZV1JrTnpZMSUy
+        NTBBWlRjJTI1M0QtLTM4NGE2NmIwNGVhNDNjZjIzOWQ4MWY0YjdlY2JhYWI3
+        ZTY1M2QyNzA7IGRvbWFpbj0udHdpdHRlci5jb207IHBhdGg9LzsgSHR0cE9u
+        bHk=
+      - !binary |-
+        Z3Vlc3RfaWQ9djElM0ExMzQ2NjcxMTE3MTQ3NDE4MTg7IGRvbWFpbj0udHdp
+        dHRlci5jb207IHBhdGg9LzsgZXhwaXJlcz1XZWQsIDAzLVNlcC0yMDE0IDIz
+        OjE4OjM3IEdNVA==
+      - !binary |-
+        az0xMC4zNi4zMS4xMTcuMTM0NjY3MTExNzEzNDI0MDsgcGF0aD0vOyBleHBp
+        cmVzPU1vbiwgMTAtU2VwLTEyIDExOjE4OjM3IEdNVDsgZG9tYWluPS50d2l0
+        dGVyLmNvbQ==
+      !binary "VmFyeQ==":
+      - !binary |-
+        QWNjZXB0LUVuY29kaW5n
+      !binary "U2VydmVy":
+      - !binary |-
+        dGZl
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9Im5vIj4KICA8aGVhZD4KICAg
+        IDxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KICAgIDxtZXRhIGh0dHAtZXF1aXY9
+        IlgtVUEtQ29tcGF0aWJsZSIgY29udGVudD0iSUU9ZWRnZSI+CiAgICA8bWV0
+        YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRo
+        OyBpbml0aWFsLXNjYWxlPTEuMDsgbWF4aW11bS1zY2FsZT0xLjA7Ij4KICAg
+        IDx0aXRsZT5Ud2l0dGVyIC8gR29ka2plbm4gZW4gYXBwbGlrYXNqb248L3Rp
+        dGxlPgoKICAgIDxsaW5rIGhyZWY9Imh0dHBzOi8vc2kwLnR3aW1nLmNvbS9h
+        LzEzNDYzNjc1NzcvcGhvZW5peC9jc3MvdGZ3LmJ1bmRsZS5jc3MiIG1lZGlh
+        PSJzY3JlZW4iIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIC8+
+        CiAgICA8IS0tW2lmIChJRU1vYmlsZSkgJiAobHQgSUUgOSldPgogICAgPGxp
+        bmsgaHJlZj0iaHR0cHM6Ly9zaTAudHdpbWcuY29tL2EvMTM0NjM2NzU3Ny9w
+        aG9lbml4L2Nzcy90ZndfaWVtb2JpbGUuYnVuZGxlLmNzcyIgbWVkaWE9InNj
+        cmVlbiIgcmVsPSJzdHlsZXNoZWV0IiB0eXBlPSJ0ZXh0L2NzcyIgLz4KICAg
+        IDwhW2VuZGlmXS0tPgoKICAgIAoKICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
+        cyI+CiAgICAgIGh0bWwgeyBkaXNwbGF5Om5vbmU7IH0KICAgIDwvc3R5bGU+
+        CiAgICA8bm9zY3JpcHQ+CiAgICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+
+        CiAgICAgICAgaHRtbCB7IGRpc3BsYXk6IGJsb2NrOyB9CiAgICAgIDwvc3R5
+        bGU+CiAgICA8L25vc2NyaXB0PgogICAgPCEtLVtpZiBJRU1vYmlsZSAmIGx0
+        IElFIDldPgogICAgPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KICAgICAgaHRt
+        bCB7IGRpc3BsYXk6IGJsb2NrOyB9CiAgICA8L3N0eWxlPgogICAgPCFbZW5k
+        aWZdLS0+CiAgPC9oZWFkPgogIDxib2R5IGNsYXNzPSJvYXV0aCBhdXRoZW50
+        aWNhdGUgdGZ3IG5vIGxvZ2dlZC1vdXQgbm9sb2tpIj4KCiAgICA8ZGl2IGlk
+        PSJoZWFkZXIiIHJvbGU9ImJhbm5lciI+CiAgICAgIDxkaXYgY2xhc3M9ImJh
+        ciI+CiAgICAgICAgPGgxIGNsYXNzPSJsb2dvIj48YSBocmVmPSJodHRwczov
+        L3R3aXR0ZXIuY29tL2hvbWUiIGNsYXNzPSJhbHRlcm5hdGUtY29udGV4dCI+
+        VHdpdHRlcjwvYT48L2gxPgoKICAgICAgICAKICAgICAgICA8ZGl2IGlkPSJu
+        b3QtbG9nZ2VkLWluIj4KICA8YSBocmVmPSJodHRwczovL3R3aXR0ZXIuY29t
+        L3NpZ251cD9jb250ZXh0PW9hdXRoJmFtcDtvYXV0aF90b2tlbj1ldzZUeG5O
+        Ym1ZRTNxdUlLR1Q1cTZZZzFzb3JjZDBDTHl5NlNTeUc3VSIgY2xhc3M9InJl
+        Z2lzdGVyIGFsdGVybmF0ZS1jb250ZXh0Ij5SZWdpc3RyZXIgZGVnPC9hPjwv
+        ZGl2PgogICAgICAgIAogICAgICA8L2Rpdj4KICAgIDwvZGl2PgoKICAgIDxk
+        aXYgaWQ9ImJkIiByb2xlPSJtYWluIj4KICAgICAgCjxkaXYgY2xhc3M9ImNv
+        bmNlcm5lZCBub3RpY2UiPgogIDxoMj5EdSBrYW4gYnJ1a2UgZGluIFR3aXR0
+        ZXIta29udG8gZm9yIMOlIGxvZ2dlIGlubiBww6UgYW5kcmUgc3RlZGVyIG9n
+        IHRqZW5lc3Rlci48L2gyPgogIDxwPlZlZCDDpSBsb2dnZSBpbm4gaGVyLCBr
+        YW4gZHUgYnJ1a2UgQ2hlY2twb2ludCBUZXN0IFJlYWxtIHV0ZW4gw6UgbcOl
+        dHRlIGRlbGUgZGl0dCBwYXNzb3JkLjwvcD4KPC9kaXY+CgoKCgoKCjxkaXYg
+        Y2xhc3M9ImF1dGgiPgogIDxoMj5BdXRob3JpemUgQ2hlY2twb2ludCBUZXN0
+        IFJlYWxtIHRvIHVzZSB5b3VyIGFjY291bnQ/PC9oMj4KCiAgCjxkaXYgY2xh
+        c3M9ImFwcC1pbmZvIiByb2xlPSJjb250ZW50LWluZm8iIHRhYmluZGV4PSIw
+        Ij4KICA8aDM+CiAgICA8aW1nIGFsdD0iIiBjbGFzcz0iYXBwLWljb24iIHNy
+        Yz0iaHR0cHM6Ly9zaTAudHdpbWcuY29tL2EvMTM0NjM2NzU3Ny9pbWFnZXMv
+        b2F1dGhfYXBwbGljYXRpb24ucG5nIiB0aXRsZT0iQ2hlY2twb2ludCBUZXN0
+        IFJlYWxtIiAvPgogICAgQ2hlY2twb2ludCBUZXN0IFJlYWxtCiAgPC9oMz4K
+        ICA8ZGw+CiAgICA8ZHQgY2xhc3M9InVybCI+QXBwbGlrYXNqb24tVVJMPC9k
+        dD4KICAgIDxkZCBjbGFzcz0idXJsIj5jaGVja3BvaW50LmRldi88L2RkPgog
+        ICAgPGR0IGNsYXNzPSJub3RlcyI+T20gZGVubmUgYXBwZW48L2R0PgogICAg
+        PGRkIGNsYXNzPSJub3RlcyI+PHA+VGhpcyBpcyBhIHRlc3QgYXBwbGljYXRp
+        b24sIGFuZCB3aWxsIG5ldmVyIGJlIGV4cG9zZWQgdG8gbGl2ZSB1c2Vycy48
+        L3A+PC9kZD4KICA8L2RsPgogIDxwPjxhIGhyZWY9Imh0dHA6Ly9leGFtcGxl
+        Lm9yZy9hdXRoL3R3aXR0ZXIvY2FsbGJhY2s/ZGVuaWVkPWV3NlR4bk5ibVlF
+        M3F1SUtHVDVxNllnMXNvcmNkMENMeXk2U1N5RzdVIiBjbGFzcz0iZGVueSBt
+        YWludGFpbi1jb250ZXh0Ij5DYW5jZWwsIGFuZCByZXR1cm4gdG8gYXBwPC9h
+        PjwvcD4KPC9kaXY+CgoKCiAgPGRpdiBjbGFzcz0icGVybWlzc2lvbnMgYWxs
+        b3ciPgogIDxwPkRlbm5lIGFwcGxpa2Fzam9uZW4gPHN0cm9uZz52aWwgdsOm
+        cmUgaSBzdGFuZCB0aWwgw6U8L3N0cm9uZz46PC9wPgogIDx1bD4KICAgIAog
+        ICAgCiAgICAgIDxsaT5MZXNlIHR3ZWV0cyBmcmEgZGluIHRpZHNsaW5qZS48
+        L2xpPgogICAgCiAgICAKICAgIDxsaT5TZSBodmVtIGR1IGbDuGxnZXI6PC9s
+        aT4KCgogICAgCiAgICAKICA8L3VsPgo8L2Rpdj4KCgogIDxmb3JtIGFjdGlv
+        bj0iaHR0cHM6Ly9hcGkudHdpdHRlci5jb20vb2F1dGgvYXV0aGVudGljYXRl
+        IiBpZD0ib2F1dGhfZm9ybSIgbWV0aG9kPSJwb3N0Ij48ZGl2IHN0eWxlPSJt
+        YXJnaW46MDtwYWRkaW5nOjAiPjxpbnB1dCBuYW1lPSJhdXRoZW50aWNpdHlf
+        dG9rZW4iIHR5cGU9ImhpZGRlbiIgdmFsdWU9IjAzMDI3MTJjNDcxMjg3ZWQ3
+        MGZkODk0MjYzMTE3NTVmYzNiNGFkMjYiIC8+PC9kaXY+CiAgICA8aW5wdXQg
+        aWQ9Im9hdXRoX3Rva2VuIiBuYW1lPSJvYXV0aF90b2tlbiIgdHlwZT0iaGlk
+        ZGVuIiB2YWx1ZT0iZXc2VHhuTmJtWUUzcXVJS0dUNXE2WWcxc29yY2QwQ0x5
+        eTZTU3lHN1UiIC8+ICAgICAgICAKCgoKPGZpZWxkc2V0IGNsYXNzPSJzaWdu
+        LWluIj4KICA8bGVnZW5kPlNpZ24gaW4gdG8gVHdpdHRlcjwvbGVnZW5kPgog
+        IDxkaXYgY2xhc3M9InJvdyB1c2VyIj4KICAgIDxsYWJlbCBmb3I9InVzZXJu
+        YW1lX29yX2VtYWlsIiB0YWJpbmRleD0iLTEiPkJydWtlcm5hdm4gZWxsZXIg
+        ZS1wb3N0PC9sYWJlbD4KICAgIDxpbnB1dCBhcmlhLXJlcXVpcmVkPSJ0cnVl
+        IiBhdXRvY2FwaXRhbGl6ZT0ib2ZmIiBhdXRvY29ycmVjdD0ib2ZmIiBhdXRv
+        Zm9jdXM9ImF1dG9mb2N1cyIgY2xhc3M9InRleHQiIGlkPSJ1c2VybmFtZV9v
+        cl9lbWFpbCIgbmFtZT0ic2Vzc2lvblt1c2VybmFtZV9vcl9lbWFpbF0iIHJl
+        cXVpcmVkPSJyZXF1aXJlZCIgdHlwZT0idGV4dCIgLz4KICA8L2Rpdj4KICA8
+        ZGl2IGNsYXNzPSJyb3cgcGFzc3dvcmQiPgogIDxsYWJlbCBmb3I9InBhc3N3
+        b3JkIiB0YWJpbmRleD0iLTEiPlBhc3NvcmQ8L2xhYmVsPgogICAgPGlucHV0
+        IGFyaWEtcmVxdWlyZWQ9InRydWUiIGNsYXNzPSJwYXNzd29yZCB0ZXh0IiBp
+        ZD0icGFzc3dvcmQiIG5hbWU9InNlc3Npb25bcGFzc3dvcmRdIiByZXF1aXJl
+        ZD0icmVxdWlyZWQiIHR5cGU9InBhc3N3b3JkIiB2YWx1ZT0iIiAvPgogIDwv
+        ZGl2PgogIDxwPgogICAgPGlucHV0IHR5cGU9ImNoZWNrYm94IiBuYW1lPSJy
+        ZW1lbWJlcl9tZSIgaWQ9InJlbWVtYmVyIiB2YWx1ZT0iMSI+CiAgICA8bGFi
+        ZWwgZm9yPSJyZW1lbWJlciI+SHVzayBtZWc8L2xhYmVsPgogICAgCiAgICAm
+        bWlkZG90OwogICAgPGEgY2xhc3M9ImFsdGVybmF0ZS1jb250ZXh0IiBocmVm
+        PSIvYWNjb3VudC9yZXNlbmRfcGFzc3dvcmQiPkdsZW10IHBhc3NvcmRldD88
+        L2E+CiAgICAKICA8L3A+CjwvZmllbGRzZXQ+CgoKCiAgICA8ZmllbGRzZXQg
+        Y2xhc3M9ImJ1dHRvbnMiPgogICAgICA8bGVnZW5kPkxvZ2cgaW5uIHDDpSBD
+        aGVja3BvaW50IFRlc3QgUmVhbG0gbWVkIGRpbiBrb250bz88L2xlZ2VuZD4K
+        ICAgICAgPGlucHV0IHR5cGU9InN1Ym1pdCIgdmFsdWU9IkxvZ2cgaW5uIiBj
+        bGFzcz0ic3VibWl0IGJ1dHRvbiBzZWxlY3RlZCIgaWQ9ImFsbG93Ij4KICAg
+        ICAgPGlucHV0IHR5cGU9InN1Ym1pdCIgdmFsdWU9IkF2YnJ5dCIgY2xhc3M9
+        InN1Ym1pdCBidXR0b24iIG5hbWU9ImNhbmNlbCIgaWQ9ImRlbnkiPgogICAg
+        PC9maWVsZHNldD4KPC9mb3JtPgogIDxkaXYgY2xhc3M9InBlcm1pc3Npb25z
+        IGRlbnkiPgogIDxwPkRlbm5lIGFwcGxpa2Fzam9uZW4gPHN0cm9uZz52aWwg
+        aWtrZSB2w6ZyZSBpIHN0YW5kIHRpbCDDpTwvc3Ryb25nPjo8L3A+CiAgPHVs
+        PgogICAgPGxpPkbDuGxnIG55ZSBwZXJzb25lci48L2xpPgogICAgPGxpPk9w
+        cGRhdGVyZSBkaW4gcHJvZmlsLjwvbGk+CiAgICA8bGk+UG9zdGUgdHdlZXRz
+        IGZvciBkZWcuPC9saT4KCiAgICAKICAgIAogICAgPGxpPkbDpSB0aWxnYW5n
+        IHRpbCBkaW5lIGRpcmVrdGVtZWxkaW5nZXIuPC9saT4KICAgIAoKICAgIDxs
+        aT5TZSB0d2l0dGVycGFzc29yZGV0IGRpdHQuPC9saT4KICA8L3VsPgo8L2Rp
+        dj4KCjwvZGl2PgoKCgoKICAgIDwvZGl2PgoKICAgIAoKICAgIAogICAgPGRp
+        diBjbGFzcz0iZm9vdGVyIiByb2xlPSJuYXZpZ2F0aW9uIj48ZGl2IGlkPSJm
+        dCI+CiAgICAgIAo8cCBjbGFzcz0idGlwIj5EdSBrYW4gb3BwaGV2ZSB0aWxn
+        YW5nIHRpbCBodmlsa2VuIHNvbSBoZWxzdCBhcHBsaWthc2pvbiBuw6VyIGR1
+        IMO4bnNrZXIgZGV0dGUgZnJhIDxhIGhyZWY9Imh0dHBzOi8vdHdpdHRlci5j
+        b20vc2V0dGluZ3MvYXBwbGljYXRpb25zIj5hcHBsaWthc2pvbnNmYW5lbjwv
+        YT4gdW5kZXIgaW5uc3RpbGxpbmdlci48L3A+CjxwPjxzbWFsbD5WZWQgw6Ug
+        YXV0b3Jpc2VyZSBlbiBhcHBsaWthc2pvbiB2aWwgZHUgZm9ydHNldHRlIMOl
+        IG9wZXJlcmUgdW5kZXIgPGEgaHJlZj0iaHR0cHM6Ly90d2l0dGVyLmNvbS90
+        b3MiPlR3aXR0ZXIgc2luZSB2aWxrw6VyIGZvciB0amVuZXN0ZW48L2E+LiBF
+        biBkZWwgYXYgYnJ1a2VyaW5mb3JtYXNqb25lbiB2aWwgZGVsZXMgdGlsYmFr
+        ZSBtZWQgVHdpdHRlci4gRm9yIG1lciBpbmZvcm1hc2pvbiwgc2UgdsOlcmUg
+        c2lkZSBvbTxhIGhyZWY9Imh0dHBzOi8vdHdpdHRlci5jb20vcHJpdmFjeSI+
+        UGVyc29udmVybjwvYT4uPC9zbWFsbD48L3A+CgogICAgPC9kaXY+PC9kaXY+
+        CiAgICAKCiAgICA8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCIgY2hh
+        cnNldD0idXRmLTgiPgogICAgICB2YXIgdHd0dHIgPSB0d3R0ciB8fCB7fTsK
+        ICAgICAgdHd0dHIuZm9ybV9hdXRoZW50aWNpdHlfdG9rZW4gPSAnMDMwMjcx
+        MmM0NzEyODdlZDcwZmQ4OTQyNjMxMTc1NWZjM2I0YWQyNic7CiAgICAgIGlm
+        IChzZWxmID09IHRvcCkgewogICAgICAgIGRvY3VtZW50LmRvY3VtZW50RWxl
+        bWVudC5zdHlsZS5kaXNwbGF5ID0gJ2Jsb2NrJzsKICAgICAgfQogICAgPC9z
+        Y3JpcHQ+CgogICAgPHNjcmlwdCBzcmM9Imh0dHBzOi8vc2kwLnR3aW1nLmNv
+        bS9hLzEzNDYzNjc1NzcvamF2YXNjcmlwdHMvbG9hZHJ1bm5lci5qcyIgZGF0
+        YS1tYWluPSJ0ZncvaW50ZW50cy9tYWluIiBkYXRhLXBhdGg9Imh0dHBzOi8v
+        c2kwLnR3aW1nLmNvbS9hLzEzNDYzNjc1NzcvamF2YXNjcmlwdHMvbW9kdWxl
+        cyIgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ij48L3NjcmlwdD4KCiAgICA8c2Ny
+        aXB0IHNyYz0iaHR0cHM6Ly9zaTAudHdpbWcuY29tL2EvMTM0NjM2NzU3Ny9q
+        YXZhc2NyaXB0cy9pMThuL25vLmpzPzEzNDYzNzMwODgiIHR5cGU9InRleHQv
+        amF2YXNjcmlwdCI+PC9zY3JpcHQ+CgogICAgCiAgICA8c2NyaXB0IHR5cGU9
+        InRleHQvamF2YXNjcmlwdCIgY2hhcnNldD0idXRmLTgiPgogICAgICAKdXNp
+        bmcoJ2ltcG9ydHMvanF1ZXJ5JywgZnVuY3Rpb24oJCkgewogICQoJy5hcHAt
+        aW5mbycpLmNsaWNrKGZ1bmN0aW9uKCkgewogICAgJCh0aGlzKS50b2dnbGVD
+        bGFzcygnZXhwYW5kZWQnKTsKICB9KTsKfSk7CnVzaW5nKCdpbXBvcnRzL2px
+        dWVyeScsIGZ1bmN0aW9uKCQpIHsKICAvLyBBZGp1c3Qgd2luZG93IHNpemVz
+        IHdoZW4gb3BlbmluZyB0aGUgT0F1dGggZmxvdyBpbiBhIG5ldyB3aW5kb3cu
+        CiAgLy8gTkIuIFBsZWFzZXBsZWFzZXBsZWFzZSBkb24ndCBpbnZva2UgT0F1
+        dGggZmxvd3MgaW4gbmV3IHdpbmRvdyB3aXRob3V0IGEKICAvLyAgICAgdmlz
+        aWJsZSBhZGRyZXNzIGJhci9TU0wgdmVyaWZpY2F0aW9uIGFuZCBzY3JvbGwg
+        YmFyIHN1cHBvcnQuIEh1Z3MhIDstKQogIGlmKHdpbmRvdy5vcGVuZXIpIHsK
+        ICAgICQoZnVuY3Rpb24oKSB7CiAgICAgIGJ1ZmZlciA9IDE3MDsKICAgICAg
+        Y29udGVudCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdiZCcpOwogICAg
+        ICB2cGggPSB3aW5kb3cuaW5uZXJIZWlnaHQgfHwgZG9jdW1lbnQuZG9jdW1l
+        bnRFbGVtZW50LmNsaWVudEhlaWdodCB8fCBkb2N1bWVudC5ib2R5LmNsaWVu
+        dEhlaWdodDsKICAgICAgYnJvd3NlciA9IHdpbmRvdy5vdXRlckhlaWdodCB8
+        fCB2cGggKyA2MDsKICAgICAgCiAgICAgIHZwdyA9IHdpbmRvdy5pbm5lcldp
+        ZHRoIHx8IGRvY3VtZW50LmRvY3VtZW50RWxlbWVudC5jbGllbnRXaWR0aCAr
+        IDI5IHx8IGRvY3VtZW50LmJvZHkuY2xpZW50V2lkdGggKyAyOTsKICAgICAg
+        CiAgICAgIGlmKHZwaCA8IGNvbnRlbnQub2Zmc2V0SGVpZ2h0ICsgYnVmZmVy
+        KSB7CiAgICAgICAgd2luZG93LnJlc2l6ZVRvKHZwdywgY29udGVudC5vZmZz
+        ZXRIZWlnaHQgKyAoYnJvd3NlciAtIHZwaCkgKyBidWZmZXIpOwogICAgICB9
+        CiAgICB9KTsKICB9Cn0pOwoKICAgICAgCiAgICA8L3NjcmlwdD4KICAgIAog
+        ICAgCgoKICA8L2JvZHk+CjwvaHRtbD4=
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:37 GMT
+- request:
+    method: post
+    uri: https://api.twitter.com/oauth/authenticate
+    body:
+      encoding: US-ASCII
+      string: authenticity_token=0302712c471287ed70fd89426311755fc3b4ad26&oauth_token=ew6TxnNbmYE3quIKGT5q6Yg1sorcd0CLyy6SSyG7U&session[username_or_email]=tildenielsen&session[password]=REDACTED:TWITTER_PASSWORD&allow=Sign+In
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: !binary |-
+        T0s=
+    headers:
+      !binary "RGF0ZQ==":
+      - !binary |-
+        TW9uLCAwMyBTZXAgMjAxMiAxMToxODozOSBHTVQ=
+      !binary "U3RhdHVz":
+      - !binary |-
+        MjAwIE9L
+      !binary "U3RyaWN0LVRyYW5zcG9ydC1TZWN1cml0eQ==":
+      - !binary |-
+        bWF4LWFnZT02MzExMzg1MTk=
+      !binary "RXhwaXJlcw==":
+      - !binary |-
+        VHVlLCAzMSBNYXIgMTk4MSAwNTowMDowMCBHTVQ=
+      !binary "Q2FjaGUtQ29udHJvbA==":
+      - !binary |-
+        bm8tY2FjaGUsIG5vLXN0b3JlLCBtdXN0LXJldmFsaWRhdGUsIHByZS1jaGVj
+        az0wLCBwb3N0LWNoZWNrPTA=
+      !binary "WC1SdW50aW1l":
+      - !binary |-
+        MC4wMzk3Ng==
+      !binary "Q29udGVudC1MZW5ndGg=":
+      - !binary |-
+        NDQ4MQ==
+      !binary "WC1UcmFuc2FjdGlvbg==":
+      - !binary |-
+        ODUwOTE0MDVlYWE2ZjJkOA==
+      !binary "TGFzdC1Nb2RpZmllZA==":
+      - !binary |-
+        TW9uLCAwMyBTZXAgMjAxMiAxMToxODozOSBHTVQ=
+      !binary "Q29udGVudC1UeXBl":
+      - !binary |-
+        dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04
+      !binary "RXRhZw==":
+      - !binary |-
+        IjFhYzc3NjBiMzVhMGJhYzJlMWI1YWE4YWNiODI4NGNiIg==
+      !binary "UHJhZ21h":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "WC1GcmFtZS1PcHRpb25z":
+      - !binary |-
+        U0FNRU9SSUdJTg==
+      !binary "WC1NaWQ=":
+      - !binary |-
+        NmExMDJlN2ZmMTY3NzU2ZDcxZDY0OGE3MzQ3ODkwYTQ1MmQwZGIxMg==
+      !binary "U2V0LUNvb2tpZQ==":
+      - !binary |-
+        X3R3aXR0ZXJfc2Vzcz1CQWg3RFNJS1pteGhjMmhKUXpvblFXTjBhVzl1UTI5
+        dWRISnZiR3hsY2pvNlJteGhjMmc2T2tac1lYTm8lMjUwQVNHRnphSHNBQmpv
+        S1FIVnpaV1I3QURvUFkzSmxZWFJsWkY5aGRHd3JDTk9NMm9zNUFUb01ZM055
+        Wmw5cCUyNTBBWkNJbE5EWTNPVGRpWm1Fd1lXUTNaVE0yTlRBeU1HVmxOV0Zr
+        WTJaa04yRTRNREE2Q1hWelpYSnBCTktPJTI1MEEyd0U2RTNCaGMzTjNiM0pr
+        WDNSdmEyVnVJaTFrWm1OalpEQTRNakJqTVRreE9XWmhPV1kyWkdVeU5Ea3gl
+        MjUwQVptWm1Oak16TUdFd056UTVaREF3T2hCemRHRjVYM05sWTNWeVpWUTZC
+        MmxrSWlWa1pXSXdZV0ZpWkRaayUyNTBBWldZd1pHTTJaR1prTjJWaVlqQm1a
+        akUwWWpJNVpqb2JjMlZ6YzJsdmJsOXdZWE56ZDI5eVpGOTBiMnRsJTI1MEFi
+        aUl0WkdaalkyUXdPREl3WXpFNU1UbG1ZVGxtTm1SbE1qUTVNV1ptWmpZek16
+        QmhNRGMwT1dRd01BJTI1M0QlMjUzRC0tODM3MjE2MWIzYTM0MmQ4NzlkMGU2
+        YmFlNzhhZjUzYmEzNDNhMThkNTsgZG9tYWluPS50d2l0dGVyLmNvbTsgcGF0
+        aD0vOyBIdHRwT25seQ==
+      - !binary |-
+        YXV0aF90b2tlbj1kZmNjZDA4MjBjMTkxOWZhOWY2ZGUyNDkxZmZmNjMzMGEw
+        NzQ5ZDAwOyBkb21haW49LnR3aXR0ZXIuY29tOyBwYXRoPS87IEh0dHBPbmx5
+      - !binary |-
+        YXV0aF90b2tlbj1kZmNjZDA4MjBjMTkxOWZhOWY2ZGUyNDkxZmZmNjMzMGEw
+        NzQ5ZDAwOyBkb21haW49LnR3aXR0ZXIuY29tOyBwYXRoPS87IHNlY3VyZTsg
+        SHR0cE9ubHk=
+      - !binary |-
+        YXV0aF90b2tlbl9zZXNzaW9uPXRydWU7IGRvbWFpbj0udHdpdHRlci5jb207
+        IHBhdGg9Lw==
+      - !binary |-
+        ZG50PTsgZG9tYWluPS50d2l0dGVyLmNvbTsgcGF0aD0vOyBleHBpcmVzPVRo
+        dSwgMDEtSmFuLTE5NzAgMDA6MDA6MDAgR01U
+      - !binary |-
+        Z3Vlc3RfaWQ9djElM0ExMzQ2NjcxMTE5NTcwNDkxMjI7IGRvbWFpbj0udHdp
+        dHRlci5jb207IHBhdGg9LzsgZXhwaXJlcz1XZWQsIDAzLVNlcC0yMDE0IDIz
+        OjE4OjM5IEdNVA==
+      - !binary |-
+        az0xMC4zNC4xMjIuMTMyLjEzNDY2NzExMTk1NTk2MzM7IHBhdGg9LzsgZXhw
+        aXJlcz1Nb24sIDEwLVNlcC0xMiAxMToxODozOSBHTVQ7IGRvbWFpbj0udHdp
+        dHRlci5jb20=
+      - !binary |-
+        cmVtZW1iZXJfY2hlY2tlZD0wOyBkb21haW49LnR3aXR0ZXIuY29tOyBwYXRo
+        PS87IGV4cGlyZXM9U2F0LCAwMy1TZXAtMjAyMiAyMzoxODozOSBHTVQ=
+      - !binary |-
+        c2VjdXJlX3Nlc3Npb249dHJ1ZTsgZG9tYWluPS50d2l0dGVyLmNvbTsgcGF0
+        aD0v
+      - !binary |-
+        dHdpZD11JTNEMzExNjYxNjIlN0NkMlhqeXgxb3ZKSnRDMUdYWXl5d05tRXBL
+        QlklM0Q7IGRvbWFpbj0udHdpdHRlci5jb207IHBhdGg9Lzsgc2VjdXJl
+      - !binary |-
+        dHdpZD11JTNEMzExNjYxNjIlN0NkMlhqeXgxb3ZKSnRDMUdYWXl5d05tRXBL
+        QlklM0Q7IGRvbWFpbj0udHdpdHRlci5jb207IHBhdGg9Lzsgc2VjdXJl
+      - !binary |-
+        dHdpZD11JTNEMzExNjYxNjIlN0NkMlhqeXgxb3ZKSnRDMUdYWXl5d05tRXBL
+        QlklM0Q7IGRvbWFpbj0udHdpdHRlci5jb207IHBhdGg9Lzsgc2VjdXJl
+      - !binary |-
+        dHdsbD1sJTNEMTM0NjY3MTExOTsgZG9tYWluPS50d2l0dGVyLmNvbTsgcGF0
+        aD0vOyBleHBpcmVzPVNhdCwgMDMtU2VwLTIwMjIgMjM6MTg6MzkgR01U
+      !binary "VmFyeQ==":
+      - !binary |-
+        QWNjZXB0LUVuY29kaW5n
+      !binary "U2VydmVy":
+      - !binary |-
+        dGZl
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9Im5vIj4KICA8aGVhZD4KICAg
+        IDxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KICAgIDxtZXRhIGh0dHAtZXF1aXY9
+        IlgtVUEtQ29tcGF0aWJsZSIgY29udGVudD0iSUU9ZWRnZSI+CiAgICA8bWV0
+        YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRo
+        OyBpbml0aWFsLXNjYWxlPTEuMDsgbWF4aW11bS1zY2FsZT0xLjA7Ij4KICAg
+        IDx0aXRsZT5Ud2l0dGVyIC8gR29ka2plbm4gZW4gYXBwbGlrYXNqb248L3Rp
+        dGxlPgoKICAgIDxsaW5rIGhyZWY9Imh0dHBzOi8vc2kwLnR3aW1nLmNvbS9h
+        LzEzNDYzNjc1NzcvcGhvZW5peC9jc3MvdGZ3LmJ1bmRsZS5jc3MiIG1lZGlh
+        PSJzY3JlZW4iIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIC8+
+        CiAgICA8IS0tW2lmIChJRU1vYmlsZSkgJiAobHQgSUUgOSldPgogICAgPGxp
+        bmsgaHJlZj0iaHR0cHM6Ly9zaTAudHdpbWcuY29tL2EvMTM0NjM2NzU3Ny9w
+        aG9lbml4L2Nzcy90ZndfaWVtb2JpbGUuYnVuZGxlLmNzcyIgbWVkaWE9InNj
+        cmVlbiIgcmVsPSJzdHlsZXNoZWV0IiB0eXBlPSJ0ZXh0L2NzcyIgLz4KICAg
+        IDwhW2VuZGlmXS0tPgoKICAgIDxtZXRhIGh0dHAtZXF1aXY9InJlZnJlc2gi
+        IGNvbnRlbnQ9IjA7dXJsPWh0dHA6Ly9leGFtcGxlLm9yZy9hdXRoL3R3aXR0
+        ZXIvY2FsbGJhY2s/b2F1dGhfdG9rZW49ZXc2VHhuTmJtWUUzcXVJS0dUNXE2
+        WWcxc29yY2QwQ0x5eTZTU3lHN1Umb2F1dGhfdmVyaWZpZXI9c0g0cFUwRXBO
+        bmpCTEpsdmhKYlVVc3dEb1RzT1pLblU5QWtjZkNwOFJ3Ij4KCgogICAgPHN0
+        eWxlIHR5cGU9InRleHQvY3NzIj4KICAgICAgaHRtbCB7IGRpc3BsYXk6bm9u
+        ZTsgfQogICAgPC9zdHlsZT4KICAgIDxub3NjcmlwdD4KICAgICAgPHN0eWxl
+        IHR5cGU9InRleHQvY3NzIj4KICAgICAgICBodG1sIHsgZGlzcGxheTogYmxv
+        Y2s7IH0KICAgICAgPC9zdHlsZT4KICAgIDwvbm9zY3JpcHQ+CiAgICA8IS0t
+        W2lmIElFTW9iaWxlICYgbHQgSUUgOV0+CiAgICA8c3R5bGUgdHlwZT0idGV4
+        dC9jc3MiPgogICAgICBodG1sIHsgZGlzcGxheTogYmxvY2s7IH0KICAgIDwv
+        c3R5bGU+CiAgICA8IVtlbmRpZl0tLT4KICA8L2hlYWQ+CiAgPGJvZHkgY2xh
+        c3M9InRmdyBubyBsb2dnZWQtaW4gbm9sb2tpIj4KCiAgICA8ZGl2IGlkPSJo
+        ZWFkZXIiIHJvbGU9ImJhbm5lciI+CiAgICAgIDxkaXYgY2xhc3M9ImJhciI+
+        CiAgICAgICAgPGgxIGNsYXNzPSJsb2dvIj48YSBocmVmPSJodHRwczovL3R3
+        aXR0ZXIuY29tL2hvbWUiIGNsYXNzPSJhbHRlcm5hdGUtY29udGV4dCI+VHdp
+        dHRlcjwvYT48L2gxPgoKICAgICAgICAKICAgICAgICA8ZGl2IGlkPSJzZXNz
+        aW9uIiByb2xlPSJuYXZpZ2F0aW9uIj4KICAgICAgICAgIDxoMiBjbGFzcz0i
+        Y3VycmVudC11c2VyIj48YSBocmVmPSJodHRwczovL3R3aXR0ZXIuY29tL3Rp
+        bGRlbmllbHNlbiIgdGl0bGU9IlRpbGRlIE5pZWxzZW4iPgogICAgICAgICAg
+        ICA8aW1nIHNyYz0iaHR0cHM6Ly9zaTAudHdpbWcuY29tL3Byb2ZpbGVfaW1h
+        Z2VzLzIxMDA4MTk4OS9yaXBwZXJfbWluaS5qcGciIGFsdD0iIiB3aWR0aD0i
+        MjQiIGhlaWdodD0iMjQiPgogICAgICAgICAgICA8c3BhbiBjbGFzcz0ibmFt
+        ZSI+dGlsZGVuaWVsc2VuPC9zcGFuPgogICAgICAgICAgPC9hPjwvaDI+CiAg
+        ICAgICAgICA8ZGl2IGNsYXNzPSJ1c2VyLW1lbnUiPgogICAgICAgICAgICA8
+        aDMgY2xhc3M9InNlc3Npb24iPkJydWtlcmFkbWluaXN0cmFzam9uPC9oMz4K
+        ICAgICAgICAgICAgPHVsIGNsYXNzPSJzZXNzaW9uIj4KICAgICAgICAgICAg
+        ICA8bGkgY2xhc3M9Im5ldyI+PGEgaHJlZj0iL2ludGVudC90d2VldCI+TmV3
+        IFR3ZWV0PC9hPjwvbGk+CiAgICAgICAgICAgICAgPGxpIGNsYXNzPSJzZXR0
+        aW5ncyI+PGEgaHJlZj0iL3NldHRpbmdzIj5TZXR0aW5nczwvYT48L2xpPgog
+        ICAgICAgICAgICAgIDxsaSBjbGFzcz0iaGVscCI+PGEgaHJlZj0iL2hlbHAi
+        PkhlbHA8L2E+PC9saT4KICAgICAgICAgICAgICA8bGkgY2xhc3M9InNpZ25v
+        dXQiPjxmb3JtIGFjdGlvbj0iL2ludGVudC9zZXNzaW9uIiBtZXRob2Q9InBv
+        c3QiPjxkaXYgc3R5bGU9Im1hcmdpbjowO3BhZGRpbmc6MCI+PGlucHV0IG5h
+        bWU9Il9tZXRob2QiIHR5cGU9ImhpZGRlbiIgdmFsdWU9ImRlbGV0ZSIgLz48
+        aW5wdXQgbmFtZT0iYXV0aGVudGljaXR5X3Rva2VuIiB0eXBlPSJoaWRkZW4i
+        IHZhbHVlPSIwZjlmNzU3ZjFkMTg4ZjMxMmZkMmZjMDcyZjNmYjY5Y2Y4OGM2
+        ZjRjIiAvPjwvZGl2PgogICAgICAgICAgICAgICAgICA8aW5wdXQgaWQ9InJl
+        ZmVyZXIiIG5hbWU9InJlZmVyZXIiIHR5cGU9ImhpZGRlbiIgdmFsdWU9Ii9v
+        YXV0aC9hdXRoZW50aWNhdGUiIC8+CiAgICAgICAgICAgICAgICAgIDxpbnB1
+        dCB0eXBlPSJzdWJtaXQiIGNsYXNzPSJ0ZXh0dWFsIGxpbmsiIHZhbHVlPSJM
+        b2dnIHV0Ij4KICAgICAgICAgICAgICA8L2Zvcm0+PC9saT4KICAgICAgICAg
+        ICAgPC91bD4KCiAgICAgICAgICAgIAogICAgICAgICAgPC9kaXY+CiAgICAg
+        ICAgPC9kaXY+CiAgICAgICAgCiAgICAgIDwvZGl2PgogICAgPC9kaXY+Cgog
+        ICAgPGRpdiBpZD0iYmQiIHJvbGU9Im1haW4iPgogICAgICAKPGRpdiBjbGFz
+        cz0iaGFwcHkgbm90aWNlIGNhbGxiYWNrIj4KICA8aDI+VGFyIGRlZyB0aWxi
+        YWtlIHRpbCBhcHBsaWthc2pvbmVuLiBEZXR0ZSBrYW4gdGEgbm9lbiDDuHll
+        Ymxpa2suPC9oMj4KICA8cD5EZXJzb20gZGluIG5ldHRsZXNlciBpa2tlIHZp
+        ZGVyZXNlbmRlciBkZWcsIHZlbm5saWdzdCA8YSBocmVmPSJodHRwOi8vZXhh
+        bXBsZS5vcmcvYXV0aC90d2l0dGVyL2NhbGxiYWNrP29hdXRoX3Rva2VuPWV3
+        NlR4bk5ibVlFM3F1SUtHVDVxNllnMXNvcmNkMENMeXk2U1N5RzdVJm9hdXRo
+        X3ZlcmlmaWVyPXNINHBVMEVwTm5qQkxKbHZoSmJVVXN3RG9Uc09aS25VOUFr
+        Y2ZDcDhSdyIgY2xhc3M9Im1haW50YWluLWNvbnRleHQiPmtsaWtrIGhlciBm
+        b3Igw6UgZm9ydHNldHRlPC9hPjwvcD4KPC9kaXY+CgoKCiAgICA8L2Rpdj4K
+        CiAgICAKCiAgICAKICAgIDxkaXYgY2xhc3M9ImZvb3RlciIgcm9sZT0ibmF2
+        aWdhdGlvbiI+PGRpdiBpZD0iZnQiPgogICAgICAKPHAgY2xhc3M9InRpcCI+
+        RHUga2FuIG9wcGhldmUgdGlsZ2FuZyB0aWwgaHZpbGtlbiBzb20gaGVsc3Qg
+        YXBwbGlrYXNqb24gbsOlciBkdSDDuG5za2VyIGRldHRlIGZyYSA8YSBocmVm
+        PSJodHRwczovL3R3aXR0ZXIuY29tL3NldHRpbmdzL2FwcGxpY2F0aW9ucyI+
+        YXBwbGlrYXNqb25zZmFuZW48L2E+IHVuZGVyIGlubnN0aWxsaW5nZXIuPC9w
+        Pgo8cD48c21hbGw+VmVkIMOlIGF1dG9yaXNlcmUgZW4gYXBwbGlrYXNqb24g
+        dmlsIGR1IGZvcnRzZXR0ZSDDpSBvcGVyZXJlIHVuZGVyIDxhIGhyZWY9Imh0
+        dHBzOi8vdHdpdHRlci5jb20vdG9zIj5Ud2l0dGVyIHNpbmUgdmlsa8OlciBm
+        b3IgdGplbmVzdGVuPC9hPi4gRW4gZGVsIGF2IGJydWtlcmluZm9ybWFzam9u
+        ZW4gdmlsIGRlbGVzIHRpbGJha2UgbWVkIFR3aXR0ZXIuIEZvciBtZXIgaW5m
+        b3JtYXNqb24sIHNlIHbDpXJlIHNpZGUgb208YSBocmVmPSJodHRwczovL3R3
+        aXR0ZXIuY29tL3ByaXZhY3kiPlBlcnNvbnZlcm48L2E+Ljwvc21hbGw+PC9w
+        PgoKICAgIDwvZGl2PjwvZGl2PgogICAgCgogICAgPHNjcmlwdCB0eXBlPSJ0
+        ZXh0L2phdmFzY3JpcHQiIGNoYXJzZXQ9InV0Zi04Ij4KICAgICAgdmFyIHR3
+        dHRyID0gdHd0dHIgfHwge307CiAgICAgIHR3dHRyLmZvcm1fYXV0aGVudGlj
+        aXR5X3Rva2VuID0gJzBmOWY3NTdmMWQxODhmMzEyZmQyZmMwNzJmM2ZiNjlj
+        Zjg4YzZmNGMnOwogICAgICBpZiAoc2VsZiA9PSB0b3ApIHsKICAgICAgICBk
+        b2N1bWVudC5kb2N1bWVudEVsZW1lbnQuc3R5bGUuZGlzcGxheSA9ICdibG9j
+        ayc7CiAgICAgIH0KICAgIDwvc2NyaXB0PgoKICAgIDxzY3JpcHQgc3JjPSJo
+        dHRwczovL3NpMC50d2ltZy5jb20vYS8xMzQ2MzY3NTc3L2phdmFzY3JpcHRz
+        L2xvYWRydW5uZXIuanMiIGRhdGEtbWFpbj0idGZ3L2ludGVudHMvbWFpbiIg
+        ZGF0YS1wYXRoPSJodHRwczovL3NpMC50d2ltZy5jb20vYS8xMzQ2MzY3NTc3
+        L2phdmFzY3JpcHRzL21vZHVsZXMiIHR5cGU9InRleHQvamF2YXNjcmlwdCI+
+        PC9zY3JpcHQ+CgogICAgPHNjcmlwdCBzcmM9Imh0dHBzOi8vc2kwLnR3aW1n
+        LmNvbS9hLzEzNDYzNjc1NzcvamF2YXNjcmlwdHMvaTE4bi9uby5qcz8xMzQ2
+        MzczMDg4IiB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwvc2NyaXB0PgoKICAg
+        IAogICAgPHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiIGNoYXJzZXQ9
+        InV0Zi04Ij4KICAgICAgCnVzaW5nKCdpbXBvcnRzL2pxdWVyeScsIGZ1bmN0
+        aW9uKCQpIHsKICB3aW5kb3cuc2V0VGltZW91dChmdW5jdGlvbigpIHsKICAg
+        ICQoZG9jdW1lbnQuYm9keSkuYWRkQ2xhc3MoJ3JlZGlyZWN0LXRpbWVvdXQn
+        KTsKICB9LCAxMDAwMCk7Cn0pOwoKICAgICAgCiAgICA8L3NjcmlwdD4KICAg
+        IAogICAgCgoKICA8L2JvZHk+CjwvaHRtbD4=
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:39 GMT
+- request:
+    method: post
+    uri: https://api.twitter.com/oauth/access_token
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OAuth gem v0.4.6
+      Content-Length:
+      - '0'
+      Authorization:
+      - OAuth oauth_body_hash="2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D", oauth_consumer_key="REDACTED:TWITTER_OAUTH_KEY",
+        oauth_nonce="tL5ldGs0f20meVt5jfsba0IDowsOkYD3BJCqGccUzc", oauth_signature="hZLCPotu%2FRIlD8T1lgeaFlawzxE%3D",
+        oauth_signature_method="HMAC-SHA1", oauth_timestamp="1346671119", oauth_token="ew6TxnNbmYE3quIKGT5q6Yg1sorcd0CLyy6SSyG7U",
+        oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 03 Sep 2012 11:18:41 GMT
+      Status:
+      - 200 OK
+      Last-Modified:
+      - Mon, 03 Sep 2012 11:18:41 GMT
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Transaction:
+      - 7be2bbd5150cf6ee
+      X-Mid:
+      - 24c83be49f2437ffa79e16b9b4619e7ad43edaf6
+      Content-Type:
+      - text/html; charset=utf-8
+      X-Runtime:
+      - '0.03735'
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Etag:
+      - ! '"92186649388164cbd51c297f2744a69b"'
+      Content-Length:
+      - '166'
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCCST2os5ASIKZmxhc2hJQzonQWN0aW9uQ29u%250AdHJvbGxlcjo6Rmxhc2g6OkZsYXNoSGFzaHsABjoKQHVzZWR7ADoHaWQiJTIx%250AOWE3ODM3YWRiOTk1NDRhNzg4M2JmMzY0NTUyMDFm--54749134c685995449f061228c35852613c20b8f;
+        domain=.twitter.com; path=/; HttpOnly
+      - guest_id=v1%3A134667112118782756; domain=.twitter.com; path=/; expires=Wed,
+        03-Sep-2014 23:18:41 GMT
+      - k=10.34.252.138.1346671121177298; path=/; expires=Mon, 10-Sep-12 11:18:41
+        GMT; domain=.twitter.com
+      Vary:
+      - Accept-Encoding
+      Server:
+      - tfe
+    body:
+      encoding: US-ASCII
+      string: oauth_token=31166162-53o7LgJiFUicUCLnD5utjgSnSMH3hKEGPanCZjBQF&oauth_token_secret=lVCsHrXOehGFzlfrC6by2V4x2k1NQ1HcVwnZoCL4Sk&user_id=31166162&screen_name=tildenielsen
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:41 GMT
+- request:
+    method: get
+    uri: https://api.twitter.com/1/account/verify_credentials.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OAuth gem v0.4.6
+      Authorization:
+      - OAuth oauth_consumer_key="REDACTED:TWITTER_OAUTH_KEY", oauth_nonce="xju26A4TD0D9e6JTkrWRvAdat8eBEnJeaIoZ2AGv0M",
+        oauth_signature="8gexWypBLVAtFXV6p5vC6hqo85c%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1346671121", oauth_token="31166162-53o7LgJiFUicUCLnD5utjgSnSMH3hKEGPanCZjBQF",
+        oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 03 Sep 2012 11:18:42 GMT
+      Status:
+      - 200 OK
+      X-Runtime:
+      - '0.07597'
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Frame-Options:
+      - SAMEORIGIN
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      X-Ratelimit-Remaining:
+      - '349'
+      Content-Length:
+      - '1843'
+      Etag:
+      - ! '"ef38b6b345193770a9cd8ddfb33e1c65"'
+      X-Ratelimit-Limit:
+      - '350'
+      X-Access-Level:
+      - read
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      X-Transaction-Mask:
+      - a6183ffa5f8ca943ff1b53b5644ef114ec050bec
+      Last-Modified:
+      - Mon, 03 Sep 2012 11:18:42 GMT
+      X-Mid:
+      - 391822ffc294afe49e14a35ab371fa77a2dcb48c
+      X-Transaction:
+      - c3aff699f6ea1cdb
+      Pragma:
+      - no-cache
+      X-Ratelimit-Reset:
+      - '1346674722'
+      X-Ratelimit-Class:
+      - api_identified
+      Set-Cookie:
+      - _twitter_sess=BAh7CToPY3JlYXRlZF9hdGwrCASZ2os5AToMY3NyZl9pZCIlZDc0YmYyNDcz%250AZDg0MmI4ZjQ1ZDY4ZTY1N2NhOWZmOGYiCmZsYXNoSUM6J0FjdGlvbkNvbnRy%250Ab2xsZXI6OkZsYXNoOjpGbGFzaEhhc2h7AAY6CkB1c2VkewA6B2lkIiU4OGNm%250AYzIwNDcxZjE1YzU5N2U4Y2NiNmZjZGIzYjZiYw%253D%253D--66674db92317c4846359bf9a54d5f7923324277b;
+        domain=.twitter.com; path=/; HttpOnly
+      - dnt=; domain=.twitter.com; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      - guest_id=v1%3A134667112268023973; domain=.twitter.com; path=/; expires=Wed,
+        03-Sep-2014 23:18:42 GMT
+      - k=10.36.37.130.1346671122676404; path=/; expires=Mon, 10-Sep-12 11:18:42 GMT;
+        domain=.twitter.com
+      - lang=en; path=/
+      - twid=u%3D31166162%7Cd2Xjyx1ovJJtC1GXYyywNmEpKBY%3D; domain=.twitter.com; path=/;
+        secure
+      Vary:
+      - Accept-Encoding
+      Server:
+      - tfe
+    body:
+      encoding: US-ASCII
+      string: ! '{"id":31166162,"followers_count":3,"location":"","profile_background_tile":false,"profile_sidebar_fill_color":"DDEEF6","listed_count":0,"time_zone":"Greenland","utc_offset":-10800,"profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/210081989\/ripper_normal.jpg","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/210081989\/ripper_normal.jpg","name":"Tilde
+        Nielsen","profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","verified":false,"lang":"en","profile_background_color":"C0DEED","protected":false,"friends_count":20,"default_profile_image":false,"statuses_count":66,"contributors_enabled":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","description":"","profile_link_color":"0084B4","favourites_count":0,"id_str":"31166162","following":false,"show_all_inline_media":false,"url":null,"notifications":false,"profile_use_background_image":true,"created_at":"Tue
+        Apr 14 16:55:52 +0000 2009","profile_text_color":"333333","status":{"place":null,"favorited":false,"contributors":null,"created_at":"Fri
+        May 18 08:45:30 +0000 2012","retweet_count":0,"possibly_sensitive":false,"in_reply_to_status_id_str":null,"id_str":"203405940878360576","truncated":false,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"coordinates":null,"in_reply_to_screen_name":null,"geo":null,"retweeted":false,"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/tweetbutton\" rel=\"nofollow\"\u003ETweet Button\u003C\/a\u003E","possibly_sensitive_editable":true,"in_reply_to_status_id":null,"id":203405940878360576,"text":"H\u00f8r
+        denne l\u00e5ta! http:\/\/t.co\/YEFXYFst #BandwagonNorge"},"screen_name":"tildenielsen","is_translator":false,"default_profile":true,"profile_sidebar_border_color":"C0DEED","geo_enabled":false,"follow_request_sent":false}'
+    http_version: 
+  recorded_at: Mon, 03 Sep 2012 11:18:42 GMT
+recorded_with: VCR 2.2.4

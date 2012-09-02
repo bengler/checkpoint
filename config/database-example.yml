@@ -1,0 +1,23 @@
+---
+common: &common
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 5
+  username: checkpoint
+
+production:
+  database: checkpoint_production
+  password: 
+  <<: *common
+
+development:
+  database: checkpoint_development
+  password: 
+  <<: *common
+
+test:
+  database: checkpoint_test
+  password: 
+  min_messages: WARNING
+  <<: *common
