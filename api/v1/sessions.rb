@@ -7,7 +7,7 @@ class CheckpointV1 < Sinatra::Base
   # @return [JSON] json containing the session key and the identity id
   get '/sessions/:key' do |id|
     @session = Session.find_by_key(id)
-    halt 200, "{}" unless @session
+    halt 200, {'Content-Type' => 'application/json'}, "{}" unless @session
     unless @session.identity == current_identity
       check_god_credentials(@session.identity.realm_id)
     end
@@ -20,7 +20,7 @@ class CheckpointV1 < Sinatra::Base
     @session ||= Session.new(:key => id)
     @session.identity_id = params[:identity_id]
     @session.save!
-    halt 200
+    halt 204
   end
 
   # Create a session

@@ -51,7 +51,7 @@ class CheckpointV1 < Sinatra::Base
     else
       # Retrieve a single identity
       identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
-      halt 200, "{}" unless identity
+      halt 200, {'Content-Type' => 'application/json'}, "{}" unless identity
       pg :identity, :locals => {:identity => identity}
     end
   end

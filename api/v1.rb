@@ -195,7 +195,7 @@ end
     def find_realm_by_label(label)
       realm = current_realm if label == 'current'
       realm ||= Realm.find_by_label(label)
-      halt 200, "{}" unless realm
+      halt 200, {'Content-Type' => 'application/json'}, "{}" unless realm
       realm
     end
 
