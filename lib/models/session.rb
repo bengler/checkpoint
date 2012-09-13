@@ -19,7 +19,7 @@ class Session < ActiveRecord::Base
   # identity_id. This avoids millions of blank sessions created as people who never
   # actually log in are assigned sessions keys.
   def should_be_persisted?
-    changed? || (new_record? && identity_id)
+    identity_id_changed?
   end
 
   def self.cache_key(key)
