@@ -29,6 +29,7 @@ gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
 gem 'ar-tsvectors', '~> 0.0.1', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
+gem 'airbrake', '~> 3.1.4', :require => false
 
 group :development, :test do
   gem 'simplecov'
