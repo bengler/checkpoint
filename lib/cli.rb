@@ -91,6 +91,11 @@ module Checkpoint
     def create_session
       Session.transaction do
         realm = Realm.where(:label => options[:realm]).first
+        unless realm
+          puts "Sorry, no realm labeled \'#{options[:realm]}\'."
+          puts "Create it like so: \'bx ./bin/checkpoint create #{options[:realm]}\'."
+          return
+        end
         identity = Identity.create(:realm_id => realm.id, :god => !!options[:god])
         Session.create(:identity_id => identity.id, :key => options[:session])
       end
