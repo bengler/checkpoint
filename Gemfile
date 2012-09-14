@@ -3,6 +3,11 @@ source 'http://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'rack-contrib'
+
+# Because of a bug in rack-protection that affects cors-requests we'll need to get rack-protection from github
+# This can safely be set to the official gem version '> 1.2.0' whenever it is released
+gem 'rack-protection', :git => 'git://github.com/rkh/rack-protection.git'
+
 gem 'activerecord', :require => 'active_record'
 gem 'activesupport'
 gem 'pg'
