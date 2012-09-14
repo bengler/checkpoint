@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: git://github.com/rack/rack.git
-  revision: edc8b923fa4ea4e3c1ce8778f5ddbc89688bc01b
+  revision: ea7ed1aeb8e6e0e5d68edca03a9d2e687a3ce388
   specs:
     rack (1.4.1)
 
@@ -56,9 +56,10 @@ GIT
 
 GIT
   remote: git@github.com:bengler/pebbles-cors.git
-  revision: a36b07603714de814eb2d885fc69a9a6d274625e
+  revision: 6672a5b23d2b283e3feebf6de4a9b991dd0b262a
   specs:
     pebbles-cors (0.0.1)
+      dalli
       pebblebed
       rack
 
