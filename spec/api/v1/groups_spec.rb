@@ -72,6 +72,12 @@ describe "Identities" do
       get "/groups"
       json_output['groups'].first['group']['label'].should eq "i_want_this"
     end
+
+    it "lists the subtrees for each group" do
+      GroupSubtree.create!(:group => group, :location => "area51.a.b.c")
+      get "/groups"
+      json_output['groups'].first['group']['subtrees'].first.should eq "area51.a.b.c"
+    end
   end
 
   describe "POST /groups/:label" do

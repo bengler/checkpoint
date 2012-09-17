@@ -1,5 +1,5 @@
 node :group => group do
   attributes :id, :label
   node :realm => group.realm.label
-  node :subtrees => group.subtrees.map(&:path)
+  node :subtrees => group.subtrees.map(&:location)
 end
