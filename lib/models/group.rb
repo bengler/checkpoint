@@ -16,8 +16,12 @@ class Group < ActiveRecord::Base
     :scope => :realm_id,
     :allow_nil => true
 
-  def self.find_by_label_or_id(identifier)
-    return self.find(identifier) if identifier.is_a?(Numeric) or identifier =~ /^[0-9]+$/
-    self.find_by_label(identifier)
-  end
+  scope :by_label_or_id, lambda { |identifier| 
+    if identifier.is_a?(Numeric) or identifier =~ /^[0-9]+$/
+      where(:id => identifier)
+    else
+      where(:label => identifier)
+    end
+  }
+
 end
