@@ -10,7 +10,7 @@ describe Group do
   end
 
   it 'registers a path' do
-    GroupSubtree.create!(:group => group, :location => "a.b.c")
+    GroupSubtree.create!(:group => group, :location => "area51.a.b.c")
     group.subtrees.size.should eq 1
   end
 

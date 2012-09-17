@@ -18,7 +18,7 @@ describe Group do
 
   it "can find a group by label or identifier alike" do
     group = Group.create!(:realm => realm, :label => "abc123")
-    Group.find_by_label_or_id(group.id).should_not be_nil
-    Group.find_by_label_or_id(group.label).should_not be_nil
+    Group.by_label_or_id(group.id).first.should_not be_nil
+    Group.by_label_or_id(group.label).first.should_not be_nil
   end
 end
