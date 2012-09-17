@@ -1,0 +1,3 @@
+collection :groups => groups do |group|
+  partial :group, :group => group
+end
