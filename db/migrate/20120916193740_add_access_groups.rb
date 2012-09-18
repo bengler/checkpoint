@@ -12,6 +12,7 @@ class AddAccessGroups < ActiveRecord::Migration
     create_table :group_memberships do |t|
       t.integer :group_id, :null => false
       t.integer :identity_id, :null => false
+      t.timestamps
     end
     add_index :group_memberships, [:group_id, :identity_id], :unique => true, :name => "group_membership_identity_uniqueness_index"
     execute 'alter table group_memberships add foreign key (group_id) references groups'
@@ -20,6 +21,7 @@ class AddAccessGroups < ActiveRecord::Migration
     create_table :group_subtrees do |t|
       t.integer :group_id, :null => false
       t.text :location, :null => false
+      t.timestamps
     end
     add_index :group_subtrees, :group_id
     add_index :group_subtrees, [:group_id, :location], :unique => true, :name => 'group_subtree_location_uniqueness_index'
