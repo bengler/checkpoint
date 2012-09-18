@@ -4,10 +4,23 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET search_path = public, pg_catalog;
 
@@ -97,6 +110,110 @@ ALTER TABLE public.domains_id_seq OWNER TO checkpoint;
 --
 
 ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
+
+
+--
+-- Name: group_memberships; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE group_memberships (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    identity_id integer NOT NULL
+);
+
+
+ALTER TABLE public.group_memberships OWNER TO checkpoint;
+
+--
+-- Name: group_memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE group_memberships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.group_memberships_id_seq OWNER TO checkpoint;
+
+--
+-- Name: group_memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE group_memberships_id_seq OWNED BY group_memberships.id;
+
+
+--
+-- Name: group_subtrees; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE group_subtrees (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    location text NOT NULL
+);
+
+
+ALTER TABLE public.group_subtrees OWNER TO checkpoint;
+
+--
+-- Name: group_subtrees_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE group_subtrees_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.group_subtrees_id_seq OWNER TO checkpoint;
+
+--
+-- Name: group_subtrees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE group_subtrees_id_seq OWNED BY group_subtrees.id;
+
+
+--
+-- Name: groups; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE groups (
+    id integer NOT NULL,
+    realm_id integer NOT NULL,
+    label text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.groups OWNER TO checkpoint;
+
+--
+-- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.groups_id_seq OWNER TO checkpoint;
+
+--
+-- Name: groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE groups_id_seq OWNED BY groups.id;
 
 
 --
@@ -277,6 +394,27 @@ ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
+ALTER TABLE ONLY group_memberships ALTER COLUMN id SET DEFAULT nextval('group_memberships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY group_subtrees ALTER COLUMN id SET DEFAULT nextval('group_subtrees_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
@@ -315,6 +453,30 @@ ALTER TABLE ONLY accounts
 
 ALTER TABLE ONLY domains
     ADD CONSTRAINT domains_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: group_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY group_memberships
+    ADD CONSTRAINT group_memberships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: group_subtrees_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY group_subtrees
+    ADD CONSTRAINT group_subtrees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: groups_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY groups
+    ADD CONSTRAINT groups_pkey PRIMARY KEY (id);
 
 
 --
@@ -382,6 +544,13 @@ CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
 --
 
 CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
+
+
+--
+-- Name: index_groups_on_realm_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_groups_on_realm_id ON groups USING btree (realm_id);
 
 
 --
@@ -455,6 +624,38 @@ ALTER TABLE ONLY accounts
 
 ALTER TABLE ONLY domains
     ADD CONSTRAINT domains_realm_id_fkey FOREIGN KEY (realm_id) REFERENCES realms(id);
+
+
+--
+-- Name: group_memberships_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY group_memberships
+    ADD CONSTRAINT group_memberships_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+
+
+--
+-- Name: group_memberships_identity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY group_memberships
+    ADD CONSTRAINT group_memberships_identity_id_fkey FOREIGN KEY (identity_id) REFERENCES identities(id);
+
+
+--
+-- Name: group_subtrees_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY group_subtrees
+    ADD CONSTRAINT group_subtrees_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+
+
+--
+-- Name: groups_realm_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY groups
+    ADD CONSTRAINT groups_realm_id_fkey FOREIGN KEY (realm_id) REFERENCES realms(id);
 
 
 --

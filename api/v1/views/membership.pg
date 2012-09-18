@@ -1,0 +1,3 @@
+node :membership => membership do
+  attributes :group_id, :identity_id
+end
