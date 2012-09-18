@@ -10,4 +10,9 @@ class GroupSubtree < ActiveRecord::Base
     return false unless self.location && self.group
     self.location.split('.').first == self.group.realm.label
   end
+
+  def uid
+    "group_subtree:#{group.realm.label}.groups.#{group_id}$#{location}"
+  end
+
 end

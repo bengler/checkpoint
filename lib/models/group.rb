@@ -24,4 +24,8 @@ class Group < ActiveRecord::Base
     end
   }
 
+  def uid
+    "group:#{realm.label}.groups$#{id}"
+  end
+
 end

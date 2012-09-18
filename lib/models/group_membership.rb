@@ -5,4 +5,8 @@ class GroupMembership < ActiveRecord::Base
   validates_each :identity do |record, attr, value|
     record.errors.add attr, "realm must match group realm" unless record.group.realm_id == value.realm_id
   end
+
+  def uid
+    "group_membership:#{group.realm.label}.groups.#{group_id}$#{identity_id}"
+  end
 end
