@@ -12,7 +12,7 @@ class GroupSubtree < ActiveRecord::Base
   end
 
   def uid
-    "group_subtree:#{group.realm.label}.groups.#{group_id}$#{location}"
+    "group_subtree:#{group.realm.label}.groups.#{group_id}$#{id}"
   end
 
 end

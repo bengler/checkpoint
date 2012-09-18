@@ -7,6 +7,6 @@ class GroupMembership < ActiveRecord::Base
   end
 
   def uid
-    "group_membership:#{group.realm.label}.groups.#{group_id}$#{identity_id}"
+    "group_membership:#{group.realm.label}.groups.#{group_id}$#{id}"
   end
 end

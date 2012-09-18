@@ -10,25 +10,21 @@ class RiverNotifications < ActiveRecord::Observer
     @river ||= Pebblebed::River.new
   end
 
-  def after_create(post)
-    publish(post, :create)
+  def after_create(record)
+    publish(record, :create)
   end
 
-  def after_update(post)
-    if post.deleted?
-      publish(post, :delete)
-    else
-      publish(post, :update)
-    end
+  def after_update(record)
+    publish(record, :update)
   end
 
-  def after_destroy(post)
-    publish(post, :delete)
+  def after_destroy(record)
+    publish(record, :delete)
   end
 
-  def publish(post, event)
+  def publish(record, event)
     return if ENV['RACK_ENV'] == 'test'
-    self.class.river.publish(:event => event, :uid => post.uid, :attributes => post.attributes.update('document' => post.merged_document))
+    self.class.river.publish(:event => event, :uid => record.uid, :attributes => record.attributes)
   end
 
 end
