@@ -153,7 +153,7 @@ class CheckpointV1 < Sinatra::Base
       @current_identity = nil
     end
 
-    def check_god_credentials(realm_id)
+    def check_god_credentials(realm_id = current_realm.try(:id))
       unless realm_id
         halt 403, "Unknown realm"
       end

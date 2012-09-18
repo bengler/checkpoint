@@ -29,6 +29,8 @@ end
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::INFO
 
+LOGGER.level = Logger::WARN
+
 set :environment, :test
 
 # Run all examples in a transaction
