@@ -103,9 +103,9 @@ class CheckpointV1 < Sinatra::Base
 
   # Get all memberships for an identity.
   #
-  # @param [Integer] id The id of the identity in question
+  # @param [Integer] id The id of the identity in question ('me' for current identity)
   get "/identities/:id/memberships" do |id|
-    identity = Identity.find(id)
+    identity = (id == 'me') ? current_identity : Identity.find(id)
     halt 404, "No such identity in this realm" unless identity.realm_id == current_realm.try(:id)
     memberships = GroupMembership.where(:identity_id => identity.id).includes(:group)
     pg :memberships, :locals => { :memberships => memberships, :groups => memberships.map(&:group)}
