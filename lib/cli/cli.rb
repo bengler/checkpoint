@@ -1,9 +1,9 @@
 module Checkpoint
   module CLI
-    require "cli/domain"
-    require "cli/identity"
-    require "cli/realm"
-    require "cli/session"
+    require "subcommands/domain"
+    require "subcommands/identity"
+    require "subcommands/realm"
+    require "subcommands/session"
 
     class Checkpoint < Thor
 
