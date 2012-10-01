@@ -10,7 +10,7 @@ unless defined?(LOGGER)
   LOGGER.level = Logger::INFO
 end
 
-Dir.glob('./lib/**/*.rb').each{ |lib| require lib }
+Dir.glob('./lib/checkpoint/**/*.rb').each{ |lib| require lib }
 
 $config = YAML::load(File.open("config/database.yml"))
 ENV['RACK_ENV'] ||= "development"

@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
+$:.unshift File.expand_path("../../lib/cli", __FILE__)
 
 require 'rubygems'
 require 'thor'
 require_relative '../config/environment'
+require 'cli'
 
 ActiveRecord::Base.logger.level = Logger::INFO
-Checkpoint::CLI.start
-
+Checkpoint::CLI::Checkpoint.start
