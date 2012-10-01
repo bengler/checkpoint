@@ -40,9 +40,16 @@ GIT
 
 GIT
   remote: git://github.com/rack/rack.git
-  revision: edc8b923fa4ea4e3c1ce8778f5ddbc89688bc01b
+  revision: ea7ed1aeb8e6e0e5d68edca03a9d2e687a3ce388
   specs:
     rack (1.4.1)
+
+GIT
+  remote: git://github.com/rkh/rack-protection.git
+  revision: 4a771b640d70dc1acc54b93e654537a5efec0491
+  specs:
+    rack-protection (1.2.0)
+      rack
 
 GIT
   remote: git@github.com:bengler/omniauth-vanilla.git
@@ -56,9 +63,10 @@ GIT
 
 GIT
   remote: git@github.com:bengler/pebbles-cors.git
-  revision: a36b07603714de814eb2d885fc69a9a6d274625e
+  revision: 6672a5b23d2b283e3feebf6de4a9b991dd0b262a
   specs:
     pebbles-cors (0.0.1)
+      dalli
       pebblebed
       rack
 
@@ -138,8 +146,6 @@ GEM
     queryparams (0.0.3)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
-    rack-protection (1.2.0)
-      rack
     rack-test (0.6.1)
       rack (>= 1.0)
     raindrops (0.8.0)
@@ -204,6 +210,7 @@ DEPENDENCIES
   queryparams
   rack (~> 1.4)!
   rack-contrib
+  rack-protection!
   rack-test
   rake
   rest-client
