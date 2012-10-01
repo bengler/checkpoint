@@ -67,7 +67,7 @@ module Checkpoint
 
     desc "become_god", "Provide god permissions to identity."
     method_option :identity_id, :type => :numeric, :aliases => "-i", :desc => "The identity id to make into a god."
-    method_option :session, :type => :string, :aliases => "-s", :desc => "The session key whose identity should be made into a god."
+    method_option :session, :type => :string, :required => true, :aliases => "-s", :desc => "The session key whose identity should be made into a god."
     def become_god
       identity = nil
       if options[:session]
