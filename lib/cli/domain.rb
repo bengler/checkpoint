@@ -9,7 +9,7 @@ module Checkpoint
         realm = ::Realm.find_by_label(options["realm"])
 
         unless realm
-          puts "No such realm: #{options["realm"]}. Create it with \"checkpoint create #{options["realm"]}\""
+          puts "No such realm: #{options["realm"]}. Create it with \"checkpoint realm create #{options["realm"]}\""
           return
         end
 

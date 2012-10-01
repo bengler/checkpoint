@@ -10,7 +10,7 @@ module Checkpoint
           realm = ::Realm.where(:label => options[:realm]).first
           unless realm
             puts "Sorry, no realm labeled \'#{options[:realm]}\'."
-            puts "Create it like so: \'bx ./bin/checkpoint create #{options[:realm]}\'."
+            puts "Create it like so: \'checkpoint realm create #{options[:realm]}\'."
             return
           end
           identity = ::Identity.create(:realm_id => realm.id, :god => !!options[:god])
