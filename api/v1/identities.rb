@@ -1,13 +1,38 @@
 class CheckpointV1 < Sinatra::Base
 
   helpers do
+    def ensure_account_unique(account_data)
+      existing_account = Account.where(
+          :uid => account_data['uid'],
+          :provider => account_data['provider'],
+          :realm_id => current_realm.id
+        ).first
+      if existing_account
+        # TODO: Create a nicer way to return json-errors.
+        # Really you should just need to pass halt a hash!
+        halt 409,
+          {'Content-Type' => 'application/json'},
+          {
+            error: {
+              message: "Account attached to another identity",
+              identity: existing_account.identity_id
+            }
+          }.to_json
+      end
+    end
+
     def create_identity(identity_data, account_data)
+      ensure_account_unique(account_data)
+
       attributes = identity_data || {}
       identity = Identity.create! attributes.merge(:realm => current_realm)
 
       if account_data
         attributes = account_data.merge(:realm => current_realm, :identity => identity)
-        Account.create! attributes
+        # TODO: Consider catching violations of the unique constraint
+        # on accounts and perform the ensure_account_unique-test again
+        # in the case of data races.
+        Account.create!(attributes)
         identity.ensure_primary_account
         identity.save!
       end

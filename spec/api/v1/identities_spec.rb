@@ -152,6 +152,16 @@ describe "Identities" do
       json_output['profile']["nickname"].should eq('nick')
     end
 
+    it "fails to create two identities with the same account information on the same realm" do
+      parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
+      post '/identities', parameters
+      last_response.status.should eq(200)
+      identity_id = JSON.parse(last_response.body)['identity']['id']
+      post '/identities', parameters
+      last_response.status.should eq(409) # conflict
+      JSON.parse(last_response.body)['error']['identity'].should eq identity_id
+    end
+
     it "can create god users" do
       parameters = {:session => god_session, :identity => {:god => true}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
