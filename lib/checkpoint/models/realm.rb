@@ -39,7 +39,7 @@ class Realm < ActiveRecord::Base
 
   def self.find_by_url(url)
     search_strings_for_url(url) do |domain|
-      result = joins(:domains).where('domains.name = ?', domain).first
+      result = Domain.resolve_from_host_name(domain).try(:realm)
       return result if result
     end
   end
