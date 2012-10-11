@@ -149,6 +149,7 @@ class CheckpointV1 < Sinatra::Base
       unless realm_id
         halt 403, "Unknown realm"
       end
+      return if current_identity.try(:root?)
       unless current_identity.try(:god?) && current_identity.realm_id == realm_id
         halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).label}'-realm"
       end
