@@ -10,12 +10,12 @@ class AddUniqueIndexToSessionKeys < ActiveRecord::Migration
               HAVING ( COUNT(identity_id) > 1 ) AND ( COUNT(key) > 1)
             ) AS foo
         ON sessions.key = foo.key AND sessions.identity_id = foo.identity_id"
-    end
-    if res.any? and res[0]['id'].to_i
-      res.each do |session|
-        id = session['id'].to_i
-        execute "DELETE FROM SESSIONS WHERE ID = #{id}"
-        puts "Deleted duplicate session key #{id}"
+      if res.any? and res[0]['id'].to_i
+        res.each do |session|
+          id = session['id'].to_i
+          execute "DELETE FROM SESSIONS WHERE ID = #{id}"
+          puts "Deleted duplicate session key #{id}"
+        end
       end
     end
     add_index :sessions, [:key], :unique => true, :name => 'session_key_uniqueness_index'
