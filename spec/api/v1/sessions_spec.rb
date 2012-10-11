@@ -75,11 +75,6 @@ describe "Sessions" do
     last_response.status.should eq 403
   end
 
-  it "won't let a identity on another realm with a root session create sessions for other realms" do
-    post "/sessions", :identity_id => somegod.id, :session => root_session
-    last_response.status.should eq 403
-  end
-
   it "will let a root identity create sessions for other realms" do
     post "/sessions", :identity_id => root.id, :session => root_session
     last_response.status.should eq 200
