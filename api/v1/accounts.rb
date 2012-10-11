@@ -38,21 +38,25 @@ class CheckpointV1 < Sinatra::Base
     pg :account, :locals => {:account => account}
   end
 
-  # Create an account and associate with the current identity. If there is
-  # no current identity, then a new identity is created, unless
+  # Create or updates an account and associate with the current identity.
+  # If there is no current identity, then a new identity is created, unless
   # `identity_id` is provided.
   #
   post '/identities/:id/accounts/:provider/:uid' do |id, provider, uid|
     transaction do
-      identity = (id == 'me') ? current_identity : Identity.find(id)
+      identity = Identity.find(id)
       check_god_credentials(identity.realm_id)
-      account = identity.accounts.where(:provider => provider, :uid => uid).first
-      account ||= identity.accounts.new(:provider => provider, :uid => uid, :realm => current_realm)
-      account.attributes = params.slice(
+      attributes = {
+        :uid => uid,
+        :identity => identity,
+        :provider => provider
+      }.merge(params.slice(
         *%w(token secret nickname
-          name location description profile_url image_url email))
-      account.save!
-      [201, pg(:account, :locals => {:account => account})]
+          name location description profile_url image_url email)))
+      account = Account.declare!(attributes)
+      # Was it created or updated?
+      status = (account.created_at == account.updated_at) ? 201 : 200
+      [status, pg(:account, :locals => {:account => account})]
     end
   end
 

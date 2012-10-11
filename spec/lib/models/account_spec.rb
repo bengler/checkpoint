@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Account do
 
-  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret') }
 
   let :realm do
     realm = Realm.create!(:label => "area51")
@@ -10,7 +9,9 @@ describe Account do
     realm
   end
 
-  let :identity do 
+  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm => realm, :token => 'token', :secret => 'secret') }
+
+  let :identity do
     Identity.create!(:realm => realm)
   end
 

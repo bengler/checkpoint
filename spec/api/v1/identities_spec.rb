@@ -146,8 +146,6 @@ describe "Identities" do
       parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(200)
-
-      result = JSON.parse(last_response.body)
       json_output['identity']['id'].should_not be_nil
       json_output['profile']["nickname"].should eq('nick')
     end
