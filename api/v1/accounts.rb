@@ -45,7 +45,7 @@ class CheckpointV1 < Sinatra::Base
   post '/identities/:id/accounts/:provider/:uid' do |id, provider, uid|
     transaction do
       identity = (id == 'me') ? current_identity : Identity.find(id)
-      check_god_credentials(current_identity.realm_id) unless identity == current_identity
+      check_god_credentials(identity.realm_id)
       account = identity.accounts.where(:provider => provider, :uid => uid).first
       account ||= identity.accounts.new(:provider => provider, :uid => uid, :realm => current_realm)
       account.attributes = params.slice(
