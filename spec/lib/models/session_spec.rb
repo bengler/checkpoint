@@ -45,7 +45,7 @@ describe Session do
   end
 
   it "has a unique key" do
-    s1 = Session.create!(:identity => identity, :key => "abcde")
+    Session.create!(:identity => identity, :key => "abcde")
     lambda {
       Session.create!(:identity => identity, :key => "abcde")
     }.should raise_error ActiveRecord::RecordNotUnique
