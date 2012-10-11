@@ -43,4 +43,12 @@ describe Session do
     session.destroy
     Session.identity_id_for_session(session.key).should be_nil
   end
+
+  it "has a unique key" do
+    s1 = Session.create!(:identity => identity, :key => "abcde")
+    lambda {
+      Session.create!(:identity => identity, :key => "abcde")
+    }.should raise_error ActiveRecord::RecordNotUnique
+  end
+
 end
