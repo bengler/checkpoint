@@ -1,23 +1,12 @@
 class AddUniqueIndexToSessionKeys < ActiveRecord::Migration
   def self.up
-    if ENV['RACK_ENV'] != "production"
-      # Remove duplicate session keys
-      res = execute "SELECT sessions.id, sessions.identity_id, foo.key FROM sessions
-        JOIN (SELECT identity_id, key, COUNT(identity_id)
-              AS NumOccurIdentity, COUNT(key) as NumOccurKey
-              FROM sessions
-              GROUP BY identity_id, key
-              HAVING ( COUNT(identity_id) > 1 ) AND ( COUNT(key) > 1)
-            ) AS foo
-        ON sessions.key = foo.key AND sessions.identity_id = foo.identity_id"
-      if res.any? and res[0]['id'].to_i
-        res.each do |session|
-          id = session['id'].to_i
-          execute "DELETE FROM SESSIONS WHERE ID = #{id}"
-          puts "Deleted duplicate session key #{id}"
-        end
-      end
-    end
+    # Delete any old sessions that might have duplicated (keep the latest).
+    execute "DELETE FROM sessions where id IN (SELECT first_id FROM
+                (SELECT min(id) as first_id, identity_id, key, COUNT(identity_id)
+                  AS NumOccurIdentity, COUNT(key) as NumOccurKey
+                  FROM sessions
+                  GROUP BY identity_id, key
+                  HAVING ( COUNT(identity_id) > 1 ) AND ( COUNT(key) > 1)) AS foo)"
     add_index :sessions, [:key], :unique => true, :name => 'session_key_uniqueness_index'
   end
 
