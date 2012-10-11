@@ -1,46 +1,15 @@
 class CheckpointV1 < Sinatra::Base
 
   helpers do
-
     def create_identity(identity_data, account_data)
-      # ensure_account_unique(account_data)
-      identity = nil
-      begin
+      attributes = identity_data || {}
+      identity = Identity.create! attributes.merge(:realm => current_realm)
 
-        Identity.transaction :requires_new => true do # Creates savepoint
-          attributes = identity_data || {}
-          identity = Identity.create! attributes.merge(:realm => current_realm)
-
-          if account_data
-            attributes = account_data.merge(:realm => current_realm, :identity => identity)
-            account = Account.new(attributes)
-            begin
-              account.save!
-            rescue ActiveRecord::RecordNotUnique
-              # If we are here, we just lost a data-race where someone else got an identical account
-              # saved before us. Save again to generate the correct validation error.
-              account.save!
-            end
-            identity.ensure_primary_account
-            identity.save!
-          end
-        end
-
-      rescue ActiveRecord::RecordInvalid => e
-        raise unless e.record.is_a?(Account) && e.record.errors.messages[:uid].join(' ') =~ /been taken/
-        existing_account = Account.where(
-          :uid => account_data['uid'],
-          :provider => account_data['provider'],
-          :realm_id => current_realm.id
-        ).first
-        halt 409,
-          {'Content-Type' => 'application/json'},
-          {
-            error: {
-              message: "Account attached to another identity",
-              identity: existing_account.try(:identity_id)
-            }
-          }.to_json
+      if account_data
+        attributes = account_data.merge(:realm => current_realm, :identity => identity)
+        Account.create! attributes
+        identity.ensure_primary_account
+        identity.save!
       end
       identity
     end

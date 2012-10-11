@@ -515,7 +515,7 @@ ALTER TABLE ONLY sessions
 -- Name: account_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, realm_id, uid);
+CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, identity_id, uid);
 
 
 --

@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   belongs_to :realm
 
   after_destroy :update_identity_primary_account
-
+  
   after_save :invalidate_cache
   after_save lambda {
     self.identity.update_fingerprints_from_account!(self) if self.identity
@@ -14,7 +14,6 @@ class Account < ActiveRecord::Base
   before_destroy :invalidate_cache
 
   validates_presence_of :uid, :provider, :realm_id
-  validates_uniqueness_of :uid, :scope => [:realm_id, :provider]
 
   class << self
     # Creates or updates an account from auth data as provided by
@@ -25,7 +24,7 @@ class Account < ActiveRecord::Base
     #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
     # If the account was previously attached to an identity, an InUseError exception will be raised.
     def declare_with_omniauth(auth_data, options = {})
-      identity = options[:identity]
+      identity = options[:identity]      
       raise ArgumentError, "Identity or realm must be specified" unless (options[:realm] || identity)
 
       attributes = {
@@ -79,12 +78,12 @@ class Account < ActiveRecord::Base
     {:token => token, :secret => secret}
   end
 
-  # Computes one or more hashes of the permanent components of the account
+  # Computes one or more hashes of the permanent components of the account 
   # data, which can function as a fingerprint to recognize future duplicate
   # accounts. This makes it possible to ban accounts purely based on
   # fingerprints.
   def fingerprints
-    # Note: Fingerprints must always be lowercase due to current limitations in
+    # Note: Fingerprints must always be lowercase due to current limitations in 
     # ar-tsvectors and Postgres indexing.
     digest = Digest::SHA256.new
     digest.update(self.provider.to_s)
