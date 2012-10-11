@@ -119,7 +119,9 @@ ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
 CREATE TABLE group_memberships (
     id integer NOT NULL,
     group_id integer NOT NULL,
-    identity_id integer NOT NULL
+    identity_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -153,7 +155,9 @@ ALTER SEQUENCE group_memberships_id_seq OWNED BY group_memberships.id;
 CREATE TABLE group_subtrees (
     id integer NOT NULL,
     group_id integer NOT NULL,
-    location text NOT NULL
+    location text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -519,6 +523,27 @@ CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, 
 
 
 --
+-- Name: group_label_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_label_uniqueness_index ON groups USING btree (realm_id, label);
+
+
+--
+-- Name: group_membership_identity_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_membership_identity_uniqueness_index ON group_memberships USING btree (group_id, identity_id);
+
+
+--
+-- Name: group_subtree_location_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_subtree_location_uniqueness_index ON group_subtrees USING btree (group_id, location);
+
+
+--
 -- Name: index_accounts_on_identity_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -544,6 +569,13 @@ CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
 --
 
 CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
+
+
+--
+-- Name: index_group_subtrees_on_group_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_group_subtrees_on_group_id ON group_subtrees USING btree (group_id);
 
 
 --
@@ -593,6 +625,13 @@ CREATE INDEX index_sessions_on_identity_id ON sessions USING btree (identity_id)
 --
 
 CREATE INDEX index_sessions_on_key ON sessions USING btree (key);
+
+
+--
+-- Name: session_key_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX session_key_uniqueness_index ON sessions USING btree (key);
 
 
 --
