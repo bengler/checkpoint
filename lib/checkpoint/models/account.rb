@@ -29,7 +29,7 @@ class Account < ActiveRecord::Base
 
     # Creates or updates account information as provided by record attributes. Will create an account
     # if missing, or update in place when an account with the same identity and uid exists. If an account
-    # with the same provider and uid exists, but for another identity, an AppropriateError is raised.
+    # with the same provider and uid exists, but for another identity, an InUseError is raised.
     def declare!(attributes)
       attributes.symbolize_keys!
       begin
