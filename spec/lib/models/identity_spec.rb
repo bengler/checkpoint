@@ -142,7 +142,7 @@ describe Identity do
         he.should_not be_root
       end
 
-      it "is not root if good in a different realm" do
+      it "is not root if god in a different realm" do
         he = Identity.new(:realm => realm, :god => true)
         he.should_not be_root
       end
