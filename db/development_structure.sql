@@ -48,8 +48,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -119,7 +119,9 @@ ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
 CREATE TABLE group_memberships (
     id integer NOT NULL,
     group_id integer NOT NULL,
-    identity_id integer NOT NULL
+    identity_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -153,7 +155,9 @@ ALTER SEQUENCE group_memberships_id_seq OWNED BY group_memberships.id;
 CREATE TABLE group_subtrees (
     id integer NOT NULL,
     group_id integer NOT NULL,
-    location text NOT NULL
+    location text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -225,8 +229,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     last_seen_on date,
     fingerprints tsvector
 );
@@ -300,8 +304,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     primary_domain_id integer
 );
 
@@ -348,8 +352,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -519,6 +523,27 @@ CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, 
 
 
 --
+-- Name: group_label_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_label_uniqueness_index ON groups USING btree (realm_id, label);
+
+
+--
+-- Name: group_membership_identity_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_membership_identity_uniqueness_index ON group_memberships USING btree (group_id, identity_id);
+
+
+--
+-- Name: group_subtree_location_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX group_subtree_location_uniqueness_index ON group_subtrees USING btree (group_id, location);
+
+
+--
 -- Name: index_accounts_on_identity_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -544,6 +569,13 @@ CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
 --
 
 CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
+
+
+--
+-- Name: index_group_subtrees_on_group_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_group_subtrees_on_group_id ON group_subtrees USING btree (group_id);
 
 
 --
