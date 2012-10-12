@@ -20,8 +20,7 @@ module Checkpoint
             puts "Can't do that. #{e.message}"
           end
         end
-        Seed.explain(realm)
-
+        ::Seed.explain(realm)
       end
 
       desc "list", "list all realms and their domains. Shows all god sessions for the realm (one per line)."
@@ -38,7 +37,13 @@ module Checkpoint
           ::Seed.list
         end
       end
-
+      private
+      def require_memcached
+        unless system('ps aux | grep [m]emcached > /dev/null 2>&1')
+          puts 'Memcached needs to be running. Bailing.'
+          exit 1
+        end
+      end
     end
   end
 end
