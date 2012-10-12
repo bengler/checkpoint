@@ -15,6 +15,7 @@ require 'api/v1'
 require 'rack/test'
 require 'webmock/rspec'
 require 'vcr'
+require 'timecop'
 
 keys = Realm.environment_overrides['valid_realm']
 
@@ -43,8 +44,14 @@ RSpec.configure do |c|
     clear_cookies if respond_to?(:clear_cookies)
     $memcached = Mockcached.new
     ActiveRecord::Base.connection.transaction do
-      example.run 
+      example.run
       raise ActiveRecord::Rollback
     end
+    t = Time.now
+    Timecop.freeze(t)
+  end
+
+  c.after(:each) do
+    Timecop.return
   end
 end

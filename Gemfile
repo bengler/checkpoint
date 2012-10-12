@@ -42,5 +42,6 @@ group :development, :test do
   gem 'rspec', '~> 2.8'
   gem 'webmock'
   gem 'vcr'
+  gem 'timecop', '~> 0.3.5'
   gem 'rack-test'
 end
