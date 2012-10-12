@@ -30,11 +30,6 @@ class CheckpointV1 < Sinatra::Base
 
   end
 
-  # TODO
-  # [x] make it work
-  # [ ] make it right
-  # [ ] make it fast
-
   # Create a new identity.
   #
   # @param [Hash] identity the attributes of the new identity
@@ -59,7 +54,7 @@ class CheckpointV1 < Sinatra::Base
   # @return [JSON] The identity or identities.
   get '/identities/:id' do |id|
     if id =~ /\,/
-      # Retrieve a list of identities      
+      # Retrieve a list of identities
       ids = id.split(/\s*,\s*/).compact
       identities = Identity.cached_find_all_by_id(ids)
       pg :identities, :locals => {:identities => identities}
