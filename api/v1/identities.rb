@@ -1,5 +1,16 @@
 class CheckpointV1 < Sinatra::Base
 
+  error Account::InUseError do |e|
+    halt 409,
+      {'Content-Type' => 'application/json'},
+      {
+        error: {
+          message: e.message,
+          identity: e.identity_id
+        }
+      }.to_json
+  end
+
   helpers do
 
     def create_identity(identity_data, account_data)
@@ -11,18 +22,7 @@ class CheckpointV1 < Sinatra::Base
 
         if account_data
           account_data[:identity] = identity
-          begin
-            Account.declare!(account_data)
-          rescue Account::InUseError => e
-            halt 409,
-              {'Content-Type' => 'application/json'},
-              {
-                error: {
-                  message: e.message,
-                  identity: e.identity_id
-                }
-              }.to_json
-          end
+          Account.declare!(account_data)
         end
       end
       identity
