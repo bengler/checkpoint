@@ -140,6 +140,7 @@ GEM
       pathbuilder
       queryparams
       yajl-ruby
+    pebbles-uid (0.0.6)
     petroglyph (0.0.3)
       tilt
     pg (0.13.2)
@@ -206,6 +207,7 @@ DEPENDENCIES
   omniauth-vanilla!
   pebblebed
   pebbles-cors!
+  pebbles-uid
   petroglyph
   pg
   queryparams
