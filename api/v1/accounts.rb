@@ -11,10 +11,15 @@ class CheckpointV1 < Sinatra::Base
     pg :accounts, :locals => {:accounts => @identity.accounts}
   end
 
+  # @apidoc
   # Get an account for an identity
   #
-  # @param [String] id the identity id. Can be a numeric id or the string 'me'
-  # @param [String] provider the provider of the account, e.g. github, twitter
+  # @category Checkpoint/Idenities
+  # @path /api/checkpoint/v1/identities/
+  # @http GET
+  # @example /api/checkpoint/v1/identities/1/accounts/facebook
+  # @required [String] id the identity id. Can be a numeric id or the string 'me'
+  # @required [String] provider the provider of the account, e.g. github, twitter
   # @returns [JSON]
   get '/identities/:id/accounts/:provider' do |id, provider|
     identity = (id == 'me') ? current_identity : Identity.find(id)
