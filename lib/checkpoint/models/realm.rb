@@ -18,7 +18,7 @@ class Realm < ActiveRecord::Base
     end
 
     def load_environment_overrides
-      file_name = File.expand_path('../../../config/overrides.yml', __FILE__)
+      file_name = File.expand_path('../../../../config/overrides.yml', __FILE__)
       config = load_environment_overrides_from(file_name)
       if config.any?
         LOGGER.info "Loaded environment configuration overrides from #{file_name}"
