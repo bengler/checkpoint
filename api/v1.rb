@@ -9,6 +9,10 @@ class CheckpointV1 < Sinatra::Base
   set :root, "#{File.dirname(__FILE__)}/v1"
   set :protection, :except => :http_origin
 
+  configure do |config|
+    config.set :show_exceptions, false
+  end
+
   register Sinatra::Pebblebed
 
   error ActiveRecord::RecordNotFound do
