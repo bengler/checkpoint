@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   after_create :update_identity_primary_account
   before_destroy :reset_identity_primary_account
   after_destroy :update_identity_primary_account
-  
+
   after_save :invalidate_cache
   after_save lambda {
     self.identity.update_fingerprints_from_account!(self) if self.identity
@@ -23,6 +23,7 @@ class Account < ActiveRecord::Base
   before_validation :infer_realm
 
   validates_presence_of :uid, :provider, :realm_id
+  validates_uniqueness_of :uid, :scope => [:realm_id, :provider]
 
   class << self
 
