@@ -48,8 +48,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -229,8 +229,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     last_seen_on date,
     fingerprints tsvector
 );
@@ -304,8 +304,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     primary_domain_id integer
 );
 
@@ -352,8 +352,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -519,7 +519,7 @@ ALTER TABLE ONLY sessions
 -- Name: account_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, realm_id, uid);
+CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, uid);
 
 
 --
@@ -625,6 +625,13 @@ CREATE INDEX index_sessions_on_identity_id ON sessions USING btree (identity_id)
 --
 
 CREATE INDEX index_sessions_on_key ON sessions USING btree (key);
+
+
+--
+-- Name: session_key_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX session_key_uniqueness_index ON sessions USING btree (key);
 
 
 --

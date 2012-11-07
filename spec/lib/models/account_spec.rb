@@ -193,10 +193,16 @@ describe Account do
       # Create two different identitites for the same physical person
       account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
       account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
+      puts account_with_twitter.identity_id
+      puts account_with_facebook.identity_id
+      p Account.all.map(&:attributes)
+      Identity.count.should == 2
 
       # Try to attach the twitter account to the identity formerly having just a FB-account.
       lambda {
-        Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
+        a = Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
+        puts Account.count
+        puts a.identity_id
       }.should raise_error(Account::InUseError)
     end
 

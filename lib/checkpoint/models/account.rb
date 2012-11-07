@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   after_create :update_identity_primary_account
   before_destroy :reset_identity_primary_account
   after_destroy :update_identity_primary_account
-
+  
   after_save :invalidate_cache
   after_save lambda {
     self.identity.update_fingerprints_from_account!(self) if self.identity
@@ -23,7 +23,6 @@ class Account < ActiveRecord::Base
   before_validation :infer_realm
 
   validates_presence_of :uid, :provider, :realm_id
-  validates_uniqueness_of :uid, :scope => [:realm_id, :provider]
 
   class << self
 
@@ -35,8 +34,10 @@ class Account < ActiveRecord::Base
       begin
         # Optimistically we just go for it. Validations and an uniqueness-index will reject us if we are
         # in error.
+        p attributes
         return Account.create!(attributes)
       rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+        puts "did rescue"
         # Handles uniqueness violations when raised either as validation failure, or
         # in the case of a data-race: violation of uniqueness constraint in postgres.
         case e
@@ -50,11 +51,14 @@ class Account < ActiveRecord::Base
         end
 
         target_identity = attributes[:identity] || Identity.find(attributes[:identity_id])
+        puts "taget identity id = #{target_identity.id}"
         account = Account.where(
           :uid => attributes[:uid],
           :provider => attributes[:provider],
           :realm_id => target_identity.try(:realm_id)
         ).first
+        puts account.identity_id
+        puts target_identity.id
         if account.identity_id == target_identity.id
           # Fine. We are declaring a potential update on an existing account. Update in place
           account.attributes = attributes
@@ -118,12 +122,12 @@ class Account < ActiveRecord::Base
     {:token => token, :secret => secret}
   end
 
-  # Computes one or more hashes of the permanent components of the account
+  # Computes one or more hashes of the permanent components of the account 
   # data, which can function as a fingerprint to recognize future duplicate
   # accounts. This makes it possible to ban accounts purely based on
   # fingerprints.
   def fingerprints
-    # Note: Fingerprints must always be lowercase due to current limitations in
+    # Note: Fingerprints must always be lowercase due to current limitations in 
     # ar-tsvectors and Postgres indexing.
     digest = Digest::SHA256.new
     digest.update(self.provider.to_s)

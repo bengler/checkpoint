@@ -21,6 +21,7 @@ gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/bengler/omniauth
 gem 'omniauth-vanilla', :git => 'git@github.com:bengler/omniauth-vanilla.git'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
 gem 'pebblebed'
+gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git@github.com:bengler/pebbles-cors.git'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'dalli', '~> 2.1.0'
@@ -42,5 +43,6 @@ group :development, :test do
   gem 'rspec', '~> 2.8'
   gem 'webmock'
   gem 'vcr'
+  gem 'timecop', '~> 0.3.5'
   gem 'rack-test'
 end

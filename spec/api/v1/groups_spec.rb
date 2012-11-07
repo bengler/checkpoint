@@ -15,6 +15,12 @@ describe "Identities" do
     realm
   end
 
+  let :root_realm do
+    realm = Realm.create!(:label => 'root')
+    Domain.create!(:realm => realm, :name => 'immortal.dev')
+    realm
+  end
+
   let :other_realm do
     realm = Realm.create!(:label => "route66")
     Domain.create!(:realm => realm, :name => 'example.com')
@@ -46,6 +52,9 @@ describe "Identities" do
     Identity.create!(:god => true, :realm => realm)
   end
 
+  let :root do
+    Identity.create!(:god => true, :realm => root_realm)
+  end
 
   let :me_session do
     Session.create!(:identity => me).key
@@ -53,6 +62,10 @@ describe "Identities" do
 
   let :god_session do
     Session.create!(:identity => god).key
+  end
+
+  let :root_session do
+    Session.create!(:identity => root).key
   end
 
   let :group do
@@ -188,6 +201,13 @@ describe "Identities" do
       delete "/groups/#{group.id}/memberships/#{me.id}", :session => god_session
       last_response.status.should eq 204
     end
+
+    it "let's a root identity delete though" do
+      delete "/groups/#{group.id}/memberships/#{me.id}", :session => root_session
+      last_response.status.should eq 204
+    end
+
+
   end
 
   describe "PUT /groups/:identifier/subtrees/:location" do

@@ -86,17 +86,7 @@ describe "Accounts" do
         Session.create!(:identity => accountless_identity)
       end
 
-      it 'denies accounts created by non-god users' do
-        post "/identities/#{accountless_identity.id}/accounts/twitter/666",
-          {:nickname => 'bob', :session => session.key},
-          {'HTTP_HOST' => realm.primary_domain_name}
-        last_response.status.should eq 403
-        accountless_identity.reload
-        account = accountless_identity.accounts.first
-        account.should == nil
-      end
-
-      it 'gods may create an account' do
+      it 'creates an account' do
         post "/identities/#{accountless_identity.id}/accounts/twitter/666",
           {:nickname => 'bob', :session => god_session},
           {'HTTP_HOST' => realm.primary_domain_name}

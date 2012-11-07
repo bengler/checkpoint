@@ -12,7 +12,6 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do
-
     def create_identity(identity_data, account_data)
       # ensure_account_unique(account_data)
       identity = nil

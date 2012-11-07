@@ -1,3 +1,5 @@
+require "seed"
+
 module Checkpoint
   module CLI
     require "subcommands/domain"
@@ -30,14 +32,6 @@ module Checkpoint
         Seed.list
 
         puts "Remember to put oauth keys in the override.yml file"
-      end
-
-      private
-      def require_memcached
-        unless system('ps aux | grep [m]emcached > /dev/null 2>&1')
-          puts 'Memcached needs to be running. Bailing.'
-          exit 1
-        end
       end
 
     end
