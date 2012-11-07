@@ -34,10 +34,8 @@ class Account < ActiveRecord::Base
       begin
         # Optimistically we just go for it. Validations and an uniqueness-index will reject us if we are
         # in error.
-        p attributes
         return Account.create!(attributes)
       rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
-        puts "did rescue"
         # Handles uniqueness violations when raised either as validation failure, or
         # in the case of a data-race: violation of uniqueness constraint in postgres.
         case e
@@ -51,14 +49,11 @@ class Account < ActiveRecord::Base
         end
 
         target_identity = attributes[:identity] || Identity.find(attributes[:identity_id])
-        puts "taget identity id = #{target_identity.id}"
         account = Account.where(
           :uid => attributes[:uid],
           :provider => attributes[:provider],
           :realm_id => target_identity.try(:realm_id)
         ).first
-        puts account.identity_id
-        puts target_identity.id
         if account.identity_id == target_identity.id
           # Fine. We are declaring a potential update on an existing account. Update in place
           account.attributes = attributes
