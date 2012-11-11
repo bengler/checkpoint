@@ -37,7 +37,7 @@ class CheckpointV1 < Sinatra::Base
     check_god_credentials(current_realm.id)
 
     identity = create_identity(params['identity'], params['account'])
-    pg :identity, :locals => {:identity => identity}
+    [201, pg(:identity, :locals => {:identity => identity})]
   end
 
   put '/identities/:id' do |id|
