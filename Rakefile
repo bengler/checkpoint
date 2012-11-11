@@ -5,7 +5,9 @@ require 'bengler_test_helper/tasks'
 
 task :environment do
   require 'config/environment'
-  ActiveRecord::Base.logger.level = Logger::INFO
+  if ActiveRecord::Base.logger
+    ActiveRecord::Base.logger.level = Logger::INFO
+  end
 end
 
 namespace :db do
