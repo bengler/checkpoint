@@ -59,9 +59,7 @@ class CheckpointV1 < Sinatra::Base
         *%w(token secret nickname
           name location description profile_url image_url email)))
       account = Account.declare!(attributes)
-      # Was it created or updated?
-      status = (account.created_at == account.updated_at) ? 201 : 200
-      [status, pg(:account, :locals => {:account => account})]
+      [crud_http_status(account), pg(:account, :locals => {:account => account})]
     end
   end
 
