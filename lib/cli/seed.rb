@@ -26,6 +26,7 @@ module Seed
 
     def explain(realm, out = STDOUT)
       out << "* #{realm.label}\n"
+      out << "    Primary domain: #{realm.primary_domain and realm.primary_domain.name}\n"
       out << "    Domains:\n"
       realm.domains.each do |domain|
         out << "\t#{domain.name}\n"
