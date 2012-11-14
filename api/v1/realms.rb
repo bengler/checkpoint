@@ -2,15 +2,15 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
-  # Create a realm
+  # Create a realm.
   #
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/realms
   # @example /api/checkpoint/v1/realms
   # @http POST
-  # @required [Hash] realm the attributes of the realm
-  # @required [Hash] domain the attributes of the primary domain
-  # @status 200 [JSON] the realm, along with a (god) identity and a session key
+  # @required [Hash] realm The attributes of the realm.
+  # @required [Hash] domain The attributes of the primary domain.
+  # @status 200 [JSON] The realm, along with a (god) identity and a session key.
 
   post '/realms' do
     check_root_credentials
@@ -22,7 +22,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   # @apidoc
-  # List all realms
+  # List all realms.
   #
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/realms
@@ -35,13 +35,13 @@ class CheckpointV1 < Sinatra::Base
   end
 
   # @apidoc
-  # Get metadata for a realm
+  # Get metadata for a realm.
   #
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/realms/:label
   # @example /api/checkpoint/v1/realms/acme
   # @http GET
-  # @status 200 [JSON] the realm. Includes god sessions for the realm if current id is root.
+  # @status 200 [JSON] The realm. Includes god sessions for the realm if current id is root.
 
   get '/realms/:label' do |label|
     realm = find_realm_by_label(label)
@@ -52,13 +52,13 @@ class CheckpointV1 < Sinatra::Base
   end
 
   # @apidoc
-  # Get a realm by its domain name (Oh, inverted world!)
+  # Get a realm by its domain name. (Oh, inverted world!)
   #
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/domains/:name/realm
   # @example /api/checkpoint/v1/domains/:name/realm
   # @http GET
-  # @status 200 [JSON] the realm
+  # @status 200 [JSON] The realm.
 
   get '/domains/:name/realm' do |name|
     domain = Domain.find_by_name(name)

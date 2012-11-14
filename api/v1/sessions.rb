@@ -1,15 +1,15 @@
 class CheckpointV1 < Sinatra::Base
 
   # @apidoc
-  # Get metadata for a session
+  # Get metadata for a session.
   #
-  # @note Only gods may inspect the sessions of other identities
+  # @note Only gods may inspect the sessions of other identities.
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/sessions/:key
   # @example /api/checkpoint/v1/sessions/bj1vjkijoz895miad1at1m3u7a6bvrdzzikyty8m0vien2i0y9uysr6hg0zzudymxu2by7qxthv5fjgd700trd3snlfq0fzrihh
   # @http GET
   # @required [String] key The key of the session.
-  # @status 200 [JSON] session metadata
+  # @status 200 [JSON] Session metadata.
 
   get '/sessions/:key' do |id|
     @session = Session.find_by_key(id)
@@ -31,15 +31,15 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
-  # Create a session
+  # Create a session.
   #
-  # @note Only gods may create sessions for other identities
+  # @note Only gods may create sessions for other identities.
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/sessions
   # @example /api/checkpoint/v1/sessions
   # @http POST
-  # @required [Integer] identity_id The id of the identity to create a session for
-  # @status 200 [JSON] session metadata
+  # @required [Integer] identity_id The id of the identity to create a session for.
+  # @status 200 [JSON] Session metadata.
 
   post '/sessions' do
     identity = Identity.find_by_id(params[:identity_id])
@@ -54,16 +54,16 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
-  # Delete a session key
+  # Delete a session key.
   #
-  # @note Only gods may delete sessions of other identities
-  # @description Deleting a session key effectively logs out the user with that key
+  # @note Only gods may delete sessions of other identities.
+  # @description Deleting a session key effectively logs out the user with that key.
   # @category Checkpoint/Realms
   # @path /api/checkpoint/v1/sessions/:key
   # @example /api/checkpoint/v1/sessions/bj1vjkijoz895miad1at1m3u7a6bvrdzzikyty8m0vien2i0y9uysr6hg0zzudymxu2by7qxthv5fjgd700trd3snlfq0fzrihh
   # @http DELETE
-  # @required [Integer] key The hash of the session
-  # @status 200 [JSON] session metadata
+  # @required [Integer] key The hash of the session.
+  # @status 200 [JSON] Session metadata.
 
   delete '/sessions/:key' do
     session = Session.find_by_key(params[:key])
