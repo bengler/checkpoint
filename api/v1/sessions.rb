@@ -1,10 +1,16 @@
-# TODO: add petroglyph templates for session.
 class CheckpointV1 < Sinatra::Base
 
-  # Get a session
+  # @apidoc
+  # Get metadata for a session
   #
-  # @param [String] key  the session key
-  # @return [JSON] json containing the session key and the identity id
+  # @note Only gods may inspect the sessions of other identities
+  # @category Checkpoint/Realms
+  # @path /api/checkpoint/v1/sessions/:key
+  # @example /api/checkpoint/v1/sessions/bj1vjkijoz895miad1at1m3u7a6bvrdzzikyty8m0vien2i0y9uysr6hg0zzudymxu2by7qxthv5fjgd700trd3snlfq0fzrihh
+  # @http GET
+  # @required [String] key The key of the session.
+  # @status 200 [JSON] session metadata
+
   get '/sessions/:key' do |id|
     @session = Session.find_by_key(id)
     halt 200, {'Content-Type' => 'application/json'}, "{}" unless @session
@@ -23,10 +29,18 @@ class CheckpointV1 < Sinatra::Base
     halt 204
   end
 
+
+  # @apidoc
   # Create a session
   #
-  # @param [String] identity_id the id of the identity requesting a session (optional). Defaults to current id.
-  # @return [JSON] json containing the session key and the identity id
+  # @note Only gods may create sessions for other identities
+  # @category Checkpoint/Realms
+  # @path /api/checkpoint/v1/sessions
+  # @example /api/checkpoint/v1/sessions
+  # @http POST
+  # @required [Integer] identity_id The id of the identity to create a session for
+  # @status 200 [JSON] session metadata
+
   post '/sessions' do
     identity = Identity.find_by_id(params[:identity_id])
     identity ||= current_identity
@@ -38,10 +52,19 @@ class CheckpointV1 < Sinatra::Base
     pg :session, :locals => {:session => current_session}
   end
 
+
+  # @apidoc
   # Delete a session key
   #
-  # @param [String] key the session key for the session to be deleted.
-  # @return [Nothing]
+  # @note Only gods may delete sessions of other identities
+  # @description Deleting a session key effectively logs out the user with that key
+  # @category Checkpoint/Realms
+  # @path /api/checkpoint/v1/sessions/:key
+  # @example /api/checkpoint/v1/sessions/bj1vjkijoz895miad1at1m3u7a6bvrdzzikyty8m0vien2i0y9uysr6hg0zzudymxu2by7qxthv5fjgd700trd3snlfq0fzrihh
+  # @http DELETE
+  # @required [Integer] key The hash of the session
+  # @status 200 [JSON] session metadata
+
   delete '/sessions/:key' do
     session = Session.find_by_key(params[:key])
     halt 500, "No such session" unless session
