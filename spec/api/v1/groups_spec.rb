@@ -179,7 +179,7 @@ describe "Identities" do
 
     it "it refuses to add users from other realms" do
       put "/groups/#{group.id}/memberships/#{stranger.id}", :session => god_session
-      last_response.status.should eq 403
+      last_response.status.should eq 409
     end
   end
 
