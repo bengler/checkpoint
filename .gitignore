@@ -14,3 +14,19 @@ config/site.rb
 config/database.yml
 config/overrides.yml
 config/recaptcha.yml
+
+# ignore results of bundling with --binstubs
+bin/autospec
+bin/htmldiff
+bin/ldiff
+bin/nokogiri
+bin/oauth
+bin/rackup
+bin/rake
+bin/rake2thor
+bin/restclient
+bin/rspec
+bin/thor
+bin/tilt
+bin/unicorn
+bin/unicorn_rails
