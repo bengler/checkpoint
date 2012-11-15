@@ -117,7 +117,7 @@ database_migrations() {
 next_steps() {
 	echo "To get started, create a security realm, e.g. area51:"
 	echo
-	echo "  bundle exec ./bin/$NAME create area51 -t \"Area 51\""
+	echo "  bundle exec ./bin/$NAME realm create area51 -t \"Area 51\""
 	echo
 }
 main
