@@ -146,8 +146,6 @@ describe "Identities" do
       parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(200)
-
-      result = JSON.parse(last_response.body)
       json_output['identity']['id'].should_not be_nil
       json_output['profile']["nickname"].should eq('nick')
     end
@@ -160,6 +158,16 @@ describe "Identities" do
       identity['id'].should_not be_nil
       identity['god'].should be_true
       json_output['profile']["nickname"].should eq('nick')
+    end
+
+    it "fails to create two identities with the same account information on the same realm" do
+      parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
+      post '/identities', parameters
+      last_response.status.should eq(200)
+      identity_id = JSON.parse(last_response.body)['identity']['id']
+      post '/identities', parameters
+      last_response.status.should eq(409) # conflict
+      JSON.parse(last_response.body)['error']['identity'].should eq identity_id
     end
 
     it "ignores any realm that is passed in" do

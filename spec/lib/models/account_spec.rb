@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Account do
 
-  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm_id => 1, :token => 'token', :secret => 'secret') }
 
   let :realm do
     realm = Realm.create!(:label => "area51")
@@ -10,7 +9,9 @@ describe Account do
     realm
   end
 
-  let :identity do 
+  let(:account) { Account.new(:provider => :facebook, :uid => 'abc123', :realm => realm, :token => 'token', :secret => 'secret') }
+
+  let :identity do
     Identity.create!(:realm => realm)
   end
 
@@ -192,10 +193,11 @@ describe Account do
       # Create two different identitites for the same physical person
       account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
       account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
+      Identity.count.should == 2
 
       # Try to attach the twitter account to the identity formerly having just a FB-account.
       lambda {
-        Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
+        a = Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
       }.should raise_error(Account::InUseError)
     end
 

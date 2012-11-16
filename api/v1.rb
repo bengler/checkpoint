@@ -203,5 +203,13 @@ class CheckpointV1 < Sinatra::Base
     end
     alias_method_chain :redirect, :logging
 
+    # Returns 201 if object was created, otherwise 200.
+    def crud_http_status(object)
+      if object.created_at == object.updated_at and object.previous_changes.include?(:created_at)
+        201
+      else
+        200
+      end
+    end
   end
 end

@@ -50,28 +50,71 @@ describe "Accounts" do
     Session.create!(:identity => god).key
   end
 
-  describe "GET /identities/me/accounts/:provider" do
-    it "hands me my keys" do
-      get "/identities/me/accounts/twitter", :session => me_session
-      result = JSON.parse(last_response.body)['account']
-      result['identity_id'].should eq identity.id
-      result['uid'].should eq '1'
-      result['token'].should eq 'token'
-      result['secret'].should eq 'secret'
-      result['provider'].should eq 'twitter'
+  describe "GET /identities/:id/accounts" do
+    context 'when same user' do
+      it "returns accounts" do
+        get "/identities/#{identity.id}/accounts", :session => me_session
+        results = JSON.parse(last_response.body)['accounts']
+        results.length.should eq 1
+        results[0].should include('account')
+        results[0]['account'].should include(
+          'identity_id' => identity.id,
+          'uid' => '1',
+          'token' => 'token',
+          'secret' => 'secret')
+      end
     end
 
-    it "refuses to hand me the keys for someone else" do
-      get "/identities/#{god.id}/accounts/twitter", :session => me_session
-      last_response.status.should eq 403
+    context 'when god' do
+      it "returns accounts" do
+        get "/identities/#{identity.id}/accounts", :session => god_session
+        results = JSON.parse(last_response.body)['accounts']
+        results.length.should eq 1
+        results[0].should include('account')
+        results[0]['account'].should include(
+          'identity_id' => identity.id,
+          'uid' => '1',
+          'token' => 'token',
+          'secret' => 'secret')
+      end
     end
 
-    it "hands me anyones key if I'm god" do
-      get "/identities/#{identity.id}/accounts/twitter", :session => god_session
-      result = JSON.parse(last_response.body)['account']
-      result['uid'].should eq '1'
-      result['token'].should eq 'token'
-      result['secret'].should eq 'secret'
+    context 'when different user' do
+      it "returns 403" do
+        get "/identities/#{god.id}/accounts", :session => me_session
+        last_response.status.should eq 403
+      end
+    end
+  end
+
+  describe "GET /identities/:id/accounts/:provider" do
+    context 'when same user' do
+      it "returns account" do
+        get "/identities/#{identity.id}/accounts/twitter", :session => me_session
+        result = JSON.parse(last_response.body)['account']
+        result['identity_id'].should eq identity.id
+        result['uid'].should eq '1'
+        result['token'].should eq 'token'
+        result['secret'].should eq 'secret'
+        result['provider'].should eq 'twitter'
+      end
+    end
+
+    context 'when god' do
+      it "returns account" do
+        get "/identities/#{identity.id}/accounts/twitter", :session => god_session
+        result = JSON.parse(last_response.body)['account']
+        result['uid'].should eq '1'
+        result['token'].should eq 'token'
+        result['secret'].should eq 'secret'
+      end
+    end
+
+    context 'when different user' do
+      it "returns 403" do
+        get "/identities/#{god.id}/accounts/twitter", :session => me_session
+        last_response.status.should eq 403
+      end
     end
   end
 
@@ -82,13 +125,23 @@ describe "Accounts" do
         Identity.create!(:realm => realm)
       end
 
-      let :session do
-        Session.create!(:identity => accountless_identity)
+      let :accountless_session do
+        Session.create!(:identity => accountless_identity).key
+      end
+
+      it 'requires god' do
+        post "/identities/#{accountless_identity.id}/accounts/twitter/666",
+          {:nickname => 'bob', :session => accountless_session},
+          {'HTTP_HOST' => realm.primary_domain_name}
+        last_response.status.should eq 403
+        accountless_identity.reload
+        account = accountless_identity.accounts.first
+        account.should == nil
       end
 
       it 'creates an account' do
         post "/identities/#{accountless_identity.id}/accounts/twitter/666",
-          {:nickname => 'bob', :session => session.key},
+          {:nickname => 'bob', :session => god_session},
           {'HTTP_HOST' => realm.primary_domain_name}
         accountless_identity.reload
         account = accountless_identity.accounts.first
@@ -99,10 +152,66 @@ describe "Accounts" do
 
     context 'when account already exists' do
       it 'updates the account' do
-        post "/identities/#{identity.id}/accounts/twitter/1", {:nickname => 'bob', :session => me_session},
+        post "/identities/#{identity.id}/accounts/twitter/1", {:nickname => 'bob', :session => god_session},
           {'HTTP_HOST' => realm.primary_domain_name}
         account.reload
         account.nickname.should == 'bob'
+      end
+    end
+
+  end
+
+  describe "DELETE /identities/:id/accounts/:provider/:uid" do
+
+    context 'when account exists' do
+      let :accountless_identity do
+        Identity.create!(:realm => realm)
+      end
+
+      let :accountless_session do
+        Session.create!(:identity => accountless_identity).key
+      end
+
+      context 'when god' do
+        it 'deletes account' do
+          delete "/identities/#{identity.id}/accounts/twitter/1",
+            {:nickname => 'bob', :session => god_session},
+            {'HTTP_HOST' => realm.primary_domain_name}
+          last_response.status.should eq 204
+          identity.reload
+          identity.accounts.where(:provider => 'twitter').count.should eq 0
+        end
+      end
+
+      context 'when same identity' do
+        it 'returns 403' do
+          delete "/identities/#{identity.id}/accounts/twitter/1",
+            {:nickname => 'bob', :session => me_session},
+            {'HTTP_HOST' => realm.primary_domain_name}
+          last_response.status.should eq 403
+          identity.reload
+          identity.accounts.where(:provider => 'twitter').count.should eq 1
+        end
+      end
+
+      context 'when different user' do
+        it 'returns 403' do
+          delete "/identities/#{identity.id}/accounts/twitter/1",
+            {:nickname => 'bob', :session => accountless_session},
+            {'HTTP_HOST' => realm.primary_domain_name}
+          last_response.status.should eq 403
+          identity.reload
+          identity.accounts.where(:provider => 'twitter').count.should eq 1
+        end
+      end
+    end
+
+    context 'when account does not exist' do
+      it 'fails' do
+        delete "/identities/123456/accounts/twitter/1",
+          {:nickname => 'bob', :session => god_session},
+          {'HTTP_HOST' => realm.primary_domain_name}
+        last_response.status.should eq 404
       end
     end
 
