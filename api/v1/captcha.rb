@@ -8,17 +8,17 @@ class CheckpointV1 < Sinatra::Base
       @recaptcha_keys ||= RecaptchaKeys.new
     end
 
-    # This method marks the current session as human for up to two minutes
+    # This method marks the current session as human for up to two minutes.
     def passed_captcha!
       $memcached.set("human:#{current_session_key}", "true", 60*2)
     end
 
-    # Call this to clear the captcha flag once the action has been taken
+    # Call this to clear the captcha flag once the action has been taken.
     def clear_captcha!
       $memcached.delete("human:#{current_session_key}")
     end
 
-    # Call this to verify that the current session has solved a captcha during the last couple of minutes
+    # Call this to verify that the current session has solved a captcha during the last couple of minutes.
     def passed_captcha?
       $memcached.get("human:#{current_session_key}") == 'true'
     end

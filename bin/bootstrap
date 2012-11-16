@@ -55,7 +55,7 @@ postgresql_requirements() {
 postgresql_setup() {
 
 	EXISTS=`psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='$NAME'"`
-	if [ $EXISTS -eq 1 ]
+	if [[ $EXISTS == 1 ]]
 	then
 		echo "    (x) $NAME user"
 		echo
@@ -117,7 +117,7 @@ database_migrations() {
 next_steps() {
 	echo "To get started, create a security realm, e.g. area51:"
 	echo
-	echo "  bundle exec ./bin/$NAME create area51 -t \"Area 51\""
+	echo "  bundle exec ./bin/$NAME realm create area51 -t \"Area 51\""
 	echo
 }
 main

@@ -15,7 +15,7 @@ class CheckpointV1 < Sinatra::Base
   helpers do
     def url_with_params(url, params)
       uri = URI.parse(self.url(url))
-      
+
       query = CGI.parse(uri.query || '')
       query = HashWithIndifferentAccess[*query.entries.map { |k, v| [k, v[0]] }.flatten]
       query.merge!(params)
@@ -40,15 +40,29 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
-  # Log in anonymously
+  # @apidoc
+  # Log in anonymously.
   #
-  # @param [String] redirect_to where to redirect to
+  # @note If a large number of anonymous identities have been created from a single ip-address
+  #   the user will be asked to solve a captcha.
+  #
+  # @description Some applications require the user to perform actions that need an identity,
+  #   but still do not require any authenitcation. Redirect the users browser here to get an
+  #   anonymous user session. The identity will be a valid checkpoint identity with no accounts
+  #   or profile.
+  #
+  # @category Checkpoint/Auth
+  # @path /api/checkpoint/v1/login/anonymous
+  # @http GET
+  # @required [String] redirect_to Where to redirect the user after login.
+  # @status 301 Redirect to target address.
+
   get '/login/anonymous' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
-    
-    anonymous_identity = Identity.find_by_session_key(current_session_key) 
 
-    # If this ip is hot, we need to perform a captcha-test first
+    anonymous_identity = Identity.find_by_session_key(current_session_key)
+
+    # If this ip is hot we need to perform a captcha-test first.
     if !anonymous_identity && IdentityIp.hot?(request_ip) && !passed_captcha?
       redirect url_with_params("/auth/captcha", :continue_to => request.url)
       return
@@ -61,14 +75,25 @@ class CheckpointV1 < Sinatra::Base
     redirect redirect_to_path
   end
 
-  # Log in with a given provider
+  # @apidoc
+  # Log in with a given provider.
   #
-  # @param [String] provider which provider's login to redirect to
-  # @param [String] redirect_to where to redirect to after login is complete (optional)
+  # @description When a user wants to log in to your application, direct her
+  #   to this endpoint. Checkpoint will take care of the authentication process
+  #   and redirect the user to the target address with a valid session.
+  #
+  # @category Checkpoint/Auth
+  # @path /api/checkpoint/v1/login/:provider
+  # @http GET
+  # @required [String] provider The provider to log in via. E.g. twitter, facebook, google.
+  # @required [String] redirect_to Where to redirect the user after login.
+  # @optional [Boolean] force_dialog Force login dialog with the provider (not supported by all providers).
+  # @status 301 Redirect to target address.
+
   get '/login/:provider' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
 
-    # Make sure the target URL is fully qualified with domain
+    # Make sure the target URL is fully qualified with domain.
     target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
     target_url.host ||= request.host
     target_url.scheme ||= "http"
@@ -79,7 +104,7 @@ class CheckpointV1 < Sinatra::Base
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
     else
-      # Proceed on primary domain rewriting the current URL
+      # Proceed on primary domain rewriting the current URL.
       uri = URI.parse(request.url)
       uri.host = current_realm.primary_domain_name
       redirect url_with_query_params(uri.to_s,
@@ -87,7 +112,7 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
-  # This is called directly by Omniauth as a rack method
+  # This is called directly by Omniauth as a rack method.
   # OMNIAUTH SWALLOWS ALL HTTP ERRORS AND EXCEPTIONS.
   get '/auth/:provider/setup' do
 
@@ -138,6 +163,17 @@ class CheckpointV1 < Sinatra::Base
     log_out
     redirect params[:redirect_to] || request.referer
   end
+
+  # @apidoc
+  # Log out from current session.
+  #
+  # @description Link to this endpoint to provide a way for the user to log out.
+  #
+  # @category Checkpoint/Auth
+  # @path /api/checkpoint/v1/logout
+  # @http POST
+  # @required [String] redirect_to Where to redirect the user after login.
+  # @status 301 Redirect to target address.
 
   post '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?

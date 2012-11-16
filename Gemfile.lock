@@ -22,6 +22,25 @@ GIT
       omniauth-oauth2 (>= 1.0.0)
 
 GIT
+  remote: git://github.com/bengler/omniauth-vanilla.git
+  revision: cad8db780a3391253d8369ba0c2b6b207582e4da
+  specs:
+    omniauth-vanilla (0.0.7)
+      multi_json
+      oauth
+      omniauth (>= 1.0.0)
+      omniauth-oauth2 (>= 1.0.0)
+
+GIT
+  remote: git://github.com/bengler/pebbles-cors.git
+  revision: d51dc16e96bb7534da7e4dae2e311c8a31b7429a
+  specs:
+    pebbles-cors (0.0.1)
+      dalli
+      pebblebed
+      rack
+
+GIT
   remote: git://github.com/intridea/omniauth-contrib.git
   revision: 027be2e65077eaa123992d64cff0190f634394e8
   specs:
@@ -49,25 +68,6 @@ GIT
   revision: 4a771b640d70dc1acc54b93e654537a5efec0491
   specs:
     rack-protection (1.2.0)
-      rack
-
-GIT
-  remote: git@github.com:bengler/omniauth-vanilla.git
-  revision: cad8db780a3391253d8369ba0c2b6b207582e4da
-  specs:
-    omniauth-vanilla (0.0.7)
-      multi_json
-      oauth
-      omniauth (>= 1.0.0)
-      omniauth-oauth2 (>= 1.0.0)
-
-GIT
-  remote: git@github.com:bengler/pebbles-cors.git
-  revision: 6672a5b23d2b283e3feebf6de4a9b991dd0b262a
-  specs:
-    pebbles-cors (0.0.1)
-      dalli
-      pebblebed
       rack
 
 GEM
