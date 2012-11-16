@@ -1,18 +1,32 @@
 class CheckpointV1 < Sinatra::Base
 
+  error Account::InUseError do |e|
+    halt 409,
+      {'Content-Type' => 'application/json'},
+      {
+        error: {
+          message: e.message,
+          identity: e.identity_id
+        }
+      }.to_json
+  end
+
   helpers do
     def create_identity(identity_data, account_data)
-      attributes = identity_data || {}
-      identity = Identity.create! attributes.merge(:realm => current_realm)
+      # ensure_account_unique(account_data)
+      identity = nil
+      Identity.transaction :requires_new => true do # Creates savepoint
+        attributes = identity_data || {}
+        identity = Identity.create! attributes.merge(:realm => current_realm)
 
-      if account_data
-        attributes = account_data.merge(:realm => current_realm, :identity => identity)
-        Account.create! attributes
-        identity.ensure_primary_account
-        identity.save!
+        if account_data
+          account_data[:identity] = identity
+          Account.declare!(account_data)
+        end
       end
       identity
     end
+
   end
 
   # @apidoc
@@ -33,7 +47,7 @@ class CheckpointV1 < Sinatra::Base
     check_god_credentials(current_realm.id)
 
     identity = create_identity(params['identity'], params['account'])
-    pg :identity, :locals => {:identity => identity}
+    [201, pg(:identity, :locals => {:identity => identity})]
   end
 
   # @apidoc
@@ -69,7 +83,7 @@ class CheckpointV1 < Sinatra::Base
 
   get '/identities/:id' do |id|
     if id =~ /\,/
-      # Retrieve a list of identities.      
+      # Retrieve a list of identities
       ids = id.split(/\s*,\s*/).compact
       identities = Identity.cached_find_all_by_id(ids)
       pg :identities, :locals => {:identities => identities}

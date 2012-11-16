@@ -37,7 +37,7 @@ class CheckpointV1 < Sinatra::Base
   post "/groups/?:label?" do |label|
     check_god_credentials
     group = Group.create!(:realm => current_realm, :label => label)
-    pg :group, :locals => {:group => group}
+    [201, pg(:group, :locals => {:group => group})]
   end
 
   # @apidoc
