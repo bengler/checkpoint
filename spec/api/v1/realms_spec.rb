@@ -103,7 +103,7 @@ describe "Realms" do
       root = Identity.create!(:realm => realm, :god => true)
       access = Session.create!(:identity => root)
       post "/realms", :realm => {:label => 'rainbows'}, :domain => {:name => 'magical.org'}, :session => access.key
-      last_response.status.should eq 200
+      last_response.status.should eq 201
       json_output = JSON.parse(last_response.body)
       json_output['realm']['label'].should eq 'rainbows'
       json_output['realm']['domains'].should eq ['magical.org']

@@ -60,7 +60,7 @@ describe "Domains" do
 
   it "lets gods attach a new domain to a realm, but not reattach it to another realm" do
     post "/realms/area51/domains", :name => "ditto.org", :session => somegod_session
-    last_response.status.should eq 200
+    last_response.status.should eq 201
     Domain.find_by_name('ditto.org').realm.should eq realm
     post "/realms/area51/domains", :name => "wired.com", :session => someone_session
     last_response.status.should eq 403 # not okay because not god

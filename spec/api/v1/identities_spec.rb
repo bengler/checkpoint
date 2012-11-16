@@ -145,7 +145,7 @@ describe "Identities" do
     it "creates an identity with an account" do
       parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
-      last_response.status.should eq(200)
+      last_response.status.should eq(201)
       json_output['identity']['id'].should_not be_nil
       json_output['profile']["nickname"].should eq('nick')
     end
@@ -153,7 +153,7 @@ describe "Identities" do
     it "can create god users" do
       parameters = {:session => god_session, :identity => {:god => true}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
-      last_response.status.should eq(200)
+      last_response.status.should eq(201)
       identity = json_output['identity']
       identity['id'].should_not be_nil
       identity['god'].should be_true
@@ -163,7 +163,7 @@ describe "Identities" do
     it "fails to create two identities with the same account information on the same realm" do
       parameters = {:session => god_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
-      last_response.status.should eq(200)
+      last_response.status.should eq(201)
       identity_id = JSON.parse(last_response.body)['identity']['id']
       post '/identities', parameters
       last_response.status.should eq(409) # conflict
@@ -174,7 +174,7 @@ describe "Identities" do
       god # trigger
       parameters = {:session => god_session, :identity => {:realm => 'rock_and_roll'}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
-      last_response.status.should eq(200)
+      last_response.status.should eq(201)
 
       identity = json_output['identity']
       identity['id'].should_not be_nil
