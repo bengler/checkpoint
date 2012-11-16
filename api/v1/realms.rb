@@ -18,7 +18,7 @@ class CheckpointV1 < Sinatra::Base
     Domain.create!(params[:domain].merge(:realm => realm))
     identity = Identity.create!(:realm => realm, :god => true)
     new_session = Session.create!(:identity => identity)
-    pg :realm, :locals => {:realm => realm, :identity => identity, :sessions => [new_session]}
+    [201, pg(:realm, :locals => {:realm => realm, :identity => identity, :sessions => [new_session]})]
   end
 
   # @apidoc

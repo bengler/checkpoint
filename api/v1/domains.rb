@@ -45,7 +45,7 @@ class CheckpointV1 < Sinatra::Base
     domain = Domain.find_by_name(params[:name])
     halt 403, "Domain was connected to realm '#{domain.realm.label}'" if domain && domain.realm != realm
     domain ||= Domain.create!(:name => params[:name], :realm => realm)
-    pg :domain, :locals => {:domain => domain}
+    [201, pg(:domain, :locals => {:domain => domain})]
   end
 
   # @apidoc
