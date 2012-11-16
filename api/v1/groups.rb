@@ -32,7 +32,7 @@ class CheckpointV1 < Sinatra::Base
   # @http POST
   # @optional [String] label A unique (within the realm) identifier for this group.
   # @example /api/checkpoint/v1/groups/secret_cabal
-  # @status 200 [JSON]
+  # @status 201 [JSON]
 
   post "/groups/?:label?" do |label|
     check_god_credentials

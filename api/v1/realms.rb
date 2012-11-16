@@ -10,7 +10,7 @@ class CheckpointV1 < Sinatra::Base
   # @http POST
   # @required [Hash] realm The attributes of the realm.
   # @required [Hash] domain The attributes of the primary domain.
-  # @status 200 [JSON] The realm, along with a (god) identity and a session key.
+  # @status 201 [JSON] The realm, along with a (god) identity and a session key.
 
   post '/realms' do
     check_root_credentials

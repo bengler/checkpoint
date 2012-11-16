@@ -37,7 +37,7 @@ class CheckpointV1 < Sinatra::Base
   # @example /api/checkpoint/v1/realms/acme?name=acme.org
   # @status 403 The domain is connected to a different realm.
   # @status 409 You are not a god in this realm.
-  # @status 200 [JSON]
+  # @status 201 [JSON]
 
   post '/realms/:label/domains' do
     realm = find_realm_by_label(params[:label])

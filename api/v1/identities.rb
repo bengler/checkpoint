@@ -41,7 +41,7 @@ class CheckpointV1 < Sinatra::Base
   # @http POST
   # @required [Hash] identity The attributes of the new identity.
   # @required [Hash] account The attributes of the default account.
-  # @status 200 [JSON]
+  # @status 201 [JSON]
 
   post '/identities' do
     check_god_credentials(current_realm.id)
