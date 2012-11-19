@@ -117,6 +117,17 @@ describe Realm do
         variants.should eq(['example.org'])
       end
 
+      it "handles localhost or other 'bare word' domains" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'http://localhost/some/page') { |variant| variants << variant }
+        variants.should eq(['localhost'])
+      end
+
+      it "handles urls that include port numbers" do
+        variants = []
+        Realm.send(:search_strings_for_url, 'example.com:9292/some/page') { |variant| variants << variant }
+        variants.should eq(['example.com'])
+      end
     end
   end
 end
