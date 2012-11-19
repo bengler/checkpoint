@@ -1,9 +1,9 @@
 # Part of Pebbles Security Model. Implements access groups.
 
-class Group < ActiveRecord::Base
+class AccessGroup < ActiveRecord::Base
   belongs_to :realm
-  has_many :memberships, :class_name => "GroupMembership", :dependent => :destroy
-  has_many :subtrees, :class_name => "GroupSubtree", :dependent => :destroy
+  has_many :memberships, :class_name => "AccessGroupMembership", :dependent => :destroy
+  has_many :subtrees, :class_name => "AccessGroupSubtree", :dependent => :destroy
   has_many :identities, :through => :memberships
 
   # Label must start with a non-digit character
@@ -16,7 +16,7 @@ class Group < ActiveRecord::Base
     :scope => :realm_id,
     :allow_nil => true
 
-  scope :by_label_or_id, lambda { |identifier| 
+  scope :by_label_or_id, lambda { |identifier|
     if identifier.is_a?(Numeric) or identifier =~ /^[0-9]+$/
       where(:id => identifier)
     else
@@ -25,7 +25,7 @@ class Group < ActiveRecord::Base
   }
 
   def uid
-    "group:#{realm.label}.groups$#{id}"
+    "access_group:#{realm.label}.access_groups$#{id}"
   end
 
 end

@@ -1,10 +1,10 @@
 require 'pebblebed'
-require_relative 'models/group'
-require_relative 'models/group_subtree'
-require_relative 'models/group_membership'
+require_relative 'models/access_group'
+require_relative 'models/access_group_subtree'
+require_relative 'models/access_group_membership'
 
 class RiverNotifications < ActiveRecord::Observer
-  observe :group, :group_subtree, :group_membership
+  observe :access_group, :access_group_subtree, :access_group_membership
 
   def self.river
     @river ||= Pebblebed::River.new

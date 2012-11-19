@@ -2,4 +2,4 @@ collection :memberships => memberships do |membership|
   partial :membership, :membership => membership
 end
 
-partial :groups, :groups => groups if groups
+partial :access_groups, :access_groups => access_groups if access_groups

@@ -1,0 +1,3 @@
+collection :access_groups => access_groups do |access_group|
+  partial :access_group, :access_group => access_group
+end

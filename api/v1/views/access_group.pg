@@ -1,0 +1,5 @@
+node :access_group => access_group do
+  attributes :id, :label
+  node :realm => access_group.realm.label
+  node :subtrees => access_group.subtrees.map(&:location)
+end

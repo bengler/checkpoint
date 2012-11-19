@@ -29,6 +29,51 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: access_group_memberships; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE access_group_memberships (
+    id integer NOT NULL,
+    access_group_id integer NOT NULL,
+    identity_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.access_group_memberships OWNER TO checkpoint;
+
+--
+-- Name: access_group_subtrees; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE access_group_subtrees (
+    id integer NOT NULL,
+    access_group_id integer NOT NULL,
+    location text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.access_group_subtrees OWNER TO checkpoint;
+
+--
+-- Name: access_groups; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE access_groups (
+    id integer NOT NULL,
+    realm_id integer NOT NULL,
+    label text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.access_groups OWNER TO checkpoint;
+
+--
 -- Name: accounts; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -113,21 +158,6 @@ ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
 
 
 --
--- Name: group_memberships; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE TABLE group_memberships (
-    id integer NOT NULL,
-    group_id integer NOT NULL,
-    identity_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE public.group_memberships OWNER TO checkpoint;
-
---
 -- Name: group_memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
 --
 
@@ -145,23 +175,8 @@ ALTER TABLE public.group_memberships_id_seq OWNER TO checkpoint;
 -- Name: group_memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
 --
 
-ALTER SEQUENCE group_memberships_id_seq OWNED BY group_memberships.id;
+ALTER SEQUENCE group_memberships_id_seq OWNED BY access_group_memberships.id;
 
-
---
--- Name: group_subtrees; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE TABLE group_subtrees (
-    id integer NOT NULL,
-    group_id integer NOT NULL,
-    location text NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE public.group_subtrees OWNER TO checkpoint;
 
 --
 -- Name: group_subtrees_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
@@ -181,23 +196,8 @@ ALTER TABLE public.group_subtrees_id_seq OWNER TO checkpoint;
 -- Name: group_subtrees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
 --
 
-ALTER SEQUENCE group_subtrees_id_seq OWNED BY group_subtrees.id;
+ALTER SEQUENCE group_subtrees_id_seq OWNED BY access_group_subtrees.id;
 
-
---
--- Name: groups; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE TABLE groups (
-    id integer NOT NULL,
-    realm_id integer NOT NULL,
-    label text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE public.groups OWNER TO checkpoint;
 
 --
 -- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
@@ -217,7 +217,7 @@ ALTER TABLE public.groups_id_seq OWNER TO checkpoint;
 -- Name: groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
 --
 
-ALTER SEQUENCE groups_id_seq OWNED BY groups.id;
+ALTER SEQUENCE groups_id_seq OWNED BY access_groups.id;
 
 
 --
@@ -384,6 +384,27 @@ ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
+ALTER TABLE ONLY access_group_memberships ALTER COLUMN id SET DEFAULT nextval('group_memberships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY access_group_subtrees ALTER COLUMN id SET DEFAULT nextval('group_subtrees_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY access_groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
 ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
 
 
@@ -392,27 +413,6 @@ ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq':
 --
 
 ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
---
-
-ALTER TABLE ONLY group_memberships ALTER COLUMN id SET DEFAULT nextval('group_memberships_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
---
-
-ALTER TABLE ONLY group_subtrees ALTER COLUMN id SET DEFAULT nextval('group_subtrees_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
---
-
-ALTER TABLE ONLY groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
 
 
 --
@@ -463,7 +463,7 @@ ALTER TABLE ONLY domains
 -- Name: group_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-ALTER TABLE ONLY group_memberships
+ALTER TABLE ONLY access_group_memberships
     ADD CONSTRAINT group_memberships_pkey PRIMARY KEY (id);
 
 
@@ -471,7 +471,7 @@ ALTER TABLE ONLY group_memberships
 -- Name: group_subtrees_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-ALTER TABLE ONLY group_subtrees
+ALTER TABLE ONLY access_group_subtrees
     ADD CONSTRAINT group_subtrees_pkey PRIMARY KEY (id);
 
 
@@ -479,7 +479,7 @@ ALTER TABLE ONLY group_subtrees
 -- Name: groups_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-ALTER TABLE ONLY groups
+ALTER TABLE ONLY access_groups
     ADD CONSTRAINT groups_pkey PRIMARY KEY (id);
 
 
@@ -526,21 +526,21 @@ CREATE UNIQUE INDEX account_uniqueness_index ON accounts USING btree (provider, 
 -- Name: group_label_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE UNIQUE INDEX group_label_uniqueness_index ON groups USING btree (realm_id, label);
+CREATE UNIQUE INDEX group_label_uniqueness_index ON access_groups USING btree (realm_id, label);
 
 
 --
 -- Name: group_membership_identity_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE UNIQUE INDEX group_membership_identity_uniqueness_index ON group_memberships USING btree (group_id, identity_id);
+CREATE UNIQUE INDEX group_membership_identity_uniqueness_index ON access_group_memberships USING btree (access_group_id, identity_id);
 
 
 --
 -- Name: group_subtree_location_uniqueness_index; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE UNIQUE INDEX group_subtree_location_uniqueness_index ON group_subtrees USING btree (group_id, location);
+CREATE UNIQUE INDEX group_subtree_location_uniqueness_index ON access_group_subtrees USING btree (access_group_id, location);
 
 
 --
@@ -575,14 +575,14 @@ CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
 -- Name: index_group_subtrees_on_group_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE INDEX index_group_subtrees_on_group_id ON group_subtrees USING btree (group_id);
+CREATE INDEX index_group_subtrees_on_group_id ON access_group_subtrees USING btree (access_group_id);
 
 
 --
 -- Name: index_groups_on_realm_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
-CREATE INDEX index_groups_on_realm_id ON groups USING btree (realm_id);
+CREATE INDEX index_groups_on_realm_id ON access_groups USING btree (realm_id);
 
 
 --
@@ -669,15 +669,15 @@ ALTER TABLE ONLY domains
 -- Name: group_memberships_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY group_memberships
-    ADD CONSTRAINT group_memberships_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+ALTER TABLE ONLY access_group_memberships
+    ADD CONSTRAINT group_memberships_group_id_fkey FOREIGN KEY (access_group_id) REFERENCES access_groups(id);
 
 
 --
 -- Name: group_memberships_identity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY group_memberships
+ALTER TABLE ONLY access_group_memberships
     ADD CONSTRAINT group_memberships_identity_id_fkey FOREIGN KEY (identity_id) REFERENCES identities(id);
 
 
@@ -685,15 +685,15 @@ ALTER TABLE ONLY group_memberships
 -- Name: group_subtrees_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY group_subtrees
-    ADD CONSTRAINT group_subtrees_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id);
+ALTER TABLE ONLY access_group_subtrees
+    ADD CONSTRAINT group_subtrees_group_id_fkey FOREIGN KEY (access_group_id) REFERENCES access_groups(id);
 
 
 --
 -- Name: groups_realm_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY groups
+ALTER TABLE ONLY access_groups
     ADD CONSTRAINT groups_realm_id_fkey FOREIGN KEY (realm_id) REFERENCES realms(id);
 
 

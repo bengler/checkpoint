@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Group do
+describe AccessGroup do
   let :realm do
     Realm.create!(:label => "area51")
   end
@@ -9,8 +9,8 @@ describe Group do
     Realm.create!(:label => "route66")
   end
 
-  let :group do
-    Group.create!(:realm => realm, :label => "charta77")
+  let :access_group do
+    AccessGroup.create!(:realm => realm, :label => "charta77")
   end
 
   let :friend do
@@ -22,13 +22,13 @@ describe Group do
   end
 
   it 'connects a member' do
-    GroupMembership.create!(:group => group, :identity => friend)
-    group.memberships.size.should eq 1
+    AccessGroupMembership.create!(:access_group => access_group, :identity => friend)
+    access_group.memberships.size.should eq 1
   end
 
   it 'refuses to enroll members from a different realm' do
     -> {
-      GroupMembership.create!(:group => group, :identity => stranger)
+      AccessGroupMembership.create!(:access_group => access_group, :identity => stranger)
     }.should raise_error(ActiveRecord::RecordInvalid)
   end
 
