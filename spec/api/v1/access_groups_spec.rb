@@ -117,6 +117,39 @@ describe "Identities" do
     end
   end
 
+  describe "PUT /access_groups/:label" do
+    it "creates a group with a label" do
+      realm
+      put "/access_groups/label", :session => god_session
+      group = AccessGroup.first
+      group.label.should eq "label"
+      group.realm_id.should eq realm.id
+    end
+
+    it "updates a group in place" do
+      realm
+      put "/access_groups/label", :session => god_session
+      last_response.status.should eq 201
+      put "/access_groups/label", :session => god_session
+      last_response.status.should eq 200
+      group = AccessGroup.first
+      group.label.should eq "label"
+      group.realm_id.should eq realm.id
+    end
+
+    it "will fail with invalid labels" do
+      put "/access_groups/1", :session => god_session
+      last_response.status.should eq 400
+    end
+
+    it "will not create a group for non-gods" do
+      post "/access_groups"
+      last_response.status.should eq 403
+      post "/access_groups", :session => me_session
+      last_response.status.should eq 403
+    end
+  end
+
   describe "GET /access_groups/:identifier" do
     it "will retrieve a group by label or id" do
       access_group

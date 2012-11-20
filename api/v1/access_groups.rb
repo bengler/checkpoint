@@ -41,6 +41,26 @@ class CheckpointV1 < Sinatra::Base
   end
 
   # @apidoc
+  # Create or update new group.
+  #
+  # @note Only for gods of the realm
+  # @category Checkpoint/AccessGroups
+  # @path /api/checkpoint/v1/access_groups/:label
+  # @http POST
+  # @optional [String] label A unique (within the realm) identifier for this group.
+  # @example /api/checkpoint/v1/access_groups/secret_cabal
+  # @status 200 [JSON]
+  # @status 201 [JSON]
+
+  put "/access_groups/:label" do |label|
+    check_god_credentials
+    halt 400, "Invalid label" unless label =~ AccessGroup::LABEL_VALIDATOR
+    group = AccessGroup.where(:realm_id => current_realm.id, :label => label).first
+    group ||= AccessGroup.create!(:realm => current_realm, :label => label)
+    [crud_http_status(group), pg(:access_group, :locals => {:access_group => group})]
+  end
+
+  # @apidoc
   # Retrieve metadata for a group.
   #
   # @category Checkpoint/AccessGroups

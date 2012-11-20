@@ -1,6 +1,7 @@
 # Part of Pebbles Security Model. Implements access groups.
 
 class AccessGroup < ActiveRecord::Base
+  LABEL_VALIDATOR = /^[a-zA-Z_-][a-zA-Z0-9_-]*$/
   belongs_to :realm
   has_many :memberships, :class_name => "AccessGroupMembership", :dependent => :destroy
   has_many :subtrees, :class_name => "AccessGroupSubtree", :dependent => :destroy
@@ -8,7 +9,7 @@ class AccessGroup < ActiveRecord::Base
 
   # Label must start with a non-digit character
   validates_format_of :label,
-    :with => /^[a-zA-Z_-][a-zA-Z0-9_-]*$/,
+    :with => LABEL_VALIDATOR,
     :if => lambda { |record| !record.label.nil? },
     :message => "must start with a non-digit character"
 
