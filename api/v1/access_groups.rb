@@ -46,7 +46,7 @@ class CheckpointV1 < Sinatra::Base
   # @note Only for gods of the realm
   # @category Checkpoint/AccessGroups
   # @path /api/checkpoint/v1/access_groups/:label
-  # @http POST
+  # @http PUT
   # @optional [String] label A unique (within the realm) identifier for this group.
   # @example /api/checkpoint/v1/access_groups/secret_cabal
   # @status 200 [JSON]
