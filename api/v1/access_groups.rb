@@ -212,7 +212,7 @@ class CheckpointV1 < Sinatra::Base
 
   get "/identities/:id/memberships" do |id|
     identity = (id == 'me') ? current_identity : Identity.find(id)
-    halt 404, "No such identity in this realm" unless identity.realm_id == current_realm.try(:id)
+    halt 404, "No such identity in this realm" unless identity && identity.realm_id == current_realm.try(:id)
     memberships = AccessGroupMembership.where(:identity_id => identity.id).includes(:access_group)
     pg :memberships, :locals => { :memberships => memberships, :access_groups => memberships.map(&:access_group)}
   end
