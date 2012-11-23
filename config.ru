@@ -10,8 +10,7 @@ set :environment, ENV['RACK_ENV'].to_sym
 map "/api/checkpoint/v1" do
   use Rack::PostBodyContentTypeParser
   use Rack::MethodOverride
-  use Rack::Session::Cookie, :key => 'checkpoint.cookie',
-    :secret => 'ice cream sandwich'
+  use Rack::Session::Cookie, :key => 'checkpoint.cookie'
 
   use OmniAuth::Builder do
     provider :twitter, nil, nil, :setup => true
