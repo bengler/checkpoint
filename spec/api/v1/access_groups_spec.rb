@@ -309,5 +309,12 @@ describe "Identities" do
       json_output['access_groups'].size.should eq 1
       json_output['access_groups'].first['access_group']['id'].should eq access_group.id
     end
+
+    it "will do just fine with no data" do
+      get "/identities/#{me.id}/memberships"
+      json_output['memberships'].size.should eq 0
+      json_output['access_groups'].size.should eq 0
+    end
+
   end
 end
