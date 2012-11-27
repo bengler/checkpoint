@@ -25,6 +25,20 @@ class AccessGroup < ActiveRecord::Base
     end
   }
 
+  def self.paths_for_identity(id)
+    # Feel free to translate this into ActiveRecord query syntax at your leisure.
+    # Kind regards, KO
+    connection.select_values(<<-SQL)
+      SELECT location
+      FROM access_group_subtrees
+      WHERE access_group_id IN (
+        SELECT access_group_id
+        FROM access_group_memberships
+        WHERE identity_id = #{id}
+      )
+    SQL
+  end
+
   def uid
     "access_group:#{realm.label}.access_groups$#{id}"
   end

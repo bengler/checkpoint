@@ -217,4 +217,29 @@ class CheckpointV1 < Sinatra::Base
     pg :memberships, :locals => { :memberships => memberships, :access_groups => memberships.map(&:access_group)}
   end
 
+  # @apidoc
+  # Ask if an identity has (restricted) access to a given path.
+  #
+  # @category Checkpoint/AccessGroups
+  # @path /api/checkpoint/v1/identities/:id/access_to/:path
+  # @example /api/checkpoint/v1/identities/1/access_to/a.b.c
+  # @http GET
+  # @required [String] id The id of the identity ('me' for current identity).
+  # @required [String] path The path for which access status is being checked
+  # @status 200 [JSON]
+  get "/identities/:id/access_to/:path" do |id, path|
+    identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
+    unless identity && identity.realm_id == current_realm.try(:id)
+      halt 200, {:access => {:granted => false, :path => path}}.to_json
+    end
+
+    paths = AccessGroup.paths_for_identity(identity.id)
+
+    if paths.any? { |other| path[0..(other.length - 1)] == other }
+      halt 200, {:access => {:granted => true, :path => path}}.to_json
+    else
+      halt 200, {:access => {:granted => false, :path => path}}.to_json
+    end
+  end
+
 end

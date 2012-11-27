@@ -21,4 +21,14 @@ describe AccessGroup do
     AccessGroup.by_label_or_id(access_group.id).first.should_not be_nil
     AccessGroup.by_label_or_id(access_group.label).first.should_not be_nil
   end
+
+  it "returns the paths that an individual has access to" do
+    access_group = AccessGroup.create!(:realm => realm, :label => "abc123")
+    AccessGroupSubtree.create!(:access_group => access_group, :location => "area51.a.b.c")
+    AccessGroupSubtree.create!(:access_group => access_group, :location => "area51.x.y.z")
+    friend = Identity.create!(:realm => realm)
+    AccessGroupMembership.create!(:access_group => access_group, :identity => friend)
+
+    AccessGroup.paths_for_identity(friend.id).should eq(['area51.a.b.c', 'area51.x.y.z'])
+  end
 end

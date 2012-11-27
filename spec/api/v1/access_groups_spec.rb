@@ -315,6 +315,25 @@ describe "Identities" do
       json_output['memberships'].size.should eq 0
       json_output['access_groups'].size.should eq 0
     end
+  end
+
+  describe "GET /identities/:id/access_to/:path" do
+    it "works" do
+      AccessGroupSubtree.create!(:access_group => access_group, :location => "#{realm.label}.a.b.c")
+      AccessGroupSubtree.create!(:access_group => access_group, :location => "#{realm.label}.x.y.z")
+      AccessGroupMembership.create!(:access_group => access_group, :identity => me)
+
+      get "/identities/#{me.id}/access_to/#{realm.label}.a.b.c.d.e"
+      AccessGroup.paths_for_identity(me.id).should eq(["#{realm.label}.a.b.c", "#{realm.label}.x.y.z"])
+
+      json_output['access']['granted'].should == true
+    end
+
+    it "doesn't grant access to unknown persons" do
+      get "/identities/1/access_to/abc.a.b.c"
+      json_output['access']['granted'].should == false
+    end
 
   end
+
 end
