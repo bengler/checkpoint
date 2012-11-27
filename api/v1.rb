@@ -19,7 +19,7 @@ class CheckpointV1 < Sinatra::Base
     halt 404, "Record not found"
   end
 
-  not_found do
+  error Sinatra::NotFound do
     'Not found'
   end
 
