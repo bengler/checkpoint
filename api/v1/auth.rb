@@ -8,7 +8,7 @@ class CheckpointV1 < Sinatra::Base
       halt 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
     end
     uri.host ||= request.host
-    uri.scheme = "http"
+    uri.scheme ||= request.scheme
     uri.to_s
   end
 
@@ -96,7 +96,7 @@ class CheckpointV1 < Sinatra::Base
     # Make sure the target URL is fully qualified with domain.
     target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
     target_url.host ||= request.host
-    target_url.scheme ||= "http"
+    target_url.scheme ||= request.scheme
 
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
 
