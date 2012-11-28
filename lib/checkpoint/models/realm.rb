@@ -73,14 +73,16 @@ class Realm < ActiveRecord::Base
   private
 
   # Provided a block, this method will yield variations on the host with increasing
-  # specificity: 'foo.bar.example.com' will yield "example.com", "bar.example.com",
-  # "foo.bar.example.com".
+  # specificity: 'foo.bar.example.com' will yield
+  # "foo.bar.example.com", "bar.example.com", "example.com".
   def self.search_strings_for_url(url, &block)
     host = url[/(?:https?\:\/\/)?([^\/\:]+)/,1]
     if host.include?('.')
-      segments = host.split('.')
-      candidate = [segments.pop]
-      yield(candidate.unshift(segments.pop).join('.')) until segments.empty?
+      candidate = host.split('.')
+      while candidate.size > 1
+        yield candidate.join('.')
+        candidate.shift
+      end
     else
       yield host
     end

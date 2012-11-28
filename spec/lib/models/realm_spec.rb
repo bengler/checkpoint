@@ -59,7 +59,6 @@ describe Realm do
       it "fails to find with extra tld" do
         Realm.find_by_url('www.example.org.com').should be_nil
       end
-
     end
 
     context "with a qualified subdomain" do
@@ -77,6 +76,13 @@ describe Realm do
 
       it "does not match on a partial selection" do
         Realm.find_by_url('example.org').should be_nil
+      end
+
+      it "finds a more specific domain first" do
+        # for.example.org already exists, and points to 'realm'
+        realm2 = Realm.create!(:label => 'realm2')
+        Domain.create(:realm => realm2, :name => 'example.org')
+        Realm.find_by_url('for.example.org').should eq(realm)
       end
     end
 
@@ -102,13 +108,13 @@ describe Realm do
       it "handles sub domain" do
         variants = []
         Realm.send(:search_strings_for_url, 'www.example.org') { |variant| variants << variant }
-        variants.should eq(['example.org', 'www.example.org'])
+        variants.should eq(['www.example.org', 'example.org'])
       end
 
       it "handles bare domains with many segments" do
         variants = []
         Realm.send(:search_strings_for_url, 'foo.bar.baz.example.org') { |variant| variants << variant }
-        variants.should eq(['example.org', 'baz.example.org', 'bar.baz.example.org', 'foo.bar.baz.example.org'])
+        variants.should eq(['foo.bar.baz.example.org', 'bar.baz.example.org', 'baz.example.org', 'example.org'])
       end
 
       it "handles domains followed by a path" do
