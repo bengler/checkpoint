@@ -56,8 +56,8 @@ class CheckpointV1 < Sinatra::Base
   # @http GET
   # @required [String] redirect_to Where to redirect the user after login.
   # @status 301 Redirect to target address.
-  # @status 403 (if xhr request) IP-address is hot. Please redirect user to '/auth/captcha'
-  # @status 409 (if xhr request) Already logged in
+  # @status 403 (if xhr request) IP-address is hot. Please redirect user to 'login/anonymous'
+  # @status 409 (if xhr request) Logged in already
 
   get '/login/anonymous' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
@@ -66,11 +66,11 @@ class CheckpointV1 < Sinatra::Base
 
     # If this ip is hot we need to perform a captcha-test first.
     if !anonymous_identity && IdentityIp.hot?(request_ip) && !passed_captcha?
-      return halt 403, "IP-address is hot. Please redirect user to '/auth/captcha'" if request.xhr?
+      return halt 403, "IP-address is hot. Please redirect user to location 'login/anonymous'" if request.xhr?
       return redirect url_with_params("/auth/captcha", :continue_to => request.url)
     end
     clear_captcha!
-    return halt 409, "Logged in as anonymous already" if anonymous_identity and request.xhr?
+    return halt 409, "Logged in already" if current_identity and request.xhr?
     redirect_to_path = ensure_valid_redirect_path || '/'
     anonymous_identity ||= Identity.create!(:realm => current_realm)
     log_in(anonymous_identity)
