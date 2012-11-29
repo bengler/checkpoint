@@ -140,7 +140,40 @@ describe "Authorizations" do
         get "/login/anonymous", :redirect_to => "\\:/\\some:\\invalid/chars"
         last_response.status.should eq 500
       end
+
+      describe "requested with xhr" do
+
+        it "logs in anonymously" do
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 200
+          get "/identities/me"
+          JSON.parse(last_response.body)['identity']['id'].should_not be_nil
+          JSON.parse(last_response.body)['identity']['primary_account'].should be_nil
+        end
+
+        it "gets a 403 error if the ip is hot" do
+          rack_mock_session.clear_cookies
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 200
+          rack_mock_session.clear_cookies
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 200
+          rack_mock_session.clear_cookies
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 403
+        end
+
+        it "gets a 409 error if the user is logged in already" do
+          rack_mock_session.clear_cookies
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 200
+          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
+          last_response.status.should eq 409
+        end
+
+      end
     end
+
   end
 
   context "logging out" do
