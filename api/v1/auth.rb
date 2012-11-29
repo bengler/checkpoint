@@ -56,6 +56,7 @@ class CheckpointV1 < Sinatra::Base
   # @http GET
   # @required [String] redirect_to Where to redirect the user after login.
   # @status 301 Redirect to target address.
+  # @status 200 (if xhr request) Logged in
   # @status 403 (if xhr request) IP-address is hot. Please redirect user to 'login/anonymous'
   # @status 409 (if xhr request) Logged in already
 
