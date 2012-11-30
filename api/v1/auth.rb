@@ -54,7 +54,7 @@ class CheckpointV1 < Sinatra::Base
   # @category Checkpoint/Auth
   # @path /api/checkpoint/v1/login/anonymous
   # @http GET
-  # @required [String] redirect_to Where to redirect the user after login.
+  # @optional [String] redirect_to Where to redirect the user after login (NOTE: required if non-xhr request).
   # @status 301 Redirect to target address.
   # @status 200 (if xhr request) Logged in
   # @status 403 (if xhr request) IP-address is hot. Please redirect user to 'login/anonymous'
