@@ -2,8 +2,6 @@
 
 Checkpoint is a centralized authentication broker for web applications that supports a number of authentication mechanisms via an http interface. Checkpoint can take care of logging your users into your application and keep track of session and access privileges across services.
 
-In a next iteration, logging in is going to be extracted into a frontend pebble. This is partly for performance purposes (identity store vs logging in have very different usage patterns), and partly because they're different things and should, therefore, live in different places. However, that is going to happen after we've gotten the bare bones of our Cahootsware project working.
-
 [![Build Status](https://secure.travis-ci.org/bengler/checkpoint.png)](https://travis-ci.org/bengler/checkpoint)
 
 ## Concepts
@@ -25,8 +23,6 @@ Checkpoint is provided as an http service and needs to be mapped into the url-sp
     /api/checkpoint/v1/
 
 In production this mapping is done with ha-proxy. In development a rack proxy will be provided.
-
-[[TODO: Write documentation/spec for pebbles, and create a gem which can be installed and includes a bunch of useful tools to map and use pebbles in development.]]
 
 ## Typical usage
 
