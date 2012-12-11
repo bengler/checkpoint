@@ -48,7 +48,9 @@ class CheckpointV1 < Sinatra::Base
     unless identity == current_identity
       check_god_credentials(identity.realm_id)
     end
+
     log_in(identity)
+    @current_session = new_session
     pg :session, :locals => {:session => current_session}
   end
 
