@@ -43,15 +43,16 @@ class CheckpointV1 < Sinatra::Base
 
   post '/sessions' do
     identity = Identity.find_by_id(params[:identity_id])
+    if identity
+      check_god_credentials(identity.realm_id)
+      @current_session = new_session
+    end
     identity ||= current_identity
     halt 500, "Identity not found" unless identity
-    unless identity == current_identity
-      check_god_credentials(identity.realm_id)
-    end
+
     log_in(identity)
     pg :session, :locals => {:session => current_session}
   end
-
 
   # @apidoc
   # Delete a session key.
