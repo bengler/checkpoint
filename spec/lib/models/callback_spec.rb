@@ -9,6 +9,15 @@ describe Callback do
     Callback.urls_for_path('z').should eq []
   end
 
+  it "can be retrieved by realm" do
+    Callback.create!(:path => "a.b.c", :url => "http://example.org/a/b/c")
+    Callback.create!(:path => "a.b", :url => "http://example.org/a/b")
+    Callback.create!(:path => "b.c.d", :url => "http://example.org/b/c/d")
+    Callback.of_realm('a').count.should eq 2
+    realm_b = Realm.create!(:label => 'b')
+    Callback.of_realm(realm_b).count.should eq 1
+  end
+
   context "callbacks" do
     around :each do |example|
       VCR.turned_off do

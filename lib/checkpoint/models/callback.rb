@@ -12,6 +12,11 @@ class Callback < ActiveRecord::Base
 
   before_save :assign_location
 
+  scope :of_realm, lambda { |realm|
+    realm = realm.label unless realm.is_a?(String)
+    joins(:location).where(:locations => {:label_0 => realm})
+  }
+
   # Returns an array: [result, callback, reason]
   # May throw Pebblebed::HttpError if any of the callbacks fail
   def self.allow?(params)
@@ -47,6 +52,10 @@ class Callback < ActiveRecord::Base
   def self.for_path(path)
     location_ids = Location.by_path("^#{path}").map(&:id)
     where(["location_id in (?)", location_ids]).sort{|a, b| b.specificity <=> a.specificity}
+  end
+
+  def realm
+    Realm.find_by_label(self.location.label_0)
   end
 
   private
