@@ -15,7 +15,7 @@ describe "Domains" do
     realm
   end
 
-  let :someone do 
+  let :someone do
     Identity.create!(:realm => realm)
   end
 
@@ -35,7 +35,7 @@ describe "Domains" do
     Session.create!(:identity => somegod).key
   end
 
-  let :false_god_session do 
+  let :false_god_session do
     Session.create!(:identity => false_god).key
   end
 
@@ -46,7 +46,7 @@ describe "Domains" do
     result = JSON.parse(last_response.body)
     result['domain']['name'].should eq 'example.org'
     result['domain']['realm'].should eq 'area51'
-  end  
+  end
 
   # Deprecated. Remove when verified that it is not in use
   it "provides details for a specific domain" do

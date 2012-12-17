@@ -15,7 +15,7 @@ describe "Realms" do
     realm
   end
 
-  let :someone do 
+  let :someone do
     Identity.create!(:realm => realm)
   end
 
@@ -35,7 +35,7 @@ describe "Realms" do
     Session.create!(:identity => somegod).key
   end
 
-  let :false_god_session do 
+  let :false_god_session do
     Session.create!(:identity => false_god).key
   end
 
