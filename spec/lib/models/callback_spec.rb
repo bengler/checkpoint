@@ -58,6 +58,11 @@ describe Callback do
       url.should eq "http://nay.org"
       reason.should eq "You are not worthy"
     end
+
+    it "specifies default rules if no callback responded" do
+      allowed, _, _ = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
+      allowed.should eq :default
+    end
   end
 
 end

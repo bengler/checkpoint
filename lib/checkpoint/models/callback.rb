@@ -25,14 +25,20 @@ class Callback < ActiveRecord::Base
     # Forward params to all callbacks. Callbacks allow or disallow by returning a hash
     # with the key "allow". True means pass, false means deny. Callbacks returning anything
     # else will be ignored.
+    allow = :default
     urls_for_path(path).each do |url|
       response = Pebblebed::Http.post(url, params)
       record = JSON.parse(response.body)
       next unless record.keys.include?('allow') # skip if there is no allow key in the response
       # If dissallowed, return with the denying callback and reason supplied (if any)
-      return [false, url, record['reason']] unless record['allow']
+      if record['allow']
+        allow = true
+      else
+        # Terminate immediately if any callback wants to deny the action
+        return [false, url, record['reason']]
+      end
     end
-    [true, nil, nil]
+    [allow, nil, nil]
   end
 
   # Given a path, returns the callbacks for all relevant callbacks.

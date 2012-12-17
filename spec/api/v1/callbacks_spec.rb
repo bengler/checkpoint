@@ -88,4 +88,39 @@ describe "Identities" do
     Callback.count.should eq 0
   end
 
+  context "callbacks" do
+    around :each do |example|
+      VCR.turned_off do
+        example.run
+      end
+    end
+
+    before :each do
+      # A callback that accepts nothing
+      stub_http_request(:any, "http://nay.org/").
+        with(:body => "{\"identity\":\"7\",\"method\":\"create\",\"uid\":\"post.blog:area51.b.c.d.e\"}",
+              :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+         to_return(:status => 200, :body => '{"allow":false, "reason": "You are not worthy"}',
+           :headers => {'Content-Type' => 'application/json'})
+    end
+
+    it "specifies default rules if there are no callbacks" do
+      get "/callbacks/allowed/create/post.blog:area51.b.c"
+      last_response.status.should eq 200
+      result = JSON.parse(last_response.body)
+      result['allowed'].should eq 'default'
+    end
+
+    it "denies with a reason" do
+      Callback.create!(:path => "area51.b.c", :url => "http://nay.org")
+      get "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7
+      last_response.status.should eq 200
+      result = JSON.parse(last_response.body)
+      result['allowed'].should be_false
+      result['url'].should eq "http://nay.org"
+      result['reason'].should eq "You are not worthy"
+    end
+
+  end
+
 end
