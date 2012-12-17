@@ -23,6 +23,7 @@ gem 'omniauth-google-oauth2', '~> 0.1.10'
 gem 'pebblebed'
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git://github.com/bengler/pebbles-cors.git'
+gem 'pebbles-path', '>=0.0.3'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'dalli', '~> 2.1.0'
 gem 'thor'
@@ -41,8 +42,9 @@ gem 'airbrake', '~> 3.1.4', :require => false
 group :development, :test do
   gem 'simplecov'
   gem 'rspec', '~> 2.8'
-  gem 'webmock'
+  gem 'webmock', '~> 1.8.11'
   gem 'vcr'
   gem 'timecop', '~> 0.3.5'
   gem 'rack-test'
+  gem "memcache_mock"
 end

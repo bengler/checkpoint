@@ -93,8 +93,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -229,8 +229,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     last_seen_on date,
     fingerprints tsvector
 );
@@ -296,6 +296,87 @@ ALTER SEQUENCE identity_ips_id_seq OWNED BY identity_ips.id;
 
 
 --
+-- Name: locations; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE locations (
+    id integer NOT NULL,
+    label_0 text,
+    label_1 text,
+    label_2 text,
+    label_3 text,
+    label_4 text,
+    label_5 text,
+    label_6 text,
+    label_7 text,
+    label_8 text,
+    label_9 text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.locations OWNER TO checkpoint;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.locations_id_seq OWNER TO checkpoint;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
+
+
+--
+-- Name: protectors; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE protectors (
+    id integer NOT NULL,
+    callback_url text NOT NULL,
+    path text NOT NULL,
+    location_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.protectors OWNER TO checkpoint;
+
+--
+-- Name: protectors_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE protectors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.protectors_id_seq OWNER TO checkpoint;
+
+--
+-- Name: protectors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE protectors_id_seq OWNED BY protectors.id;
+
+
+--
 -- Name: realms; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -304,8 +385,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     primary_domain_id integer
 );
 
@@ -352,8 +433,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -433,6 +514,20 @@ ALTER TABLE ONLY identity_ips ALTER COLUMN id SET DEFAULT nextval('identity_ips_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
+ALTER TABLE ONLY locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY protectors ALTER COLUMN id SET DEFAULT nextval('protectors_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
 ALTER TABLE ONLY realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
 
 
@@ -497,6 +592,22 @@ ALTER TABLE ONLY identities
 
 ALTER TABLE ONLY identity_ips
     ADD CONSTRAINT identity_ips_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: protectors_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY protectors
+    ADD CONSTRAINT protectors_pkey PRIMARY KEY (id);
 
 
 --
@@ -604,6 +715,20 @@ CREATE INDEX index_identity_ips_on_address ON identity_ips USING btree (address)
 --
 
 CREATE INDEX index_identity_ips_on_identity_id ON identity_ips USING btree (identity_id);
+
+
+--
+-- Name: index_location_on_labels; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_location_on_labels ON locations USING btree (label_0, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8, label_9);
+
+
+--
+-- Name: index_protectors_on_location_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_protectors_on_location_id ON protectors USING btree (location_id);
 
 
 --
