@@ -122,6 +122,43 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 
 --
+-- Name: callbacks; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE callbacks (
+    id integer NOT NULL,
+    url text NOT NULL,
+    path text NOT NULL,
+    location_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.callbacks OWNER TO checkpoint;
+
+--
+-- Name: callbacks_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE callbacks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.callbacks_id_seq OWNER TO checkpoint;
+
+--
+-- Name: callbacks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE callbacks_id_seq OWNED BY callbacks.id;
+
+
+--
 -- Name: domains; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -340,43 +377,6 @@ ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
 
 
 --
--- Name: protectors; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE TABLE protectors (
-    id integer NOT NULL,
-    callback_url text NOT NULL,
-    path text NOT NULL,
-    location_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
-ALTER TABLE public.protectors OWNER TO checkpoint;
-
---
--- Name: protectors_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
---
-
-CREATE SEQUENCE protectors_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.protectors_id_seq OWNER TO checkpoint;
-
---
--- Name: protectors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
---
-
-ALTER SEQUENCE protectors_id_seq OWNED BY protectors.id;
-
-
---
 -- Name: realms; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -493,6 +493,13 @@ ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
+ALTER TABLE ONLY callbacks ALTER COLUMN id SET DEFAULT nextval('callbacks_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
 ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
 
 
@@ -521,13 +528,6 @@ ALTER TABLE ONLY locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
-ALTER TABLE ONLY protectors ALTER COLUMN id SET DEFAULT nextval('protectors_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
---
-
 ALTER TABLE ONLY realms ALTER COLUMN id SET DEFAULT nextval('realms_id_seq'::regclass);
 
 
@@ -544,6 +544,14 @@ ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq':
 
 ALTER TABLE ONLY accounts
     ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: callbacks_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY callbacks
+    ADD CONSTRAINT callbacks_pkey PRIMARY KEY (id);
 
 
 --
@@ -600,14 +608,6 @@ ALTER TABLE ONLY identity_ips
 
 ALTER TABLE ONLY locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
-
-
---
--- Name: protectors_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-ALTER TABLE ONLY protectors
-    ADD CONSTRAINT protectors_pkey PRIMARY KEY (id);
 
 
 --
@@ -669,6 +669,13 @@ CREATE INDEX index_accounts_on_realm_id ON accounts USING btree (realm_id);
 
 
 --
+-- Name: index_callbacks_on_location_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_callbacks_on_location_id ON callbacks USING btree (location_id);
+
+
+--
 -- Name: index_domains_on_name; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -722,13 +729,6 @@ CREATE INDEX index_identity_ips_on_identity_id ON identity_ips USING btree (iden
 --
 
 CREATE UNIQUE INDEX index_location_on_labels ON locations USING btree (label_0, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8, label_9);
-
-
---
--- Name: index_protectors_on_location_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
---
-
-CREATE INDEX index_protectors_on_location_id ON protectors USING btree (location_id);
 
 
 --

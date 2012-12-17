@@ -10,17 +10,17 @@ class CreateProtectors < ActiveRecord::Migration
     end
     add_index :locations, labels, :unique => true, :name => 'index_location_on_labels'
 
-    create_table :protectors do |t|
-      t.text :callback_url, :null => false
+    create_table :callbacks do |t|
+      t.text :url, :null => false
       t.text :path, :null => false
       t.integer :location_id, :null => false
       t.timestamps
     end
-    add_index :protectors, :location_id
+    add_index :callbacks, :location_id
   end
 
   def self.down
     drop_table :locations
-    drop_table :protectors
+    drop_table :callbacks
   end
 end

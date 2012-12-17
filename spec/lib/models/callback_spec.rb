@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Protector do
+describe Callback do
   it "can be retrieved by path" do
-    Protector.create!(:path => "a.b.c", :callback_url => "http://example.org/a/b/c")
-    Protector.create!(:path => "a.b", :callback_url => "http://example.org/a/b")
-    Protector.create!(:path => "b.c.d", :callback_url => "http://example.org/b/c/d")
-    Protector.callbacks('a.b.c').should eq ["http://example.org/a/b/c", "http://example.org/a/b"]
-    Protector.callbacks('z').should eq []
+    Callback.create!(:path => "a.b.c", :url => "http://example.org/a/b/c")
+    Callback.create!(:path => "a.b", :url => "http://example.org/a/b")
+    Callback.create!(:path => "b.c.d", :url => "http://example.org/b/c/d")
+    Callback.urls_for_path('a.b.c').should eq ["http://example.org/a/b/c", "http://example.org/a/b"]
+    Callback.urls_for_path('z').should eq []
   end
 
   context "callbacks" do
@@ -33,18 +33,18 @@ describe Protector do
     end
 
     it "forwards the parameters to the callback and processes the positive response" do
-      Protector.create!(:path => "a.b.z", :callback_url => "http://nay.org") # irrelevant, should not trigger
-      Protector.create!(:path => "a.b.c", :callback_url => "http://yay.org")
-      allowed, url, reason = Protector.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
+      Callback.create!(:path => "a.b.z", :url => "http://nay.org") # irrelevant, should not trigger
+      Callback.create!(:path => "a.b.c", :url => "http://yay.org")
+      allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
       allowed.should be_true
       url.should be_nil
       reason.should be_nil
     end
 
     it "forwards the parameters to the callback and processes the negative response" do
-      Protector.create!(:path => "a.b.c", :callback_url => "http://nay.org")
-      Protector.create!(:path => "a.b.c.d", :callback_url => "http://yay.org") # will be overridden
-      allowed, url, reason = Protector.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
+      Callback.create!(:path => "a.b.c", :url => "http://nay.org")
+      Callback.create!(:path => "a.b.c.d", :url => "http://yay.org") # will be overridden
+      allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
       allowed.should be_false
       url.should eq "http://nay.org"
       reason.should eq "You are not worthy"
