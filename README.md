@@ -59,6 +59,16 @@ For each account registered with an identity, one or more *fingerprints* are rec
 
 The fingerprint obscures the original details but still permits the application to determine if a future credential has been fingerprinted, thus making it possible to ban Twitter users, mobile numbers, etc. without having the original information at hand.
 
+## Callbacks
+
+Pebbles have default rules guarding who gets to do what to a given object. Callbacks allow implementation of custom policies for creating, updating and deleting objects.
+
+A callback is registered with a path and an url. If a callback is registered with the path 'a.b.c' it will be consulted for any action within that path, i.e. it will be called when someone wants to update `post:a.b.c.d.e.f.g$11` or `post:a.b.c$1`, but not `post:a$1`or `post:z.y.x$666`.
+
+When a pebble consults checkpoint to determine if an action should be allowed, the callback will post to the url. The post will recieve the parameters `method`, `uid` and `identity`. `method` will be either 'create', 'update' or 'delete', `uid` is the uid of the object the action will be taken on, `identity` is the id of the identity attempting to perform the action. The callback should return a json-hash with the key `allowed`. If the action should be allowed, `allowed` should be true, if it should be denied: false. If the callback does not have a specific opinion on the matter it should respond with an empty hash. If the callback chooses to deny the action, it should provide a `reason` in the response hash. This is a human readable string that may be presented to a user.
+
+At the time of writing, only Grove actually consults checkpoint callbacks. In the future all pebbles must support this. To support callbacks, a pebble must GET `/callbacks/allowed/:method/:uid` before performing the action. The `allowed` key in the response will be either `true`, `false` or `default`. `true` means 'categorically allowed, override default behavior', `false` means 'categorically' denied, while `default` means 'apply internal rules, the callbacks had nothing to say about this'. Typically this means no callback was defined for the path in question.
+
 ## Known weaknesses
 
 * The service defines a critical single point of failure. Infrastructure should be put in place for a redundant solution – either a high-availability memcached cluster or a different key-value store.
