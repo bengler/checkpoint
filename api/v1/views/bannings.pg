@@ -1,0 +1,3 @@
+collection :bannings => bannings do |banning|
+  partial :banning, :banning => banning
+end

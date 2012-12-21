@@ -1,6 +1,5 @@
 class CheckpointV1 < Sinatra::Base
 
-
   # @apidoc
   # Perform all relevant callbacks checking if the provided action is allowed for the current
   # identity. The vertict is returned in the 'allowed' parameter. If the action is disallowed
@@ -22,8 +21,13 @@ class CheckpointV1 < Sinatra::Base
     params[:identity] ||= current_identity.try(:id)
     params.delete('splat')
     params.delete('captures')
-    allowed, url, reason = Callback.allow?(params.to_options)
-    pg :callback_result, :locals => {:allowed => allowed, :url => url, :reason => reason}
+    if banned_path = Banning.banned?(params.to_options)
+      pg :callback_result, :locals => {:allowed => false, :url => request.url,
+        :reason => "This identity is banned from '#{banned_path}'."}
+    else
+      allowed, url, reason = Callback.allow?(params.to_options)
+      pg :callback_result, :locals => {:allowed => allowed, :url => url, :reason => reason}
+    end
   end
 
   # @apidoc
