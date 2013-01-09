@@ -129,6 +129,37 @@ describe Identity do
       end
     end
 
+    describe "#search" do
+      let :twitter_account do
+        Account.create!(:identity => someone,
+          :realm => realm,
+          :uid => '1',
+          :provider => 'twitter',
+          :nickname => 'tildetwitt',
+          :name => "Tilde Nielsen")
+      end
+      let :facebook_account do
+        Account.create!(:identity => someone,
+          :realm => realm,
+          :uid => '1',
+          :provider => 'facebook',
+          :nickname => 'tildeface',
+          :name => "Tilde Nielsen")
+      end
+
+      before(:each) do
+        twitter_account
+        facebook_account
+      end
+
+      it "finds users identity from accounts" do
+        result = Identity.find_by_query(:name => "Tilde Nielsen")
+        result.length.should eq 1
+        result.first.accounts.map(&:nickname).should == ['tildetwitt', 'tildeface']
+      end
+
+    end
+
     describe "#root?" do
       let(:root) { Realm.create!(:label => 'root') }
 

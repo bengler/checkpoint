@@ -236,4 +236,42 @@ describe "Identities" do
       JSON.parse(last_response.body)["identity"]["provisional"].should be_false
     end
   end
+
+  describe "GET /identities/find" do
+    let(:tilde_account) do
+      identity = Identity.create!(:realm => realm)
+      Account.create!(:identity => identity,
+        :realm => realm,
+        :provider => 'twitter',
+        :uid => '1',
+        :token => 'token',
+        :secret => 'secret',
+        :nickname => 'tilde',
+        :name => 'Tilde Nielsen')
+    end
+
+    describe "security" do
+      it "is only available for gods on the realm" do
+        get "/identities/find", :"q[name]" => "foo", :session => "bar"
+        last_response.status.should eq(403)
+      end
+      it "available when god" do
+        get "/identities/find", :"q[name]" => "foo", :session => god_session
+        last_response.status.should eq(200)
+      end
+    end
+
+    describe "query" do
+      it "finds identities and accounts" do
+        identity = Identity.create!(:realm => realm)
+        session = Session.create!(:identity => identity)
+        tilde_account
+        get "/identities/find", :"q[name]" => "tild", :session => god_session
+        identities = JSON.parse(last_response.body)["identities"]
+        identities.count.should eq 1
+        identities.first['accounts'].should == ["twitter"]
+      end
+    end
+  end
+
 end

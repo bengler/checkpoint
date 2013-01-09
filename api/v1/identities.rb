@@ -71,6 +71,32 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
+  # Find identities, match against attributes on the identities' accounts.
+  #
+  # @note Only for gods.
+  # @category Checkpoint/Identities
+  # @path /api/checkpoint/v1/identities/find
+  # @example /api/checkpoint/v1/identities/find?q[nickname]=foo&q[name]=bar&operator=or
+  # @http GET
+  # @optional [String] q[nickname] Account nickname
+  # @optional [String] q[name] Account name
+  # @optional [String] q[provider] Account provider (lowercase keyword)
+  # @optional [String] q[location] Account location
+  # @optional [String] q[description] Account description
+  # @optional [String] q[email] Account email
+  # @optional [String] operator 'and' or 'or' kind of matching
+  # @status 200 [JSON]
+
+  get '/identities/find' do
+    require_god
+    check_god_credentials(current_realm.id)
+    q = params[:q]
+    pg :identities, :locals => {
+        :identities => Identity.find_by_query(params[:q].symbolize_keys!, params[:operator])
+      }
+  end
+
+  # @apidoc
   # Retrieve one or more identities including profiles.
   #
   # @category Checkpoint/Identities
