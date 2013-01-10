@@ -92,11 +92,11 @@ class CheckpointV1 < Sinatra::Base
     check_god_credentials(current_realm.id)
     q = params[:q]
     if q.is_a?(Hash)
-      pg :identities, :locals => {
-          :identities => Identity.find_by_query(
-              params[:q].symbolize_keys!, params[:operator]
-            ).where("identities.realm_id = ?", current_realm.id)
-        }
+      identities = Identity.find_by_query(
+        params[:q].symbolize_keys!,
+        params[:operator]
+      ).where("identities.realm_id = ?", current_realm.id)
+      pg :identities, :locals => { :identities => identities }
     else
       halt 400, "Invalid query"
     end

@@ -266,7 +266,7 @@ describe "Identities" do
         identity = Identity.create!(:realm => realm)
         session = Session.create!(:identity => identity)
         tilde_account
-        get "/identities/find", :"q[name]" => "tild", :session => god_session
+        get "/identities/find", :"q[name]" => "tilde", :"q[provider]" => "twitter", :session => god_session
         identities = JSON.parse(last_response.body)["identities"]
         identities.count.should eq 1
         identities.first['accounts'].should == ["twitter"]

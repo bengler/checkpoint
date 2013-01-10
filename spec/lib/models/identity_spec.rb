@@ -155,7 +155,7 @@ describe Identity do
       it "finds users identity from accounts" do
         result = Identity.find_by_query(:name => "Tilde Nielsen")
         result.length.should eq 1
-        result.first.accounts.map(&:nickname).should == ['tildetwitt', 'tildeface']
+        result.first.accounts.map(&:nickname).sort.should == ['tildeface', 'tildetwitt']
       end
 
     end
