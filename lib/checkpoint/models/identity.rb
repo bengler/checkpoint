@@ -82,7 +82,7 @@ class Identity < ActiveRecord::Base
     cached_find_by_id(Session.identity_id_for_session(session_key))
   end
 
-  def self.find_by_query(query, operator)
+  def self.find_by_query(query, operator="and")
     raise "Query is malformed (needs to be a hash, i.e. {:nickname => 'foo'})" unless query.is_a?(Hash)
     operator ||= "AND"
     criterias = []
