@@ -136,7 +136,7 @@ describe Identity do
           :uid => '1',
           :provider => 'twitter',
           :nickname => 'tildetwitt',
-          :name => "Tilde Nielsen")
+          :name => "Tilde Tjohei Nielsen Babar")
       end
       let :facebook_account do
         Account.create!(:identity => someone,
@@ -144,7 +144,7 @@ describe Identity do
           :uid => '1',
           :provider => 'facebook',
           :nickname => 'tildeface',
-          :name => "Tilde Nielsen")
+          :name => "Tilde Mehe Nielsen")
       end
 
       before(:each) do
@@ -153,7 +153,7 @@ describe Identity do
       end
 
       it "finds users identity from accounts" do
-        result = Identity.find_by_query(:name => "Tilde Nielsen")
+        result = Identity.find_by_query("Tilde Nielsen")
         result.length.should eq 1
         result.first.accounts.map(&:nickname).sort.should == ['tildeface', 'tildetwitt']
       end

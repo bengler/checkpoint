@@ -252,11 +252,11 @@ describe "Identities" do
 
     describe "security" do
       it "is only available for gods on the realm" do
-        get "/identities/find", :"q[name]" => "foo", :session => "bar"
+        get "/identities/find", :q => "foo", :session => "bar"
         last_response.status.should eq(403)
       end
       it "available when god" do
-        get "/identities/find", :"q[name]" => "foo", :session => god_session
+        get "/identities/find", :q => "foo", :session => god_session
         last_response.status.should eq(200)
       end
     end
@@ -266,10 +266,10 @@ describe "Identities" do
         identity = Identity.create!(:realm => realm)
         session = Session.create!(:identity => identity)
         tilde_account
-        get "/identities/find", :"q[name]" => "tilde", :"q[provider]" => "twitter", :session => god_session
+        get "/identities/find", :q => "tilde", :session => god_session
         identities = JSON.parse(last_response.body)["identities"]
         identities.count.should eq 1
-        identities.first['accounts'].should == ["twitter"]
+        identities.first['profile']['name'].should eq "Tilde Nielsen"
       end
     end
   end

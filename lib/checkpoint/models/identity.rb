@@ -82,14 +82,12 @@ class Identity < ActiveRecord::Base
     cached_find_by_id(Session.identity_id_for_session(session_key))
   end
 
-  def self.find_by_query(query, operator="and")
-    raise "Query is malformed (needs to be a hash, i.e. {:nickname => 'foo'})" unless query.is_a?(Hash)
-    operator ||= "AND"
-    criterias = []
-    query.each do |k,v|
-      criterias << "accounts.#{k} ilike '%#{v}%'"
-    end
-    Identity.includes(:accounts).where(criterias.join(" #{operator} "))
+  def self.find_by_query(query)
+    query = "%#{query.gsub(/\s+/, '%')}%"
+    Identity.includes(:accounts).
+      where("accounts.name ilike ? OR " <<
+        "accounts.nickname ilike ? OR " <<
+        "accounts.email ilike ?", query, query, query)
   end
 
   def mark_as_seen

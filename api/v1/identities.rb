@@ -71,34 +71,25 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
-  # Find identities, match against attributes on the identities' accounts.
+  # Find identities, match against 'name', 'nickname', 'email' attributes on the identities' accounts.
   #
   # @note Only for gods.
   # @category Checkpoint/Identities
   # @path /api/checkpoint/v1/identities/find
-  # @example /api/checkpoint/v1/identities/find?q[nickname]=foo&q[name]=bar&operator=or
+  # @example /api/checkpoint/v1/identities/find?q=Tilde%20Nielsen
   # @http GET
-  # @optional [String] q[nickname] Account nickname
-  # @optional [String] q[name] Account name
-  # @optional [String] q[provider] Account provider (lowercase keyword)
-  # @optional [String] q[location] Account location
-  # @optional [String] q[description] Account description
-  # @optional [String] q[email] Account email
-  # @optional [String] operator 'and' or 'or' kind of matching
+  # @required [String] q
   # @status 200 [JSON]
 
   get '/identities/find' do
-    require_god
-    check_god_credentials(current_realm.id)
-    q = params[:q]
-    if q.is_a?(Hash)
-      identities = Identity.find_by_query(
-        params[:q].symbolize_keys!,
-        params[:operator]
-      ).where("identities.realm_id = ?", current_realm.id)
+    if params[:q]
+      require_god
+      check_god_credentials(current_realm.id)
+      identities = Identity.find_by_query(params[:q]).
+        where("identities.realm_id = ?", current_realm.id)
       pg :identities, :locals => { :identities => identities }
     else
-      halt 400, "Invalid query"
+      halt 400, "Query (param 'q') needed!"
     end
   end
 
