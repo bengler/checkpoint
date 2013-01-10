@@ -86,7 +86,8 @@ class CheckpointV1 < Sinatra::Base
       require_god
       check_god_credentials(current_realm.id)
       identities = Identity.find_by_query(params[:q]).
-        where("identities.realm_id = ?", current_realm.id)
+        where("identities.realm_id = ?", current_realm.id).
+          order("identities.updated_at DESC")
       pg :identities, :locals => { :identities => identities }
     else
       halt 400, "Query (param 'q') needed!"

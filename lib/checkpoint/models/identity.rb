@@ -83,11 +83,15 @@ class Identity < ActiveRecord::Base
   end
 
   def self.find_by_query(query)
-    query = "%#{query.gsub(/\s+/, '%')}%"
-    Identity.includes(:accounts).
-      where("accounts.name ILIKE ? OR " <<
-        "accounts.nickname ILIKE ? OR " <<
-        "accounts.email ILIKE ?", query, query, query)
+    if query[0] == '"' and query[-1] == '"'
+      query.gsub!('"', '')
+    else
+      query = "%#{query.gsub(/\s+/, '%')}%"
+    end
+    Identity.includes(:accounts).where(
+      "accounts.name ILIKE ? OR " <<
+      "accounts.nickname ILIKE ? OR " <<
+      "accounts.email ILIKE ?", query, query, query)
   end
 
   def mark_as_seen

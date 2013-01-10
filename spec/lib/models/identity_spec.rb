@@ -152,10 +152,17 @@ describe Identity do
         facebook_account
       end
 
-      it "finds users identity from accounts" do
+      it "finds users identity from accounts with fuzzy match" do
         result = Identity.find_by_query("Tilde Nielsen")
         result.length.should eq 1
         result.first.accounts.map(&:nickname).sort.should == ['tildeface', 'tildetwitt']
+      end
+
+      it "finds users identity from accounts with exact match" do
+        result = Identity.find_by_query('"Tilde Nielsen"')
+        result.length.should eq 0
+        result = Identity.find_by_query('"Tilde Mehe Nielsen"')
+        result.length.should eq 1
       end
 
     end
