@@ -82,7 +82,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON]
 
   get '/identities/find' do
-    if params[:q]
+    if params[:q] and !params[:q].strip.blank?
       require_god
       check_god_credentials(current_realm.id)
       identities = Identity.find_by_query(params[:q]).
