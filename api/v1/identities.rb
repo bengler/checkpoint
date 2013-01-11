@@ -85,10 +85,10 @@ class CheckpointV1 < Sinatra::Base
     if params[:q] and !params[:q].strip.blank?
       require_god
       check_god_credentials(current_realm.id)
-      identities = Identity.find_by_query(params[:q]).
+      identities, pagination = limit_offset_collection(Identity.find_by_query(params[:q]).
         where("identities.realm_id = ?", current_realm.id).
-          order("identities.updated_at DESC")
-      pg :identities, :locals => { :identities => identities }
+          order("identities.updated_at DESC"), :limit => params['limit'], :offset => params['offset'])
+      pg :identities, :locals => { :identities => identities, :pagination => pagination }
     else
       halt 400, "Query (param 'q') needed!"
     end
