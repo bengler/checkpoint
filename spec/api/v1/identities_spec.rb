@@ -44,7 +44,13 @@ describe "Identities" do
     Session.create!(:identity => god).key
   end
 
-  let(:json_output) { JSON.parse(last_response.body) }
+  let(:json_output) {
+    if last_response.headers['Content-Type'] =~ /application\/json/
+      JSON.parse(last_response.body)
+    else
+      nil
+    end
+  }
 
   describe "GET /identities/me" do
 
@@ -139,6 +145,11 @@ describe "Identities" do
       result['identity']['fingerprints'].sort.should eq me.fingerprints.sort
     end
 
+    it 'includes tags' do
+      get "/identities/#{me.id}", :session => me_session
+      result = JSON.parse(last_response.body)
+      result['identity']['tags'].sort.should eq me.tags.sort
+    end
   end
 
   describe "POST /identities" do
@@ -197,6 +208,18 @@ describe "Identities" do
       post '/identities', parameters
       last_response.status.should eq(403)
     end
+
+    it 'saves tags' do
+      post "/identities", {
+        session: god_session,
+        account: {provider: 'twitter', nickname: 'nick', uid: '2'},
+        identity: {tags: ['foo was here', 'kilroy was here']}
+      }
+      result = JSON.parse(last_response.body)
+      identity = Identity.where(id: result['identity']['id']).first
+      identity.tags.sort.should eq ['foo was here', 'kilroy was here']
+      result['identity']['tags'].sort.should eq identity.tags.sort
+    end
   end
 
   describe "PUT /identities/:id" do
@@ -221,6 +244,19 @@ describe "Identities" do
       }
       last_response.status.should eq(400)
       json_output.should eq nil
+    end
+
+    it 'saves tags' do
+      put "/identities/#{me.id}", {
+        session: god_session,
+        identity: {
+          tags: ['foo was here', 'kilroy was here']
+        }
+      }
+      last_response.status.should eq(200)
+      me.reload
+      me.tags.sort.should eq ['foo was here', 'kilroy was here']
+      json_output['identity']['tags'].sort.should eq me.tags.sort
     end
   end
 

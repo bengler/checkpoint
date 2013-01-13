@@ -14,6 +14,7 @@ class Identity < ActiveRecord::Base
 
   validates_presence_of :realm_id
 
+  ts_vector :tags
   ts_vector :fingerprints
 
   # Make sure fingerprints cannot be assigned directly
