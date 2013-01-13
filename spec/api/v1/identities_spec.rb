@@ -32,7 +32,7 @@ describe "Identities" do
     identity
   end
 
-  let :god do
+  let! :god do
     Identity.create!(:god => true, :realm => realm)
   end
 
@@ -182,7 +182,6 @@ describe "Identities" do
     end
 
     it "ignores any realm that is passed in" do
-      god # trigger
       parameters = {:session => god_session, :identity => {:realm => 'rock_and_roll'}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(201)
