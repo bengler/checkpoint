@@ -59,6 +59,14 @@ For each account registered with an identity, one or more *fingerprints* are rec
 
 The fingerprint obscures the original details but still permits the application to determine if a future credential has been fingerprinted, thus making it possible to ban Twitter users, mobile numbers, etc. without having the original information at hand.
 
+## Tagging
+
+Identities support arbitrary sets of tags. (A tag can be any string, including spaces.) The main use case is to allow apps to tag the origin of identities when there may be multiple applications sharing the same realm.
+
+For example, if you develop apps A and B, and these apps tag their identities accordingly, then it's trivial to determine which identities came from which app. If, say, app B is discontinued or must be moved to a separate realm, it's easy to purge/move the identities if they have been tagged correctly.
+
+Tagging is entirely-freeform and can serve any purpose, however.
+
 ## Known weaknesses
 
 * The service defines a critical single point of failure. Infrastructure should be put in place for a redundant solution – either a high-availability memcached cluster or a different key-value store.

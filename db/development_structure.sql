@@ -232,7 +232,8 @@ CREATE TABLE identities (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     last_seen_on date,
-    fingerprints tsvector
+    fingerprints tsvector,
+    tags tsvector
 );
 
 
