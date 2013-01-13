@@ -18,6 +18,10 @@ class CheckpointV1 < Sinatra::Base
   error ActiveRecord::RecordNotFound do
     halt 404, "Record not found"
   end
+  error ActiveRecord::UnknownAttributeError do |e|
+    raise e unless request.post? or request.put?
+    halt 400, "Invalid attribute: #{e.name || e.message}"
+  end
 
   error Sinatra::NotFound do
     'Not found'

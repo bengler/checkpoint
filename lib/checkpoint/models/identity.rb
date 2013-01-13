@@ -16,6 +16,9 @@ class Identity < ActiveRecord::Base
 
   ts_vector :fingerprints
 
+  # Make sure fingerprints cannot be assigned directly
+  private :fingerprints=
+
   scope :having_realm, lambda { |realm|
     where(:realm_id => realm.id)
   }
@@ -96,9 +99,8 @@ class Identity < ActiveRecord::Base
 
   def update_fingerprints_from_account!(account)
     if account and (fingerprints = account.fingerprints)
-      self.fingerprints ||= []
-      self.fingerprints |= fingerprints
-      save(:validate => false) unless new_record?
+      self.send(:fingerprints=, fingerprints | self.fingerprints)
+      save(validate: false) unless new_record?
     end
   end
 

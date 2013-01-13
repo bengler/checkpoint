@@ -184,6 +184,14 @@ describe "Identities" do
       profile["nickname"].should eq('nick')
     end
 
+    it "does not allow setting fingerprints" do
+      post '/identities', {
+        session: god_session,
+        identity: {fingerprints: ["faux"]},
+      }
+      last_response.status.should eq(400)
+    end
+
     it "fails to create identities if not god" do
       parameters = {:session => me_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
@@ -205,6 +213,15 @@ describe "Identities" do
       JSON.parse(last_response.body)["identity"]["god"].should == true
     end
 
+    it "does not allow setting fingerprints" do
+      expected_fingerprints = me.fingerprints.dup
+      put "/identities/#{me.id}", {
+        session: god_session,
+        identity: {fingerprints: ["X"]},
+      }
+      last_response.status.should eq(400)
+      json_output.should eq nil
+    end
   end
 
   describe "last_seen_on" do
