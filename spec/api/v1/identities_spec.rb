@@ -32,7 +32,7 @@ describe "Identities" do
     identity
   end
 
-  let :god do
+  let! :god do
     Identity.create!(:god => true, :realm => realm)
   end
 
@@ -44,7 +44,13 @@ describe "Identities" do
     Session.create!(:identity => god).key
   end
 
-  let(:json_output) { JSON.parse(last_response.body) }
+  let(:json_output) {
+    if last_response.headers['Content-Type'] =~ /application\/json/
+      JSON.parse(last_response.body)
+    else
+      nil
+    end
+  }
 
   describe "GET /identities/me" do
 
@@ -139,6 +145,11 @@ describe "Identities" do
       result['identity']['fingerprints'].sort.should eq me.fingerprints.sort
     end
 
+    it 'includes tags' do
+      get "/identities/#{me.id}", :session => me_session
+      result = JSON.parse(last_response.body)
+      result['identity']['tags'].sort.should eq me.tags.sort
+    end
   end
 
   describe "POST /identities" do
@@ -171,7 +182,6 @@ describe "Identities" do
     end
 
     it "ignores any realm that is passed in" do
-      god # trigger
       parameters = {:session => god_session, :identity => {:realm => 'rock_and_roll'}, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(201)
@@ -184,10 +194,30 @@ describe "Identities" do
       profile["nickname"].should eq('nick')
     end
 
+    it "does not allow setting fingerprints" do
+      post '/identities', {
+        session: god_session,
+        identity: {fingerprints: ["faux"]},
+      }
+      last_response.status.should eq(400)
+    end
+
     it "fails to create identities if not god" do
       parameters = {:session => me_session, :account => {:provider => 'twitter', :nickname => 'nick', :uid => '1'}}
       post '/identities', parameters
       last_response.status.should eq(403)
+    end
+
+    it 'saves tags' do
+      post "/identities", {
+        session: god_session,
+        account: {provider: 'twitter', nickname: 'nick', uid: '2'},
+        identity: {tags: ['foo was here', 'kilroy was here']}
+      }
+      result = JSON.parse(last_response.body)
+      identity = Identity.where(id: result['identity']['id']).first
+      identity.tags.sort.should eq ['foo was here', 'kilroy was here']
+      result['identity']['tags'].sort.should eq identity.tags.sort
     end
   end
 
@@ -205,6 +235,28 @@ describe "Identities" do
       JSON.parse(last_response.body)["identity"]["god"].should == true
     end
 
+    it "does not allow setting fingerprints" do
+      expected_fingerprints = me.fingerprints.dup
+      put "/identities/#{me.id}", {
+        session: god_session,
+        identity: {fingerprints: ["X"]},
+      }
+      last_response.status.should eq(400)
+      json_output.should eq nil
+    end
+
+    it 'saves tags' do
+      put "/identities/#{me.id}", {
+        session: god_session,
+        identity: {
+          tags: ['foo was here', 'kilroy was here']
+        }
+      }
+      last_response.status.should eq(200)
+      me.reload
+      me.tags.sort.should eq ['foo was here', 'kilroy was here']
+      json_output['identity']['tags'].sort.should eq me.tags.sort
+    end
   end
 
   describe "last_seen_on" do
