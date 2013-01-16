@@ -33,9 +33,12 @@ class Account < ActiveRecord::Base
     def declare!(attributes)
       attributes.symbolize_keys!
       begin
-        # Optimistically we just go for it. Validations and an uniqueness-index will reject us if we are
-        # in error.
-        return Account.create!(attributes)
+        # Use (sub-)transaction to ensure errors can be recovered
+        transaction do
+          # Optimistically we just go for it. Validations and an uniqueness-index will reject us if we are
+          # in error.
+          return Account.create!(attributes)
+        end
       rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
         # Handles uniqueness violations when raised either as validation failure, or
         # in the case of a data-race: violation of uniqueness constraint in postgres.

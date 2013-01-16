@@ -3,6 +3,7 @@ node :identity => identity do
   node :realm => identity.realm.label
   node :provisional => (identity.accounts.size == 0)
   node :fingerprints => identity.fingerprints
+  node :tags => identity.tags
 end
 
 node :accounts => identity.accounts.map(&:provider)
@@ -10,6 +11,5 @@ node :accounts => identity.accounts.map(&:provider)
 if identity.primary_account
   node :profile => identity.primary_account do
     attributes :provider, :nickname, :name, :profile_url, :image_url, :description
-
   end
 end
