@@ -13,7 +13,6 @@ class CheckpointV1 < Sinatra::Base
       halt 403, "The path #{path} is not in this realm (#{current_realm.label})"
     end
     bannings = Banning.by_path("^#{path}")
-
     pg :bannings, :locals => { :bannings => bannings }
   end
 

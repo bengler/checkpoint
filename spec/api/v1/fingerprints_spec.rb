@@ -16,7 +16,9 @@ describe "Fingerprints" do
   end
 
   it "returns a list of identities by their fingerprints" do
-    identity = Identity.create!(:fingerprints => 'abcd123', :realm => realm)
+    identity = Identity.new(:realm => realm)
+    identity.send(:fingerprints=, 'abcd123')
+    identity.save!
     get "fingerprints/abcd123/identities"
     response = JSON.parse(last_response.body)
     response['identities'].size.should eq 1

@@ -39,8 +39,15 @@ describe "Bannings" do
     Session.create!(:identity => false_god).key
   end
 
+  let :crook do
+    result = Identity.new(:realm => realm)
+    result.send(:fingerprints=, ['fingerprint1'])
+    result.save!
+    result
+  end
+
   it "will get a list of relevant bans complete with identities" do
-    crook = Identity.create!(:fingerprints => ['fingerprint1'], :realm => realm)
+    crook
     banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
     banning2 = Banning.declare!(:path => "area51.z.m.q", :fingerprint => 'fingerprint1')
     get '/bannings/area51.a.b.c.d.e', :session => somegod_session
@@ -53,7 +60,6 @@ describe "Bannings" do
   end
 
   it "will create a ban, deleting any shadowed bans" do
-    crook = Identity.create!(:fingerprints => ['fingerprint1'], :realm => realm)
     Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b.d", :fingerprint => 'fingerprint1')
     put "/bannings/area51.a/identities/#{crook.id}", :session => somegod_session
@@ -64,7 +70,7 @@ describe "Bannings" do
   end
 
   it "will not create a ban if more general ban is allready in place" do
-    crook = Identity.create!(:fingerprints => ['fingerprint1'], :realm => realm)
+    crook
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     put "/bannings/area51.a.b.c/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 201
@@ -73,7 +79,8 @@ describe "Bannings" do
   end
 
   it "will remove any necessary effective bans to lift ban on specific path for specific identity" do
-    crook = Identity.create!(:fingerprints => ['fingerprint1', 'fingerprint2'], :realm => realm)
+    crook.send(:fingerprints=, ['fingerprint1', 'fingerprint2'])
+    crook.save!
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b", :fingerprint => 'fingerprint2')
     delete "/bannings/area51.a.b.c.d.e/identities/#{crook.id}", :session => somegod_session
@@ -82,7 +89,6 @@ describe "Bannings" do
   end
 
   it "short circuits callbacks precluding any actual callback-processing" do
-    crook = Identity.create!(:fingerprints => ['fingerprint1'], :realm => realm)
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     get "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
     response = JSON.parse(last_response.body)
