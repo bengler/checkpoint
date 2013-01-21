@@ -1,0 +1,3 @@
+node :callback => callback do
+  attributes :id, :path, :url
+end

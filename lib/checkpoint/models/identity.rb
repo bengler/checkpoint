@@ -56,7 +56,7 @@ class Identity < ActiveRecord::Base
     if attributes = $memcached.get(cache_key(id))
       return Identity.instantiate(Yajl::Parser.parse(attributes))
     else
-      identity = Identity.find_by_id(id)      
+      identity = Identity.find_by_id(id)
       return nil unless identity
       $memcached.set(cache_key(id), identity.attributes.to_json)
       identity.readonly!
@@ -68,7 +68,7 @@ class Identity < ActiveRecord::Base
     ids.map!(&:to_i)
     keys = ids.map{ |id| Identity.cache_key(id)}
     result =  Hash[
-      $memcached.get_multi(*keys).map do |key, value| 
+      $memcached.get_multi(*keys).map do |key, value|
         identity = Identity.instantiate(Yajl::Parser.parse(value))
         identity.readonly!
         [id_from_key(key), identity]
@@ -78,12 +78,24 @@ class Identity < ActiveRecord::Base
     Identity.find_all_by_id(uncached).each do |identity|
       $memcached.set(identity.cache_key, identity.attributes.to_json) if identity
       result[identity.id] = identity
-    end    
+    end
     ids.map{|id| result[id]}
   end
 
   def self.find_by_session_key(session_key)
     cached_find_by_id(Session.identity_id_for_session(session_key))
+  end
+
+  def self.find_by_query(query)
+    if query[0] == '"' and query[-1] == '"'
+      query.gsub!('"', '')
+    else
+      query = "%#{query.gsub(/\s+/, '%')}%"
+    end
+    Identity.includes(:accounts).where(
+      "accounts.name ILIKE ? OR " <<
+      "accounts.nickname ILIKE ? OR " <<
+      "accounts.email ILIKE ?", query, query, query)
   end
 
   def mark_as_seen

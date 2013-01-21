@@ -71,6 +71,30 @@ class CheckpointV1 < Sinatra::Base
 
 
   # @apidoc
+  # Find identities, match against 'name', 'nickname', 'email' attributes on the identities' accounts.
+  #
+  # @note Only for gods.
+  # @category Checkpoint/Identities
+  # @path /api/checkpoint/v1/identities/find
+  # @example /api/checkpoint/v1/identities/find?q=Tilde%20Nielsen
+  # @http GET
+  # @required [String] q
+  # @status 200 [JSON]
+
+  get '/identities/find' do
+    if params[:q] and !params[:q].strip.blank?
+      require_god
+      check_god_credentials(current_realm.id)
+      identities, pagination = limit_offset_collection(Identity.find_by_query(params[:q]).
+        where("identities.realm_id = ?", current_realm.id).
+          order("identities.updated_at DESC"), :limit => params['limit'], :offset => params['offset'])
+      pg :identities, :locals => { :identities => identities, :pagination => pagination }
+    else
+      halt 400, "Query (param 'q') needed!"
+    end
+  end
+
+  # @apidoc
   # Retrieve one or more identities including profiles.
   #
   # @category Checkpoint/Identities

@@ -122,6 +122,81 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 
 --
+-- Name: bannings; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE bannings (
+    id integer NOT NULL,
+    fingerprint text,
+    path text,
+    location_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    realm_id integer
+);
+
+
+ALTER TABLE public.bannings OWNER TO checkpoint;
+
+--
+-- Name: bannings_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE bannings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bannings_id_seq OWNER TO checkpoint;
+
+--
+-- Name: bannings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE bannings_id_seq OWNED BY bannings.id;
+
+
+--
+-- Name: callbacks; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE callbacks (
+    id integer NOT NULL,
+    url text NOT NULL,
+    path text NOT NULL,
+    location_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.callbacks OWNER TO checkpoint;
+
+--
+-- Name: callbacks_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE callbacks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.callbacks_id_seq OWNER TO checkpoint;
+
+--
+-- Name: callbacks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE callbacks_id_seq OWNED BY callbacks.id;
+
+
+--
 -- Name: domains; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -297,6 +372,50 @@ ALTER SEQUENCE identity_ips_id_seq OWNED BY identity_ips.id;
 
 
 --
+-- Name: locations; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE TABLE locations (
+    id integer NOT NULL,
+    label_0 text,
+    label_1 text,
+    label_2 text,
+    label_3 text,
+    label_4 text,
+    label_5 text,
+    label_6 text,
+    label_7 text,
+    label_8 text,
+    label_9 text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.locations OWNER TO checkpoint;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: checkpoint
+--
+
+CREATE SEQUENCE locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.locations_id_seq OWNER TO checkpoint;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: checkpoint
+--
+
+ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
+
+
+--
 -- Name: realms; Type: TABLE; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -413,6 +532,20 @@ ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
 --
 
+ALTER TABLE ONLY bannings ALTER COLUMN id SET DEFAULT nextval('bannings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY callbacks ALTER COLUMN id SET DEFAULT nextval('callbacks_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
 ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
 
 
@@ -428,6 +561,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 --
 
 ALTER TABLE ONLY identity_ips ALTER COLUMN id SET DEFAULT nextval('identity_ips_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: checkpoint
+--
+
+ALTER TABLE ONLY locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq'::regclass);
 
 
 --
@@ -450,6 +590,22 @@ ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq':
 
 ALTER TABLE ONLY accounts
     ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bannings_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY bannings
+    ADD CONSTRAINT bannings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: callbacks_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY callbacks
+    ADD CONSTRAINT callbacks_pkey PRIMARY KEY (id);
 
 
 --
@@ -498,6 +654,14 @@ ALTER TABLE ONLY identities
 
 ALTER TABLE ONLY identity_ips
     ADD CONSTRAINT identity_ips_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+ALTER TABLE ONLY locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
 
 
 --
@@ -559,6 +723,20 @@ CREATE INDEX index_accounts_on_realm_id ON accounts USING btree (realm_id);
 
 
 --
+-- Name: index_bannings_on_fingerprint_and_path; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_bannings_on_fingerprint_and_path ON bannings USING btree (fingerprint, path);
+
+
+--
+-- Name: index_callbacks_on_location_id; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE INDEX index_callbacks_on_location_id ON callbacks USING btree (location_id);
+
+
+--
 -- Name: index_domains_on_name; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
 --
 
@@ -605,6 +783,13 @@ CREATE INDEX index_identity_ips_on_address ON identity_ips USING btree (address)
 --
 
 CREATE INDEX index_identity_ips_on_identity_id ON identity_ips USING btree (identity_id);
+
+
+--
+-- Name: index_location_on_labels; Type: INDEX; Schema: public; Owner: checkpoint; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_location_on_labels ON locations USING btree (label_0, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8, label_9);
 
 
 --

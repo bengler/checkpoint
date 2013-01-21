@@ -1,5 +1,5 @@
 require 'simplecov'
-require './spec/mockcached'
+require 'memcache_mock'
 
 SimpleCov.add_filter 'spec'
 SimpleCov.add_filter 'config'
@@ -42,7 +42,7 @@ RSpec.configure do |c|
   end
   c.around(:each) do |example|
     clear_cookies if respond_to?(:clear_cookies)
-    $memcached = Mockcached.new
+    $memcached = MemcacheMock.new
     ActiveRecord::Base.connection.transaction do
       example.run
       raise ActiveRecord::Rollback
