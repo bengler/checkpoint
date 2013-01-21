@@ -1,0 +1,4 @@
+collection :callbacks => callbacks do |callback|
+  partial :callback, :callback => callback
+end
+

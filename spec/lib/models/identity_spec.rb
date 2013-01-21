@@ -129,6 +129,44 @@ describe Identity do
       end
     end
 
+    describe "#search" do
+      let :twitter_account do
+        Account.create!(:identity => someone,
+          :realm => realm,
+          :uid => '1',
+          :provider => 'twitter',
+          :nickname => 'tildetwitt',
+          :name => "Tilde Tjohei Nielsen Babar")
+      end
+      let :facebook_account do
+        Account.create!(:identity => someone,
+          :realm => realm,
+          :uid => '1',
+          :provider => 'facebook',
+          :nickname => 'tildeface',
+          :name => "Tilde Mehe Nielsen")
+      end
+
+      before(:each) do
+        twitter_account
+        facebook_account
+      end
+
+      it "finds users identity from accounts with fuzzy match" do
+        result = Identity.find_by_query("Tilde Nielsen")
+        result.length.should eq 1
+        result.first.accounts.map(&:nickname).sort.should == ['tildeface', 'tildetwitt']
+      end
+
+      it "finds users identity from accounts with exact match" do
+        result = Identity.find_by_query('"Tilde Nielsen"')
+        result.length.should eq 0
+        result = Identity.find_by_query('"Tilde Mehe Nielsen"')
+        result.length.should eq 1
+      end
+
+    end
+
     describe "#root?" do
       let(:root) { Realm.create!(:label => 'root') }
 
