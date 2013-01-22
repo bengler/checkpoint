@@ -79,6 +79,8 @@ class CheckpointV1 < Sinatra::Base
   # @example /api/checkpoint/v1/identities/find?q=Tilde%20Nielsen
   # @http GET
   # @required [String] q
+  # @optional [Integer] limit The maximum amount of posts to return.
+  # @optional [Integer] offset The index of the first result to return (for pagination).
   # @status 200 [JSON]
 
   get '/identities/find' do

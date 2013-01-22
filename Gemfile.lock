@@ -144,7 +144,7 @@ GEM
     pebbles-path (0.0.3)
       pebbles-uid (>= 0.0.6)
     pebbles-uid (0.0.9)
-    petroglyph (0.0.3)
+    petroglyph (0.0.6)
       tilt
     pg (0.13.2)
     queryparams (0.0.3)

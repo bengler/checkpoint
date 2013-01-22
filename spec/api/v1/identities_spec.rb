@@ -302,6 +302,18 @@ describe "Identities" do
         :name => 'Tilde Nielsen')
     end
 
+    let(:foobar_account) do
+      identity = Identity.create!(:realm => realm)
+      Account.create!(:identity => identity,
+        :realm => realm,
+        :provider => 'twitter',
+        :uid => '2',
+        :token => 'token',
+        :secret => 'secret',
+        :nickname => 'foobar',
+        :name => 'Foo Nielsen Bar')
+    end
+
     describe "security" do
       it "is only available for gods on the realm" do
         get "/identities/find", :q => "foo", :session => "bar"
@@ -314,14 +326,23 @@ describe "Identities" do
     end
 
     describe "query" do
-      it "finds identities and accounts" do
-        identity = Identity.create!(:realm => realm)
-        session = Session.create!(:identity => identity)
+      before(:each) do
         tilde_account
+        foobar_account
+      end
+      it "finds identities and accounts" do
         get "/identities/find", :q => "tilde", :session => god_session
         identities = JSON.parse(last_response.body)["identities"]
         identities.count.should eq 1
         identities.first['profile']['name'].should eq "Tilde Nielsen"
+      end
+      it "paginates" do
+        get "/identities/find", :q => "nielsen", :session => god_session
+        identities = JSON.parse(last_response.body)["identities"]
+        identities.count.should eq 2
+        get "/identities/find", :q => "nielsen", :session => god_session, :limit => 1
+        identities = JSON.parse(last_response.body)["identities"]
+        identities.count.should eq 1
       end
     end
   end

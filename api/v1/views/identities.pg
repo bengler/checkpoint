@@ -5,3 +5,8 @@ collection :identities => identities do |identity|
     node :identity => {}
   end
 end
+if defined? pagination and pagination
+  node :pagination => pagination do
+    attributes :limit, :offset, :last_page
+  end
+end
