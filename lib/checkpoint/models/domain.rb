@@ -31,7 +31,7 @@ class Domain < ActiveRecord::Base
             begin
               ips = TCPSocket.gethostbyname(SimpleIDN.to_ascii(host_name))
               ips.select! { |s| s.is_a?(String) && ip_address?(s) }
-              domain = Domain.where(:name => ips).first
+              domain = Domain.where(:name => ips).first if ips.any?
             rescue SocketError => e
               logger.error("Socket error resolving #{host_name}")
             end
