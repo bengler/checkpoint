@@ -46,10 +46,10 @@ class Domain < ActiveRecord::Base
     # Check that name is RFC-compliant with regard to length and permitted characters.
     def valid_name?(name)
       name &&
-        ip_address?(name) ||
-        (name.length <= RFC_NAME_LIMIT &&
-        name.split('.').map(&:length).max <= RFC_NAME_LABEL_LIMIT &&
-        SimpleIDN.to_ascii(name) =~ RFC_NAME_PATTERN)
+        (ip_address?(name) ||
+          (name.length <= RFC_NAME_LIMIT &&
+          name.split('.').map(&:length).max <= RFC_NAME_LABEL_LIMIT &&
+          SimpleIDN.to_ascii(name) =~ RFC_NAME_PATTERN))
     end
 
     # Is this an IPv4 address?
