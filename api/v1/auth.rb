@@ -75,7 +75,7 @@ class CheckpointV1 < Sinatra::Base
     redirect_to_path = ensure_valid_redirect_path || '/'
     anonymous_identity ||= Identity.create!(:realm => current_realm)
     log_in(anonymous_identity)
-    return 200, "Logged in" if request.xhr?
+    halt 200, {status: "Logged in"}.to_json if request.xhr?
     redirect redirect_to_path
   end
 
@@ -182,6 +182,7 @@ class CheckpointV1 < Sinatra::Base
   post '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
+    halt 200, {status: "Logged out"}.to_json if request.xhr?
     redirect params[:redirect_to] || request.referer
   end
 
