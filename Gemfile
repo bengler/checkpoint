@@ -4,11 +4,6 @@ gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'rack-contrib'
 
-# Because of a bug in rack-protection (https://github.com/rkh/rack-protection/commit/a91810fa) that affects
-# cors-requests we'll need to get rack-protection from github
-# This can safely be changed to the official rubygems version '> 1.2.0' whenever it is released
-gem 'rack-protection', :git => 'git://github.com/rkh/rack-protection.git'
-
 gem 'activerecord', :require => 'active_record'
 gem 'activesupport'
 gem 'pg'
@@ -30,7 +25,6 @@ gem 'thor'
 gem 'unicorn', '~> 4.1.1'
 gem 'petroglyph'
 gem 'rake'
-gem 'rack', '~> 1.4', :git => 'git://github.com/rack/rack.git'
 gem 'queryparams'
 gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
 gem 'simpleidn', '~> 0.0.4'
