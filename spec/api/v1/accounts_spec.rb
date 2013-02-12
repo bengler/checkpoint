@@ -152,10 +152,11 @@ describe "Accounts" do
 
     context 'when account already exists' do
       it 'updates the account' do
-        post "/identities/#{identity.id}/accounts/twitter/1", {:nickname => 'bob', :session => god_session},
+        post "/identities/#{identity.id}/accounts/twitter/1", {:nickname => 'bob', :profile_url => "http://wired.com", :session => god_session},
           {'HTTP_HOST' => realm.primary_domain_name}
         account.reload
         account.nickname.should == 'bob'
+        account.profile_url.should == 'http://wired.com'
       end
     end
 
