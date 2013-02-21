@@ -2,7 +2,7 @@ class CheckpointV1 < Sinatra::Base
 
   # @apidoc
   # Perform all relevant callbacks checking if the provided action is allowed for the current
-  # identity. The vertict is returned in the 'allowed' parameter. If the action is disallowed
+  # identity. The verdict is returned in the 'allowed' parameter. If the action is disallowed
   # the reason is provided in the 'reason' field and the url of the denying callback will be in
   # the 'url'-field.
   #
@@ -68,8 +68,8 @@ class CheckpointV1 < Sinatra::Base
   # @path /api/checkpoint/v1/callbacks
   # @http POST
   # @example /api/checkpoint/v1/callbacks
-  # @required [String] callback.path The path the callback shall protect
-  # @required [String] callback.url The url to be notified
+  # @required [String] callback.path The path the callback shall protect.
+  # @required [String] callback.url The url which will allow/disallow an action.
   # @status 201 [Attributes of callback]
   # @status 403 You are not god
   # @status 404 No such realm
