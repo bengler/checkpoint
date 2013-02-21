@@ -27,16 +27,12 @@ describe Callback do
 
     before :each do
       # A callback that accepts everything
-      stub_http_request(:any, "http://yay.org/").
-        with(:body => "{\"method\":\"create\",\"identity\":7,\"uid\":\"post.blog:a.b.c.d.e\"}",
-          :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+      stub_http_request(:get, "http://yay.org/?identity=7&method=create&uid=post.blog:a.b.c.d.e").
          to_return(:status => 200, :body => '{"allow":true}',
            :headers => {'Content-Type' => 'application/json'})
 
       # A callback that accepts nothing
-      stub_http_request(:any, "http://nay.org/").
-        with(:body => "{\"method\":\"create\",\"identity\":7,\"uid\":\"post.blog:a.b.c.d.e\"}",
-          :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+      stub_http_request(:get, "http://nay.org/?identity=7&method=create&uid=post.blog:a.b.c.d.e").
          to_return(:status => 200, :body => '{"allow":false, "reason": "You are not worthy"}',
            :headers => {'Content-Type' => 'application/json'})
     end
