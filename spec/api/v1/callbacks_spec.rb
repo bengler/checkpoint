@@ -56,6 +56,16 @@ describe "Identities" do
     callback.path.should eq "area51.a.b.c"
   end
 
+  it "does not create a callback if an identical allready exists" do
+    path = "area51.a.b.c"
+    url = "http://example.org"
+    Callback.create!(:path => path, :url => url)
+    count = Callback.count
+    post "/callbacks", :session => god_session, :callback => { :path => path, :url => url}
+    last_response.status.should eq 200
+    Callback.count.should eq count
+  end
+
   it "can provide a list of callbacks" do
     callback1 = Callback.create!(:path => "area51.a.b.c", :url => "http://example.org/1")
     callback2 = Callback.create!(:path => "area51.a.b.d", :url => "http://example.org/2")
