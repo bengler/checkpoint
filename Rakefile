@@ -21,10 +21,6 @@ namespace :db do
     Rake::Task['db:test:prepare'].invoke
   end
 
-  task :migrate => :environment do
-    Rake::Task["db:structure:dump"].invoke
-  end
-
   desc "nuke db, recreate, run migrations"
   task :nuke do
     name = "checkpoint"
