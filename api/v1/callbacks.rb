@@ -19,6 +19,7 @@ class CheckpointV1 < Sinatra::Base
 
   get "/callbacks/allowed/:method/:uid" do
     params[:identity] ||= current_identity.try(:id)
+    params[:session] ||= current_session.key
     params.delete('splat')
     params.delete('captures')
     if banned_path = Banning.banned?(params.to_options)
@@ -64,6 +65,7 @@ class CheckpointV1 < Sinatra::Base
   # @apidoc
   # Create a callback. Requires god permissions.
   #
+  # @note This method does nothing if a callback allready exists for the provided params.
   # @category Checkpoint/Callbacks
   # @path /api/checkpoint/v1/callbacks
   # @http POST
@@ -82,10 +84,16 @@ class CheckpointV1 < Sinatra::Base
     realm = Realm.find_by_label(realm_label)
     halt 404, "No such realm (#{realm_label})" unless realm
     check_god_credentials(realm.id)
-    callback = Callback.create!(
-      :path => attributes[:path],
-      :url => attributes[:url])
-    [201, pg(:callback, :locals => { :callback => callback })]
+
+    status = 200
+    callback = Callback.where(:path => attributes[:path], :url => attributes[:url]).first
+    unless callback
+      callback = Callback.create!(
+        :path => attributes[:path],
+        :url => attributes[:url])
+      status = 201
+    end
+    [status, pg(:callback, :locals => { :callback => callback })]
   end
 
   # @apidoc
