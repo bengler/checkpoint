@@ -73,6 +73,10 @@ class CheckpointV1 < Sinatra::Base
   end
 
   helpers do
+    def logger
+      LOGGER
+    end
+
     # Is the current host the realm's primary domain?
     def on_primary_domain?
       current_realm && request.host == current_realm.primary_domain_name
@@ -191,6 +195,7 @@ class CheckpointV1 < Sinatra::Base
 
     # A redirect that can redirect across domains while maintaining the current session
     def transfer(url)
+      logger.info "Transfer to #{url.inspect}"
       target_host = URI.parse(url).host
       if target_host.nil? || target_host == request.host
         # This can be solved with the common household redirect
@@ -202,7 +207,7 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def redirect_with_logging(url)
-      LOGGER.info "Redirecting to #{url}"
+      logger.info "Redirecting to #{url}"
       redirect_without_logging(url)
     end
     alias_method_chain :redirect, :logging
