@@ -33,7 +33,7 @@ describe Callback do
 
       # A callback that accepts nothing
       stub_http_request(:get, "http://nay.org/?identity=7&method=create&uid=post.blog:a.b.c.d.e").
-         to_return(:status => 200, :body => '{"allow":false, "reason": "You are not worthy"}',
+         to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
            :headers => {'Content-Type' => 'application/json'})
     end
 
