@@ -56,6 +56,16 @@ describe "Identities" do
     callback.path.should eq "area51.a.b.c"
   end
 
+  it "does not create a callback if an identical allready exists" do
+    path = "area51.a.b.c"
+    url = "http://example.org"
+    Callback.create!(:path => path, :url => url)
+    count = Callback.count
+    post "/callbacks", :session => god_session, :callback => { :path => path, :url => url}
+    last_response.status.should eq 200
+    Callback.count.should eq count
+  end
+
   it "can provide a list of callbacks" do
     callback1 = Callback.create!(:path => "area51.a.b.c", :url => "http://example.org/1")
     callback2 = Callback.create!(:path => "area51.a.b.d", :url => "http://example.org/2")
@@ -97,15 +107,14 @@ describe "Identities" do
 
     before :each do
       # A callback that accepts nothing
-      stub_http_request(:any, "http://nay.org/").
-        with(:body => "{\"identity\":\"7\",\"method\":\"create\",\"uid\":\"post.blog:area51.b.c.d.e\"}",
-              :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
-         to_return(:status => 200, :body => '{"allow":false, "reason": "You are not worthy"}',
+      stub_request(:get, "http://nay.org/?identity=7&method=create&session=#{stranger_session}&uid=post.blog:area51.b.c.d.e").
+         to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
            :headers => {'Content-Type' => 'application/json'})
+
     end
 
     it "specifies default rules if there are no callbacks" do
-      get "/callbacks/allowed/create/post.blog:area51.b.c"
+      get "/callbacks/allowed/create/post.blog:area51.b.c", :session => stranger_session
       last_response.status.should eq 200
       result = JSON.parse(last_response.body)
       result['allowed'].should eq 'default'
@@ -113,7 +122,7 @@ describe "Identities" do
 
     it "denies with a reason" do
       Callback.create!(:path => "area51.b.c", :url => "http://nay.org")
-      get "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7
+      get "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7, :session => stranger_session
       last_response.status.should eq 200
       result = JSON.parse(last_response.body)
       result['allowed'].should be_false
