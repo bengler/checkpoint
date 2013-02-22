@@ -22,6 +22,7 @@ namespace :db do
   end
 
   task :migrate => :environment do
+    Rake::Task["db:structure:dump"].invoke
   end
 
   desc "nuke db, recreate, run migrations"
