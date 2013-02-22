@@ -19,6 +19,7 @@ class CheckpointV1 < Sinatra::Base
 
   get "/callbacks/allowed/:method/:uid" do
     params[:identity] ||= current_identity.try(:id)
+    params[:session] ||= current_session.key
     params.delete('splat')
     params.delete('captures')
     if banned_path = Banning.banned?(params.to_options)

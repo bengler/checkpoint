@@ -29,9 +29,9 @@ class Callback < ActiveRecord::Base
     urls_for_path(path).each do |url|
       response = Pebblebed::Http.get(url, params)
       record = JSON.parse(response.body)
-      next unless record.keys.include?('allow') # skip if there is no allow key in the response
+      next unless record.keys.include?('allowed') # skip if there is no allow key in the response
       # If dissallowed, return with the denying callback and reason supplied (if any)
-      if record['allow']
+      if record['allowed']
         allow = true
       else
         # Terminate immediately if any callback wants to deny the action
