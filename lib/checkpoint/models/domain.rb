@@ -19,6 +19,9 @@ class Domain < ActiveRecord::Base
     unless Domain.valid_name?(name)
       record.errors.add(attr, :invalid_name)
     end
+    if SimpleIDN.to_ascii(name) != name
+      record.errors.add(attr, :must_be_idn)
+    end
   end
 
   class << self

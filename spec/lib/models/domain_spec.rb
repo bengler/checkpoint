@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe Domain do
@@ -15,6 +17,14 @@ describe Domain do
 
   it 'accepts IP addresses' do
     Domain.new(:realm => realm, :name => '127.0.0.1').valid?.should == true
+  end
+
+  describe 'Validation' do
+    it 'rejects non-IDN names' do
+      domain = Domain.new(realm: realm, name: "frøhø")
+      domain.valid?.should == false
+      domain.errors[:name][0].should =~ /must_be_idn/  # FIXME: No i18n yet
+    end
   end
 
   describe '#resolve_from_host_name' do
