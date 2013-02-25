@@ -5,13 +5,10 @@ require 'bengler_test_helper/tasks'
 
 task :environment do
   require 'config/environment'
-  if ActiveRecord::Base.logger
-    ActiveRecord::Base.logger.level = Logger::INFO
-  end
+  ActiveRecord::Base.logger.level = Logger::INFO if ActiveRecord::Base.logger
 end
 
 namespace :db do
-
   desc "bootstrap db user, recreate, run migrations"
   task :bootstrap do
     name = "checkpoint"
@@ -21,9 +18,7 @@ namespace :db do
     Rake::Task['db:test:prepare'].invoke
   end
 
-  task :migrate => :environment do
-    Rake::Task["db:structure:dump"].invoke
-  end
+  task :migrate => :environment
 
   desc "nuke db, recreate, run migrations"
   task :nuke do
@@ -33,7 +28,6 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
   end
-
 end
 
 namespace :maintenance do
@@ -52,4 +46,3 @@ namespace :maintenance do
     Identity.connection.execute("delete from identity_ips where created_at < now() - interval '30 days'")
   end
 end
-

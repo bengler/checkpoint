@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/bengler/bengler_test_helper.git
-  revision: e9258320a096beeaa6b1bdae33252f290886f9bd
+  revision: 4bb1bbcc3548ca14ffbbd8020a3a9f4b5b9d02f0
   specs:
     bengler_test_helper (0.0.2)
 
