@@ -2,7 +2,7 @@
 
 Checkpoint is a centralized authentication broker for web applications that supports a number of authentication mechanisms via an http interface. Checkpoint can take care of logging your users into your application and keep track of session and access privileges across services.
 
-[![Build Status](https://semaphoreapp.com/projects/1534/branches/27033)](https://semaphoreapp.com/api/v1/projects/4e82122fc31c2c679be6aaded3ebc29929c12dcc/27033/badge.png)
+[![Build Status](https://semaphoreapp.com/api/v1/projects/4e82122fc31c2c679be6aaded3ebc29929c12dcc/27033/badge.png)](https://semaphoreapp.com/projects/1534/branches/27033)
 
 ## Concepts
 
