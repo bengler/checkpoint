@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-activerecord'
@@ -22,7 +22,6 @@ gem 'pebbles-path', '>=0.0.3'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'dalli', '~> 2.1.0'
 gem 'thor'
-gem 'unicorn', '~> 4.1.1'
 gem 'petroglyph'
 gem 'rake'
 gem 'queryparams'
@@ -31,7 +30,6 @@ gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
 gem 'ar-tsvectors', '~> 0.0.1', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
-gem 'airbrake', '~> 3.1.4', :require => false
 
 group :development, :test do
   gem 'simplecov'
@@ -41,4 +39,9 @@ group :development, :test do
   gem 'timecop', '~> 0.3.5'
   gem 'rack-test'
   gem "memcache_mock"
+end
+
+group :production do
+  gem 'airbrake', '~> 3.1.4', :require => false
+  gem 'unicorn', '~> 4.1.1'
 end

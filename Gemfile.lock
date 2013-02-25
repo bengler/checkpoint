@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/bengler/bengler_test_helper.git
-  revision: ea72fe8f186fb057aa07ddfc87c21ddb0e9725d4
+  revision: fefbe789aa2ad05e040971b5e6e4fc201205bef4
   specs:
     bengler_test_helper (0.0.2)
 
@@ -58,7 +58,7 @@ GIT
       omniauth (~> 1.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.11)
       activesupport (= 3.2.11)
