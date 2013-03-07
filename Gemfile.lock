@@ -109,15 +109,15 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
-    omniauth (1.0.3)
+    omniauth (1.1.3)
       hashie (~> 1.2)
       rack
-    omniauth-facebook (1.2.0)
-      omniauth-oauth2 (~> 1.0.0)
+    omniauth-facebook (1.4.1)
+      omniauth-oauth2 (~> 1.1.0)
     omniauth-google-oauth2 (0.1.10)
       omniauth (~> 1.0)
       omniauth-oauth2
-    omniauth-oauth2 (1.0.3)
+    omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     pathbuilder (0.0.2)
@@ -195,9 +195,9 @@ DEPENDENCIES
   curb (>= 0.7.14)
   dalli (~> 2.1.0)
   memcache_mock
-  omniauth (~> 1.0.2)
+  omniauth (~> 1.1.3)
   omniauth-contrib (~> 1.0.0)!
-  omniauth-facebook (~> 1.2.0)
+  omniauth-facebook (~> 1.4.1)
   omniauth-google-oauth2 (~> 0.1.10)
   omniauth-oauth (~> 1.0.0)!
   omniauth-origo (~> 1.0.0.rc3)!
