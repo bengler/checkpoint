@@ -35,7 +35,7 @@ class CheckpointV1 < Sinatra::Base
   put "/bannings/:path/identities/:identity" do |path, identity|
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
-    halt 403, "Identity and path is in different realms" unless path.split('.').first == identity.realm.label
+    check_path_in_realm(path, identity.realm)
     check_god_credentials(identity.realm.id)
     halt 400, "Unable to ban identity. No fingerprints!" if identity.fingerprints.empty?
 
