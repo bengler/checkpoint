@@ -25,13 +25,13 @@ gem 'thor'
 gem 'petroglyph'
 gem 'rake'
 gem 'queryparams'
-gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
 gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
 gem 'ar-tsvectors', '~> 0.0.1', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
 
 group :development, :test do
+  gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
   gem 'simplecov'
   gem 'rspec', '~> 2.8'
   gem 'webmock', '~> 1.8.11'
