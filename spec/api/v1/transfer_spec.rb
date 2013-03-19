@@ -91,17 +91,17 @@ describe "Transfers" do
     it "receives a transfer at the destination domain, sets the session key and redirects to the final target" do
       get "/transfer", {:target => target_url, :session => session.key},
         {'HTTP_HOST' => target_domain.name}
-      last_response.status.should eq 302
+      last_response.status.should eq 200
       last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=specialsecretsession/
-      last_response.location.should eq target_url
+      last_response.body.scan(URI.escape(target_url)).length.should > 0
     end
 
     it "receives a transfer at the destination domain, sets the session key even if it's invalid, and redirects to the final target" do
       get "/transfer", {:target => target_url, :session => 'i_do_not_exist'},
         {'HTTP_HOST' => target_domain.name}
-      last_response.status.should eq 302
+      last_response.status.should eq 200
       last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=i_do_not_exist/
-      last_response.location.should eq target_url
+      last_response.body.scan(URI.escape(target_url)).length.should > 0
     end
   end
 end

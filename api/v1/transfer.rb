@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'uri'
 
 class CheckpointV1 < Sinatra::Base
@@ -54,7 +56,25 @@ class CheckpointV1 < Sinatra::Base
     else
       # We have arrived at the target domain.
       set_session_key(params[:session]) if params[:session]
-      redirect target_url.to_s
+      # redirect target_url.to_s
+
+      # Setting cookies while redirecting failed on some browsers (Safari 5, IE6/7) because of a browser bug or
+      # misguided policy. This is a hack to work around that.
+      escaped_url = URI.escape(target_url.to_s)
+      <<-END
+        <html>
+          <head>
+            <meta http-equiv="refresh" content="0;#{escaped_url}"/>
+          </head>
+          <script>
+            window.location="#{escaped_url}";
+          </script>
+          <body>
+            <p>Du videresendes &hellp; <a href="#{escaped_url}">Klikk her for å fortsette</a></p>
+            <p>You are being forwarded &hellp; <a href="#{escaped_url}">Click here to continue.</a></p>
+          </body>
+        </html>
+      END
     end
   end
 
