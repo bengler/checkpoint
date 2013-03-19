@@ -59,6 +59,8 @@ For each account registered with an identity, one or more *fingerprints* are rec
 
 The fingerprint obscures the original details but still permits the application to determine if a future credential has been fingerprinted, thus making it possible to ban Twitter users, mobile numbers, etc. without having the original information at hand.
 
+Checkpoint exposes an API that can be used to check for banned fingerprints. This API uses the Pebblebed path system, so that the banning system can be used not only for blocking logins, but for fine-grained access control such as blocking users from posting in a forum.
+
 ## Callbacks
 
 Pebbles have default rules guarding who gets to do what to a given object. Callbacks allow implementation of custom policies for creating, updating and deleting objects.

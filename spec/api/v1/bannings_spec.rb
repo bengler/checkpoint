@@ -15,6 +15,12 @@ describe "Bannings" do
     realm
   end
 
+  let :other_realm do
+    realm = Realm.create!(:label => "area52")
+    Domain.create!(:realm => realm, :name => 'example.com')
+    realm
+  end
+
   let :someone do
     Identity.create!(:realm => realm)
   end
@@ -46,17 +52,76 @@ describe "Bannings" do
     result
   end
 
-  it "will get a list of relevant bans complete with identities" do
-    crook
-    banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
-    banning2 = Banning.declare!(:path => "area51.z.m.q", :fingerprint => 'fingerprint1')
-    get '/bannings/area51.a.b.c.d.e', :session => somegod_session
-    response = JSON.parse(last_response.body)
-    response['bannings'].size.should eq 1
-    banning = response['bannings'].first['banning']
-    banning['path'].should eq 'area51.a.b.c'
-    banning['identities'].size.should eq 1
-    banning['identities'].first['identity']['id'].should eq crook.id
+  describe 'GET /bannings/:path' do
+    context 'when god' do
+      it "will get a list of relevant bans complete with identities" do
+        crook
+        banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
+        banning2 = Banning.declare!(:path => "area51.z.m.q", :fingerprint => 'fingerprint1')
+        get '/bannings/area51.a.b.c.d.e', :session => somegod_session
+        response = JSON.parse(last_response.body)
+        response['bannings'].size.should eq 1
+        banning = response['bannings'].first['banning']
+        banning['path'].should eq 'area51.a.b.c'
+        banning['identities'].size.should eq 1
+        banning['identities'].first['identity']['id'].should eq crook.id
+      end
+
+      it 'can filter on identity' do
+        crook2 = Identity.new(:realm => realm)
+        crook2.send(:fingerprints=, ['fingerprint2'])
+        crook2.save!
+
+        Banning.declare!(path: "area51", fingerprint: crook2.fingerprints.first)
+        Banning.declare!(path: "area51", fingerprint: crook.fingerprints.first)
+
+        get '/bannings/area51',
+          session: somegod_session,
+          identity_id: crook.id
+        response = JSON.parse(last_response.body)
+        response['bannings'].size.should eq 1
+        banning = response['bannings'].first['banning']
+        banning['path'].should eq 'area51'
+        banning['identities'].size.should eq 1
+        banning['identities'].first['identity']['id'].should eq crook.id
+
+        get '/bannings/area51',
+          session: somegod_session,
+          identity_id: crook2.id
+        response = JSON.parse(last_response.body)
+        response['bannings'].size.should eq 1
+        banning = response['bannings'].first['banning']
+        banning['path'].should eq 'area51'
+        banning['identities'].size.should eq 1
+        banning['identities'].first['identity']['id'].should eq crook2.id
+      end
+
+      it 'fails with 403 if identity belongs to other realm' do
+        foreigner = Identity.new(:realm => other_realm)
+        foreigner.send(:fingerprints=, ['fingerprint1'])
+        foreigner.save!
+
+        get '/bannings/area51',
+          session: somegod_session,
+          identity_id: foreigner.id
+        last_response.status.should eq 403
+      end
+
+      it 'fails if identity does not exist' do
+        get '/bannings/area51',
+          session: somegod_session,
+          identity_id: 0
+        last_response.status.should eq 404
+      end
+    end
+
+    context 'when not god' do
+      it 'should fail with 403' do
+        crook
+        get '/bannings/area51.a.b.c.d.e', :session => someone_session
+        last_response.status.should eq 403
+      end
+    end
   end
 
   it "will create a ban, deleting any shadowed bans" do

@@ -4,16 +4,23 @@ class CheckpointV1 < Sinatra::Base
   # Get all effective bans for a given path
   #
   # @category Checkpoint/Bannings
+  # @param identity_id Filter list by an identity. This can be used to quickly determine 
+  #   if an identity is banned for the given path.
   # @path /api/checkpoint/v1/bannings/:path
   # @http GET
-
   get "/bannings/:path" do |path|
     check_god_credentials
-    unless path.split('.').first == current_realm.label
-      halt 403, "The path #{path} is not in this realm (#{current_realm.label})"
-    end
+    check_path_in_realm(path)
+
     bannings = Banning.by_path("^#{path}")
-    pg :bannings, :locals => { :bannings => bannings }
+    if params[:identity_id]
+      identity = Identity.where(id: params[:identity_id]).first
+      halt 404, "No such identity" unless identity
+      check_path_in_realm(path, identity.realm)
+      bannings = bannings.where("fingerprint in (?)", identity.fingerprints)
+    end
+
+    pg :bannings, locals: {bannings: bannings}
   end
 
   # @apidoc
@@ -28,7 +35,7 @@ class CheckpointV1 < Sinatra::Base
   put "/bannings/:path/identities/:identity" do |path, identity|
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
-    halt 403, "Identity and path is in different realms" unless path.split('.').first == identity.realm.label
+    check_path_in_realm(path, identity.realm)
     check_god_credentials(identity.realm.id)
     halt 400, "Unable to ban identity. No fingerprints!" if identity.fingerprints.empty?
 
@@ -51,13 +58,20 @@ class CheckpointV1 < Sinatra::Base
   delete "/bannings/:path/identities/:identity" do |path, identity|
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
-    halt 400, "Identity and path is of different realms" unless path.split('.').first == identity.realm.label
+
+    check_path_in_realm(path, identity.realm)
     check_god_credentials(identity.realm.id)
 
-    bannings = Banning.where(["fingerprint in (?)", identity.fingerprints]).by_path("^#{path}")
+    bannings = Banning.where("fingerprint in (?)", identity.fingerprints).by_path("^#{path}")
     bannings.map(&:destroy)
 
     pg :bannings, :locals => {:bannings => bannings}
+  end
+
+  def check_path_in_realm(path, realm = current_realm)
+    unless path.split('.').first == realm.label
+      halt 403, "The path #{path} is not in correct realm (#{realm.label})"
+    end
   end
 
 end
