@@ -157,7 +157,11 @@ class CheckpointV1 < Sinatra::Base
       return
     end
 
-    transfer session[:redirect_to]
+    if (url = session[:redirect_to])
+      transfer(url)
+    else
+      halt 500, "Your browser has issues with cookies, which are required to log in."
+    end
   end
 
   get '/auth/failure' do
