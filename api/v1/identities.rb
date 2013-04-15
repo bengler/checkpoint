@@ -44,7 +44,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 201 [JSON]
 
   post '/identities' do
-    check_god_credentials(current_realm.id)
+    check_god_credentials
 
     identity = create_identity(params['identity'], params['account'])
     [201, pg(:identity, :locals => {:identity => identity})]
@@ -63,7 +63,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON]
 
   put '/identities/:id' do |id|
-    check_god_credentials(current_realm.id)
+    check_god_credentials
     identity = Identity.find(id)
     identity.update_attributes!(params[:identity])
     pg :identity, :locals => {:identity => identity}
@@ -86,7 +86,7 @@ class CheckpointV1 < Sinatra::Base
   get '/identities/find' do
     if params[:q] and !params[:q].strip.blank?
       require_god
-      check_god_credentials(current_realm.id)
+      check_god_credentials
       identities, pagination = limit_offset_collection(Identity.find_by_query(params[:q]).
         where("identities.realm_id = ?", current_realm.id).
           order("identities.updated_at DESC"), :limit => params['limit'], :offset => params['offset'])
