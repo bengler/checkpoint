@@ -70,7 +70,7 @@ describe "Authorizations" do
         get '/auth/twitter'
         get '/auth/twitter/callback'
         last_response.status.should eq 302
-        last_response.header['Location'].should eq "/auth/failure?message=invalid_credentials"
+        last_response.header['Location'].should eq "/auth/failure?message=invalid_credentials&strategy=twitter"
         get "/auth/failure", :message => 'invalid_credentials'
         last_response.status.should eq 302
         last_response.header['Location'].should =~ %r{http://example.org/login/failed}
