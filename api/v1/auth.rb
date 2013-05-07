@@ -106,6 +106,7 @@ class CheckpointV1 < Sinatra::Base
     target_url.scheme ||= request.scheme
 
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
+    session[:display] = params[:display]
 
     if on_primary_domain?
       session[:redirect_to] = target_url.to_s
@@ -128,6 +129,7 @@ class CheckpointV1 < Sinatra::Base
     service_keys = current_realm.keys_for(params[:provider].to_sym)
 
     strategy.options[:force_dialog] = session[:force_dialog]
+    strategy.options[:display] = session[:display] if params[:provider] == 'facebook'
     strategy.options[:target_url] = session[:redirect_to]
 
     if strategy.options.respond_to?(:consumer_key)
@@ -140,10 +142,6 @@ class CheckpointV1 < Sinatra::Base
       halt 500, "Invalid strategy for provider: #{params[:provider]}"
     end
     strategy.options[:scope] = service_keys.scope if service_keys.scope
-
-    # TODO: Add detection of device to wisely choose whether we should ask for
-    # touch interface from facebook.
-    # strategy.options[:display] = "touch" if params[:provider] == "facebook"
   end
 
   get '/auth/:provider/callback' do
