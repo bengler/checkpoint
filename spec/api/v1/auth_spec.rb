@@ -52,6 +52,11 @@ describe "Authorizations" do
       decode_cookie(rack_mock_session.cookie_jar['checkpoint.cookie'])['redirect_to'].should eq('http://example.org/somewhere/else')
     end
 
+    it "(optionally) passes the display param" do
+      get '/login/facebook', :display => 'popup'
+      decode_cookie(rack_mock_session.cookie_jar['checkpoint.cookie'])['display'].should eq('popup')
+    end
+
     it "configures strategy and redirects to twitter" do
       keys = valid_realm.keys_for(:twitter)
       VCR.use_cassette("twitter_auth_setup") do
