@@ -83,12 +83,13 @@ class CheckpointV1 < Sinatra::Base
   # @status 409 You are not a god in this realm.
   # @status 201 OK
 
-  post '/realms/:label/domains/:name/origins' do |label, name, origin|
+  post '/realms/:label/domains/:name/origins' do |label, name|
+    halt 400, "param origin missing" unless params[:origin]
     realm = find_realm_by_label(label)
     check_god_credentials(realm.id)
     domain = Domain.find_by_name(name)
-    halt 403, "Domain is connected to realm '#{domain.realm.label}'" if domain && domain.realm != realm
-    domain.add_origin(origin)
+    halt 403, "Domain is connected to realm '#{domain.realm.label}'" if domain && domain.name != name
+    domain.add_origin(params[:origin])
     [201, pg(:domain, :locals => {:domain => domain})]
   end
 
@@ -131,7 +132,7 @@ class CheckpointV1 < Sinatra::Base
 
   delete '/realms/:label/domains/:name/origins/:origin' do |label, name, origin|
     domain = Domain.find_by_name(name)
-    halt 403, "Domain is connected to '#{domain.realm.label}'" unless domain.realm.label == labels
+    halt 403, "Domain is connected to '#{domain.realm.label}'" unless domain.realm.label == label
     check_god_credentials(domain.realm.id)
     domain.remove_origin(origin)
     halt 204

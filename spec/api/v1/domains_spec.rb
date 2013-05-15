@@ -58,17 +58,19 @@ describe "Domains" do
     result['domain']['realm'].should eq 'area51'
   end
 
-  it "tests if a domain is allows communication from another domain" do
-    realm = Realm.create!(:label => 'area51')
-    domain = Domain.create!(:name => 'example.org', :realm => realm)
-    get "/domains/example.org/allows/pinshing.com"
+  it "creates rules and tests if a host is allowed as an origin" do
+    domain = Domain.create!(:name => 'mystuff.com', :realm => realm)
+    get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
-    post "/domains/example.org/origins/pinshing.com"
-    get "/domains/example.org/allows/pinshing.com"
+    post "/realms/area51/domains/mystuff.com/origins", :origin => "pinshing.com", :session => somegod_session
+    last_response.status.should == 201
+    get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq true
-    delete "/domains/example.org/origins/pinshing.com"
+    delete "/realms/area51/domains/mystuff.com/origins/pinshing.com", :session => somegod_session
+    last_response.status.should == 204
+    get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
   end
