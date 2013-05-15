@@ -58,6 +58,21 @@ describe "Domains" do
     result['domain']['realm'].should eq 'area51'
   end
 
+  it "tests if a domain is allows communication from another domain" do
+    realm = Realm.create!(:label => 'area51')
+    domain = Domain.create!(:name => 'example.org', :realm => realm)
+    get "/domains/example.org/allows/pinshing.com"
+    result = JSON.parse(last_response.body)
+    result['allowed'].should eq false
+    post "/domains/example.org/origins/pinshing.com"
+    get "/domains/example.org/allows/pinshing.com"
+    result = JSON.parse(last_response.body)
+    result['allowed'].should eq true
+    delete "/domains/example.org/origins/pinshing.com"
+    result = JSON.parse(last_response.body)
+    result['allowed'].should eq false
+  end
+
   it "lets gods attach a new domain to a realm, but not reattach it to another realm" do
     post "/realms/area51/domains", :name => "ditto.org", :session => somegod_session
     last_response.status.should eq 201
