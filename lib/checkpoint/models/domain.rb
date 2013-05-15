@@ -24,6 +24,26 @@ class Domain < ActiveRecord::Base
     end
   end
 
+  def allow_origin?(origin)
+    origins.include?(SimpleIDN.to_ascii(origin))
+  end
+
+  def add_origin(origin)
+    if Domain.valid_name?(origin_host)
+      origin_host = SimpleIDN.to_ascii(origin)
+      origins << origin_host
+      save
+    end
+  end
+
+  def remove_origin(origin)
+    origin_host = SimpleIDN.to_ascii(origin)
+    if origins.include?(origin_host)
+      origins.delete(origin_host)
+      save
+    end
+  end
+
   class << self
     # Finds domain matching a host name.
     def resolve_from_host_name(host_name)
