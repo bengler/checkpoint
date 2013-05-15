@@ -27,7 +27,8 @@ class Domain < ActiveRecord::Base
   end
 
   def allow_origin?(origin)
-    origins.include?(SimpleIDN.to_ascii(origin))
+    all_hosts =  (realm.domains.map(&:name) << self.origins.to_a).compact.flatten.uniq
+    all_hosts.include?(SimpleIDN.to_ascii(origin))
   end
 
   def add_origin(origin)

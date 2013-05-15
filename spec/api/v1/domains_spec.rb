@@ -60,6 +60,9 @@ describe "Domains" do
 
   it "creates rules and tests if a host is allowed as an origin" do
     domain = Domain.create!(:name => 'mystuff.com', :realm => realm)
+    get "/domains/mystuff.com/allows/example.org"
+    result = JSON.parse(last_response.body)
+    result['allowed'].should eq true
     get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
