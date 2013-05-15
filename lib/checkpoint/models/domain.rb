@@ -13,7 +13,7 @@ class Domain < ActiveRecord::Base
     :dependent => :nullify
 
   after_save :ensure_primary_domain
-  
+
   validates :name, :presence => {}, :uniqueness => {}
   validates_each :name do |record, attr, name|
     unless Domain.valid_name?(name)
