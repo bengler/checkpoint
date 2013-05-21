@@ -142,6 +142,7 @@ class CheckpointV1 < Sinatra::Base
       halt 500, "Invalid strategy for provider: #{params[:provider]}"
     end
     strategy.options[:scope] = service_keys.scope if service_keys.scope
+    strategy.options[:client_options].site = service_keys.site if service_keys.site
   end
 
   get '/auth/:provider/callback' do

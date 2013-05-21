@@ -98,6 +98,7 @@ Tagging is entirely-freeform and can serve any purpose, however.
 
     $ ./bin/bootstrap
 
+
 The bootstrap script will check for dependencies and set up a development environment if PostgreSQL and Memcached are installed.
 
 ### Testing
@@ -105,3 +106,12 @@ The bootstrap script will check for dependencies and set up a development enviro
     $ bundle exec rake db:test:prepare
     $ bundle exec rspec spec
 
+### A note on configuring the Evernote strategy for sandbox use
+
+When developing evernote-apps you will typically start with a sandbox account. To make the auth-mechanism
+use your sandbox-account, add a site-key to the evernote service-keys, like this:
+
+    evernote:
+      consumer_key: <key>
+      consumer_secret: <secret>
+      site: 'https://sandbox.evernote.com'

@@ -15,6 +15,7 @@ gem 'omniauth-oauth', '~> 1.0.1', :git => 'git://github.com/intridea/omniauth-oa
 gem 'omniauth-oauth2', '~> 1.1.0', :git => 'git://github.com/intridea/omniauth-oauth2.git'
 gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/bengler/omniauth-origo.git'
 gem 'omniauth-vanilla', :git => 'git://github.com/bengler/omniauth-vanilla.git'
+gem 'omniauth-evernote'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
 gem 'pebblebed'
 gem 'pebbles-uid'
