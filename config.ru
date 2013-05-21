@@ -19,6 +19,7 @@ map "/api/checkpoint/v1" do
     provider :vanilla, nil, nil, :setup => true
     #provider :openid, nil, :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id'
     provider :google_oauth2, nil, nil, :setup => true
+    provider :evernote, nil, nil, :setup => true
 
     on_failure do |env|
       message_key = env['omniauth.error.type']
