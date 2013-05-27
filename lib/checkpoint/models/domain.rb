@@ -13,7 +13,9 @@ class Domain < ActiveRecord::Base
     :dependent => :nullify
 
   after_save :ensure_primary_domain
-  
+
+  ts_vector :origins
+
   validates :name, :presence => {}, :uniqueness => {}
   validates_each :name do |record, attr, name|
     unless Domain.valid_name?(name)
@@ -21,6 +23,27 @@ class Domain < ActiveRecord::Base
     end
     if SimpleIDN.to_ascii(name) != name
       record.errors.add(attr, :must_be_idn)
+    end
+  end
+
+  def allow_origin?(origin)
+    all_hosts =  (realm.domains.map(&:name) << self.origins.to_a).compact.flatten.uniq
+    all_hosts.include?(SimpleIDN.to_ascii(origin))
+  end
+
+  def add_origin(origin)
+    raise "Invalid origin #{origin}" unless Domain.valid_name?(origin)
+    self.origins = self.origins << SimpleIDN.to_ascii(origin)
+    save!
+  end
+
+  def remove_origin(origin)
+    origin_host = SimpleIDN.to_ascii(origin)
+    if self.origins.include?(origin_host)
+      self.origins = self.origins.to_a.select { |d| d != origin_host }
+      save
+    else
+      raise "Not found"
     end
   end
 
