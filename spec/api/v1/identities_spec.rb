@@ -315,12 +315,8 @@ describe "Identities" do
     end
 
     describe "security" do
-      it "is only available for gods on the realm" do
+      it "is available for everyone" do
         get "/identities/find", :q => "foo", :session => "bar"
-        last_response.status.should eq(403)
-      end
-      it "available when god" do
-        get "/identities/find", :q => "foo", :session => god_session
         last_response.status.should eq(200)
       end
     end
