@@ -23,4 +23,5 @@ $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
 
 Pebblebed.config do
   service :vanilla
+  service :checkpoint
 end
