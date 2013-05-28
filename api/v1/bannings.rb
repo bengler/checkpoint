@@ -33,10 +33,9 @@ class CheckpointV1 < Sinatra::Base
   # @http PUT
 
   put "/bannings/:path/identities/:identity" do |path, identity|
+    require_action_allowed(:moderate, "post.any:#{path}", :default => false)
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
-    check_path_in_realm(path, identity.realm)
-    check_god_credentials(identity.realm.id)
     halt 400, "Unable to ban identity. No fingerprints!" if identity.fingerprints.empty?
 
     bannings = identity.fingerprints.map do |fingerprint|
@@ -56,12 +55,9 @@ class CheckpointV1 < Sinatra::Base
   # @http DELETE
 
   delete "/bannings/:path/identities/:identity" do |path, identity|
+    require_action_allowed(:moderate, "post.any:#{path}", :default => false)
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
-
-    check_path_in_realm(path, identity.realm)
-    check_god_credentials(identity.realm.id)
-
     bannings = Banning.where("fingerprint in (?)", identity.fingerprints).by_path("^#{path}")
     bannings.map(&:destroy)
 

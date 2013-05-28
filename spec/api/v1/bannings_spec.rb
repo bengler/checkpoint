@@ -52,6 +52,13 @@ describe "Bannings" do
     result
   end
 
+  let(:checkpoint) {
+    checkpoint = stub
+    checkpoint.stub!(:service_url => 'http://example.com')
+    checkpoint
+  }
+
+
   describe 'GET /bannings/:path' do
     context 'when god' do
       it "will get a list of relevant bans complete with identities" do
@@ -127,6 +134,9 @@ describe "Bannings" do
   it "will create a ban, deleting any shadowed bans" do
     Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b.d", :fingerprint => 'fingerprint1')
+    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a").and_return(DeepStruct.wrap(:allowed => true))
+    Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
+
     put "/bannings/area51.a/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 201
     Banning.count.should eq 1
@@ -137,6 +147,8 @@ describe "Bannings" do
   it "will not create a ban if more general ban is allready in place" do
     crook
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
+    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c").and_return(DeepStruct.wrap(:allowed => true))
+    Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
     put "/bannings/area51.a.b.c/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 201
     Banning.count.should eq 1
@@ -148,6 +160,8 @@ describe "Bannings" do
     crook.save!
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b", :fingerprint => 'fingerprint2')
+    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
+    Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
     delete "/bannings/area51.a.b.c.d.e/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 200
     Banning.count.should eq 0
