@@ -13,6 +13,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 404 No such identity.
   # @status 403 This is not you or you are not god!
   get '/identities/:id/accounts' do |id|
+    require_identity
     if id == 'me'
       @identity = current_identity
     else
