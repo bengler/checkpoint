@@ -600,7 +600,7 @@ http_interactions:
   recorded_at: Mon, 03 Sep 2012 11:18:41 GMT
 - request:
     method: get
-    uri: https://api.twitter.com/1/account/verify_credentials.json
+    uri: https://api.twitter.com/1.1/account/verify_credentials.json?include_entities=false&skip_status=true
     body:
       encoding: US-ASCII
       string: ''
