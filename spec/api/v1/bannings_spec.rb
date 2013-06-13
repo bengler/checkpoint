@@ -60,11 +60,15 @@ describe "Bannings" do
 
 
   describe 'GET /bannings/:path' do
-    context 'when god' do
+    context 'when moderator' do
       it "will get a list of relevant bans complete with identities" do
         crook
         banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
         banning2 = Banning.declare!(:path => "area51.z.m.q", :fingerprint => 'fingerprint1')
+
+        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
+        Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
+
         get '/bannings/area51.a.b.c.d.e', :session => somegod_session
         response = JSON.parse(last_response.body)
         response['bannings'].size.should eq 1
@@ -81,6 +85,9 @@ describe "Bannings" do
 
         Banning.declare!(path: "area51", fingerprint: crook2.fingerprints.first)
         Banning.declare!(path: "area51", fingerprint: crook.fingerprints.first)
+
+        checkpoint.should_receive(:get).twice.with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
+        Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
 
         get '/bannings/area51',
           session: somegod_session,
@@ -108,6 +115,9 @@ describe "Bannings" do
         foreigner.send(:fingerprints=, ['fingerprint1'])
         foreigner.save!
 
+        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => false))
+        Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
+
         get '/bannings/area51',
           session: somegod_session,
           identity_id: foreigner.id
@@ -115,6 +125,8 @@ describe "Bannings" do
       end
 
       it 'fails if identity does not exist' do
+        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
+        Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
         get '/bannings/area51',
           session: somegod_session,
           identity_id: 0
@@ -122,9 +134,11 @@ describe "Bannings" do
       end
     end
 
-    context 'when not god' do
+    context 'when not moderator' do
       it 'should fail with 403' do
         crook
+        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => false))
+        Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
         get '/bannings/area51.a.b.c.d.e', :session => someone_session
         last_response.status.should eq 403
       end

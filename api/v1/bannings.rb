@@ -9,9 +9,7 @@ class CheckpointV1 < Sinatra::Base
   # @path /api/checkpoint/v1/bannings/:path
   # @http GET
   get "/bannings/:path" do |path|
-    check_god_credentials
-    check_path_in_realm(path)
-
+    require_action_allowed(:moderate, "post.any:#{path}", :default => false)
     bannings = Banning.by_path("^#{path}")
     if params[:identity_id]
       identity = Identity.where(id: params[:identity_id]).first
