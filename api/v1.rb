@@ -51,7 +51,8 @@ class CheckpointV1 < Sinatra::Base
       session.save! if session.should_be_persisted?
 
       # Delete legacy cookie on wrong domain
-      Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,').each do |k, v|
+      cookies = Rack::Utils.parse_query(request.env['HTTP_COOKIE'], ';,') { |s| Rack::Utils.unescape(s) rescue s }
+      cookies.each do |k, v|
         if k == Session::COOKIE_NAME and v.is_a?(Array)
           response.set_cookie(Session::COOKIE_NAME,
             :value => '',
