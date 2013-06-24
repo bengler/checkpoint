@@ -32,11 +32,10 @@ class CheckpointV1 < Sinatra::Base
           #   but we do this to avoid breaking existing apps.
           return url_with_params(return_url, params)
         end
-        host = URI.parse(return_url).host
       else
-        host = request.host
+        return_url = "http://#{request.host}/login/failed"
       end
-      return url_with_params("http://#{host}/login/failed", params)
+      return url_with_params(return_url, params)
     end
   end
 
