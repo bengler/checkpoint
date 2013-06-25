@@ -66,23 +66,6 @@ GIT
       oauth2 (~> 0.9.0)
       omniauth (~> 1.0)
 
-GIT
-  remote: git@github.com:bengler/pebblebed.git
-  revision: 95ccc98b0c4842b78d50f0044829f4564be45e22
-  branch: post_callbacks
-  specs:
-    pebblebed (0.0.50)
-      activesupport
-      bunny
-      curb (>= 0.7.14)
-      deepstruct (>= 0.0.4)
-      futurevalue
-      i18n
-      nokogiri
-      pathbuilder
-      queryparams
-      yajl-ruby
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -153,6 +136,17 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth2
     pathbuilder (0.0.2)
+    pebblebed (0.1.0)
+      activesupport
+      bunny
+      curb (>= 0.7.14)
+      deepstruct (>= 0.0.4)
+      futurevalue
+      i18n
+      nokogiri
+      pathbuilder
+      queryparams
+      yajl-ruby
     pebbles-path (0.0.3)
       pebbles-uid (>= 0.0.6)
     pebbles-uid (0.0.9)
@@ -226,7 +220,7 @@ DEPENDENCIES
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
   omniauth-vanilla!
-  pebblebed!
+  pebblebed (>= 0.1.0)
   pebbles-cors!
   pebbles-path (>= 0.0.3)
   pebbles-uid
