@@ -27,19 +27,23 @@ describe Callback do
 
     before :each do
       # A callback that accepts everything
-      stub_http_request(:get, "http://yay.org/?identity=7&method=create&uid=post.blog:a.b.c.d.e").
-         to_return(:status => 200, :body => '{"allow":true}',
+      stub_request(:post, "http://yay.org/").
+        with(:body => "{\"method\":\"create\",\"identity\":7,\"uid\":\"post.blog:a.b.c.d.e\"}",
+             :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+        to_return(:status => 200, :body => '{"allowed":true}',
            :headers => {'Content-Type' => 'application/json'})
 
-      # A callback that accepts nothing
-      stub_http_request(:get, "http://nay.org/?identity=7&method=create&uid=post.blog:a.b.c.d.e").
-         to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
+      stub_request(:post, "http://nay.org/").
+        with(:body => "{\"method\":\"create\",\"identity\":7,\"uid\":\"post.blog:a.b.c.d.e\"}",
+             :headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+        to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
            :headers => {'Content-Type' => 'application/json'})
+
     end
 
     it "forwards the parameters to the callback and processes the positive response" do
-      Callback.create!(:path => "a.b.z", :url => "http://nay.org") # irrelevant, should not trigger
-      Callback.create!(:path => "a.b.c", :url => "http://yay.org")
+      Callback.create!(:path => "a.b.z", :url => "http://nay.org/") # irrelevant, should not trigger
+      Callback.create!(:path => "a.b.c", :url => "http://yay.org/")
       allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
       allowed.should be_true
       url.should be_nil
@@ -47,11 +51,11 @@ describe Callback do
     end
 
     it "forwards the parameters to the callback and processes the negative response" do
-      Callback.create!(:path => "a.b.c", :url => "http://nay.org")
-      Callback.create!(:path => "a.b.c.d", :url => "http://yay.org") # will be overridden
+      Callback.create!(:path => "a.b.c", :url => "http://nay.org/")
+      Callback.create!(:path => "a.b.c.d", :url => "http://yay.org/") # will be overridden
       allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
       allowed.should be_false
-      url.should eq "http://nay.org"
+      url.should eq "http://nay.org/"
       reason.should eq "You are not worthy"
     end
 
