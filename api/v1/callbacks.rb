@@ -17,18 +17,28 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 Result hash
   # @status 500 One or more of the callbacks failed, please call again later
 
-  post "/callbacks/allowed/:method/:uid" do
-    params[:identity] ||= current_identity.try(:id)
-    params[:session] ||= current_session.key
-    params.delete('splat')
-    params.delete('captures')
-    if banned_path = Banning.banned?(params.to_options)
-      pg :callback_result, :locals => {:allowed => false, :url => request.url,
-        :reason => "This identity is banned from '#{banned_path}'."}
-    else
-      allowed, url, reason = Callback.allow?(params.to_options)
-      pg :callback_result, :locals => {:allowed => allowed, :url => url, :reason => reason}
+  helpers do
+    def perform_callback
+      params[:identity] ||= current_identity.try(:id)
+      params[:session] ||= current_session.key
+      params.delete('splat')
+      params.delete('captures')
+      if banned_path = Banning.banned?(params.to_options)
+        pg :callback_result, :locals => {:allowed => false, :url => request.url,
+          :reason => "This identity is banned from '#{banned_path}'."}
+      else
+        allowed, url, reason = Callback.allow?(params.to_options)
+        pg :callback_result, :locals => {:allowed => allowed, :url => url, :reason => reason}
+      end
     end
+  end
+
+  get "/callbacks/allowed/:method/:uid" do
+    perform_callback
+  end
+
+  post "/callbacks/allowed/:method/:uid" do
+    perform_callback
   end
 
   # @apidoc
