@@ -109,10 +109,12 @@ GEM
     kgio (2.7.3)
     memcache_mock (0.0.11)
     mime-types (1.17.2)
+    mini_portile (0.5.0)
     multi_json (1.7.4)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
-    nokogiri (1.5.9)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     oauth (0.4.7)
     oauth2 (0.9.1)
       faraday (~> 0.8)
@@ -134,7 +136,7 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth2
     pathbuilder (0.0.2)
-    pebblebed (0.0.54)
+    pebblebed (0.1.0)
       activesupport
       bunny
       curb (>= 0.7.14)
@@ -218,7 +220,7 @@ DEPENDENCIES
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
   omniauth-vanilla!
-  pebblebed
+  pebblebed (>= 0.1.0)
   pebbles-cors!
   pebbles-path (>= 0.0.3)
   pebbles-uid

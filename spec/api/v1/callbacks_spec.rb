@@ -106,27 +106,26 @@ describe "Identities" do
     end
 
     before :each do
-      # A callback that accepts nothing
-      stub_request(:get, "http://nay.org/?identity=7&method=create&session=#{stranger_session}&uid=post.blog:area51.b.c.d.e").
-         to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
+      stub_request(:post, "http://nay.org/").
+        with(:headers => {'Accept'=>'application/json', 'Content-Type'=>'application/json'}).
+        to_return(:status => 200, :body => '{"allowed":false, "reason": "You are not worthy"}',
            :headers => {'Content-Type' => 'application/json'})
-
     end
 
     it "specifies default rules if there are no callbacks" do
-      get "/callbacks/allowed/create/post.blog:area51.b.c", :session => stranger_session
+      post "/callbacks/allowed/create/post.blog:area51.b.c", :session => stranger_session
       last_response.status.should eq 200
       result = JSON.parse(last_response.body)
       result['allowed'].should eq 'default'
     end
 
     it "denies with a reason" do
-      Callback.create!(:path => "area51.b.c", :url => "http://nay.org")
-      get "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7, :session => stranger_session
+      Callback.create!(:path => "area51.b.c", :url => "http://nay.org/")
+      post "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7, :session => stranger_session
       last_response.status.should eq 200
       result = JSON.parse(last_response.body)
       result['allowed'].should be_false
-      result['url'].should eq "http://nay.org"
+      result['url'].should eq "http://nay.org/"
       result['reason'].should eq "You are not worthy"
     end
 

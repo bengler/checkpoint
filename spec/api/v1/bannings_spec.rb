@@ -66,7 +66,7 @@ describe "Bannings" do
         banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
         banning2 = Banning.declare!(:path => "area51.z.m.q", :fingerprint => 'fingerprint1')
 
-        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
+        checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
 
         get '/bannings/area51.a.b.c.d.e', :session => somegod_session
@@ -86,7 +86,7 @@ describe "Bannings" do
         Banning.declare!(path: "area51", fingerprint: crook2.fingerprints.first)
         Banning.declare!(path: "area51", fingerprint: crook.fingerprints.first)
 
-        checkpoint.should_receive(:get).twice.with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
+        checkpoint.should_receive(:post).twice.with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
 
         get '/bannings/area51',
@@ -115,7 +115,7 @@ describe "Bannings" do
         foreigner.send(:fingerprints=, ['fingerprint1'])
         foreigner.save!
 
-        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => false))
+        checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => false))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
 
         get '/bannings/area51',
@@ -125,7 +125,7 @@ describe "Bannings" do
       end
 
       it 'fails if identity does not exist' do
-        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
+        checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => true))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
         get '/bannings/area51',
           session: somegod_session,
@@ -137,7 +137,7 @@ describe "Bannings" do
     context 'when not moderator' do
       it 'should fail with 403' do
         crook
-        checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => false))
+        checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => false))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
         get '/bannings/area51.a.b.c.d.e', :session => someone_session
         last_response.status.should eq 403
@@ -148,7 +148,7 @@ describe "Bannings" do
   it "will create a ban, deleting any shadowed bans" do
     Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b.d", :fingerprint => 'fingerprint1')
-    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a").and_return(DeepStruct.wrap(:allowed => true))
+    checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a").and_return(DeepStruct.wrap(:allowed => true))
     Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
 
     put "/bannings/area51.a/identities/#{crook.id}", :session => somegod_session
@@ -161,7 +161,7 @@ describe "Bannings" do
   it "will not create a ban if more general ban is allready in place" do
     crook
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
-    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c").and_return(DeepStruct.wrap(:allowed => true))
+    checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a.b.c").and_return(DeepStruct.wrap(:allowed => true))
     Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
     put "/bannings/area51.a.b.c/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 201
@@ -174,7 +174,7 @@ describe "Bannings" do
     crook.save!
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b", :fingerprint => 'fingerprint2')
-    checkpoint.should_receive(:get).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
+    checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))
     Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
     delete "/bannings/area51.a.b.c.d.e/identities/#{crook.id}", :session => somegod_session
     last_response.status.should eq 200
@@ -183,7 +183,7 @@ describe "Bannings" do
 
   it "short circuits callbacks precluding any actual callback-processing" do
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
-    get "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
+    post "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
     response = JSON.parse(last_response.body)
     response['allowed'].should be_false
     response['reason'].should_not be_nil
