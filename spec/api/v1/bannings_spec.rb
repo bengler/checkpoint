@@ -183,7 +183,7 @@ describe "Bannings" do
 
   it "short circuits callbacks precluding any actual callback-processing" do
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
-    get "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
+    post "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
     response = JSON.parse(last_response.body)
     response['allowed'].should be_false
     response['reason'].should_not be_nil
