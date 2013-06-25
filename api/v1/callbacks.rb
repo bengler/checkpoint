@@ -34,6 +34,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get "/callbacks/allowed/:method/:uid" do
+    LOGGER.warn "#{request.referrer} used GET to invoke callbacks. This is deprecated. Use POST."
     perform_callback
   end
 
