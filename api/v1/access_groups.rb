@@ -111,7 +111,12 @@ class CheckpointV1 < Sinatra::Base
     halt 204 if AccessGroupMembership.find_by_access_group_id_and_identity_id(group.id, identity_id)
     identity = Identity.find(identity_id)
     halt 409, "Identity realm does not match group realm" unless identity.realm_id == group.realm_id
-    group_membership ||= AccessGroupMembership.create!(:access_group_id => group.id, :identity_id => identity_id)
+    begin
+      group_membership ||= AccessGroupMembership.create!(:access_group_id => group.id, :identity_id => identity_id)
+    rescue PG::Error => e
+      raise unless e.message =~ /violates.*group_membership_identity_uniqueness_index/
+      halt 204 # This means someone beat us to it, but that is fine
+    end
     [204] # Success. No content.
   end
 
