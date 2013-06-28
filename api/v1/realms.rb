@@ -61,7 +61,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON] The realm.
 
   get '/domains/:name/realm' do |name|
-    domain = Domain.find_by_name(name)
+    domain = Domain.resolve_from_host_name(name)
     halt 404, "Not found" unless domain
     pg :realm, :locals => {:realm => domain.realm, :identity => nil, :sessions => nil}
   end
