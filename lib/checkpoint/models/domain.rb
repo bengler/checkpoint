@@ -27,6 +27,10 @@ class Domain < ActiveRecord::Base
   end
 
   def allow_origin?(origin)
+    # First check if the origin resolves to same realm as self
+    origin_domain = Domain.resolve_from_host_name(origin)
+    return true if origin_domain && origin_domain.realm == self.realm
+    # Did not, then check if it is explicitly listed as a valid origin
     all_hosts =  (realm.domains.map(&:name) << self.origins.to_a).compact.flatten.uniq
     all_hosts.include?(SimpleIDN.to_ascii(origin))
   end
