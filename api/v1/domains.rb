@@ -12,14 +12,14 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON]
 
   get '/domains/:name' do |name|
-    domain = Domain.find_by_name(name)
+    domain = Domain.resolve_from_host_name(name)
     halt 404, "Not found" unless domain
     pg :domain, :locals => {:domain => domain}
   end
 
   # @deprecated Use /domains/:name instead.
   get '/realms/:label/domains/:name' do
-    domain = Domain.find_by_name(params[:name])
+    domain = Domain.resolve_from_host_name(params[:name])
     halt 404, "Not found" unless domain
     pg :domain, :locals => {:domain => domain}
   end
@@ -37,7 +37,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON] allowed: true/false
 
   get '/domains/:name/allows/:origin' do |name, origin|
-    domain = Domain.find_by_name(name)
+    domain = Domain.resolve_from_host_name(name)
     halt 404, "No associated domain name" unless domain
     content_type :json
     {allowed: domain.allow_origin?(origin)}.to_json
@@ -108,7 +108,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 204 Ok.
 
   delete '/realms/:label/domains/:name' do
-    domain = Domain.find_by_name(params[:name])
+    domain = Domain.resolve_from_host_name(params[:name])
     halt 403, "Domain is connected to '#{domain.realm.label}'" unless domain.realm.label == params[:label]
     check_god_credentials(domain.realm.id)
     domain.destroy
@@ -131,7 +131,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 204 Ok.
 
   delete '/realms/:label/domains/:name/origins/:origin' do |label, name, origin|
-    domain = Domain.find_by_name(name)
+    domain = Domain.resolve_from_host_name(name)
     halt 403, "Domain is connected to '#{domain.realm.label}'" unless domain.realm.label == label
     check_god_credentials(domain.realm.id)
     domain.remove_origin(origin)
