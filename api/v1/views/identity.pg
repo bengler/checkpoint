@@ -10,6 +10,6 @@ node :accounts => identity.accounts.map(&:provider)
 
 if identity.primary_account
   node :profile => identity.primary_account do
-    attributes :provider, :nickname, :name, :profile_url, :image_url, :description
+    attributes :provider, :nickname, :name, :profile_url, :image_url, :description, :uid
   end
 end
