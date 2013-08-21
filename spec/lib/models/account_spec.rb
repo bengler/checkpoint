@@ -150,7 +150,7 @@ describe Account do
          "description"=>"Gartner pa Underskog og vaktmester pa Origo",
          "urls"=>
           {"Website"=>"http://origo.no/simen",
-           "Facebook"=>"http://twitter.com/svale"}}}
+           "Facebook"=>"http://facebook.com/svale"}}}
     end
 
     it "gets the proper fields set when declared" do
@@ -227,6 +227,13 @@ describe Account do
       account1.destroy
       identity.reload
       identity.primary_account.should eq account2
+    end
+
+    it "Provides profile urls" do
+      account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
+      account_with_twitter.profile_url.should eq  "http://twitter.com/svale"
+      account_with_facebook.profile_url.should eq  "http://facebook.com/svale"
     end
 
   end

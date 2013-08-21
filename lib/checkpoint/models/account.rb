@@ -89,6 +89,14 @@ class Account < ActiveRecord::Base
       # Create a new identity!
       identity ||= Identity.create!(:realm => options[:realm])
 
+      # Try find profile_url
+      profile_url = nil
+      if auth_data['info']['urls'] and auth_data['info']['urls'].any?
+        profile_url = auth_data['info']['urls'][auth_data['provider'].titleize]
+      elsif auth_data['extra']['raw_info']
+        profile_url = auth_data['extra']['raw_info']['link']
+      end
+
       account = declare!(
         :provider => auth_data['provider'],
         :uid => auth_data['uid'],
@@ -102,7 +110,7 @@ class Account < ActiveRecord::Base
         :image_url =>    auth_data['info']['image'],
         :description =>  auth_data['info']['description'],
         :email =>        auth_data['info']['email'],
-        :profile_url =>  (auth_data['info']['urls'] || {})['Twitter']
+        :profile_url =>  profile_url
       )
       account
     end
