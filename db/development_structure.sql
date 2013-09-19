@@ -3,7 +3,7 @@
 --
 
 SET statement_timeout = 0;
-SET client_encoding = 'SQL_ASCII';
+SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -87,8 +87,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -277,8 +277,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     last_seen_on date,
     fingerprints tsvector,
     tags tsvector
@@ -385,8 +385,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     primary_domain_id integer
 );
 
@@ -427,8 +427,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -699,6 +699,13 @@ CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
 --
 
 CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
+
+
+--
+-- Name: index_fingerprints_on_identities; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_fingerprints_on_identities ON identities USING gist (fingerprints);
 
 
 --
