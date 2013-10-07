@@ -16,7 +16,7 @@ Checkpoint is a centralized authentication broker for web applications that supp
 
 To initiate authentication, you first need to have a realm with a domain set up for your application:
 
-    $ bundle exec ./bin/checkpoint create example -t "Example Security Realm" -d example.org
+    $ bundle exec ./bin/checkpoint realm create example -t "Example Security Realm" -d example.org
 
 Checkpoint is provided as an http service and needs to be mapped into the url-space of your application using some proxy mechanism. The standard root url for checkpoint is:
 
