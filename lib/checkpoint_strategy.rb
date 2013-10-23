@@ -6,8 +6,12 @@ module Hanuman
     end
 
     def authenticate(username, password)
-      user = Hanuman.user_service.
-        authentication_by_email_or_phone(email_or_phone: username, password: password)
+      credentials = {
+        :email_or_phone => username,
+        :password       => password,
+      }
+      user = Hanuman.user_service.authentication_by_email_or_phone(credentials)
+
       account = {
         :uid   => user.id.to_s,
         :name  => user.name,
