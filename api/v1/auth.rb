@@ -110,12 +110,37 @@ class CheckpointV1 < Sinatra::Base
     if on_primary_domain?
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
-    else
+
       # Proceed on primary domain rewriting the current URL.
       uri = URI.parse(request.url)
       uri.host = current_realm.primary_domain_name
       redirect url_with_query_params(uri.to_s,
         :redirect_to => target_url)
+    end
+  end
+
+  require 'lib/checkpoint_strategy'
+  post '/login/:provider' do
+    if params[:provider] == 'hanuman'
+      strategy = Hanuman::CheckpointStrategy.new
+      begin
+        hanuman_user = strategy.authenticate(params[:username], params[:password])
+      rescue Hanuman::ServiceError => ex
+        halt 403, ex.message
+      end
+      identity = Account.where(
+        :realm_id => current_realm.id,
+        :provider => params[:provider],
+        :uid      => hanuman_user[:uid]).first.try(:identity)
+      identity ||= Identity.create!(:realm => current_realm)
+      account = Account.declare!(
+        :uid      => hanuman_user[:uid],
+        :name     => hanuman_user[:name],
+        :email    => hanuman_user[:email],
+        :realm_id => current_realm.id,
+        :provider => params[:provider],
+        :identity => identity)
+      log_in(account.identity)
     end
   end
 
