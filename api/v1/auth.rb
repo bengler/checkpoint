@@ -119,29 +119,31 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
-  require 'lib/checkpoint_strategy'
+  require 'lib/checkpoint_strategy' # Move this somewhere more suitable
   post '/login/:provider' do
     if params[:provider] == 'hanuman'
       strategy = Hanuman::CheckpointStrategy.new
       begin
-        hanuman_user = strategy.authenticate(params[:username], params[:password])
+        user = strategy.authenticate(params[:username], params[:password])
       rescue Hanuman::ServiceError => ex
         halt 403, ex.message
       end
-      identity = Account.where(
-        :realm_id => current_realm.id,
-        :provider => params[:provider],
-        :uid      => hanuman_user[:uid]).first.try(:identity)
-      identity ||= Identity.create!(:realm => current_realm)
-      account = Account.declare!(
-        :uid      => hanuman_user[:uid],
-        :name     => hanuman_user[:name],
-        :email    => hanuman_user[:email],
-        :realm_id => current_realm.id,
-        :provider => params[:provider],
-        :identity => identity)
-      log_in(account.identity)
+    else
+      halt 404, "No strategy for handling POST to /login/#{params[:provider]}"
     end
+    identity = Account.where(
+      :realm_id => current_realm.id,
+      :provider => params[:provider],
+      :uid      => user[:uid]).first.try(:identity)
+    identity ||= Identity.create!(:realm => current_realm)
+    account = Account.declare!(
+      :uid      => user[:uid],
+      :name     => user[:name],
+      :email    => user[:email],
+      :realm_id => current_realm.id,
+      :provider => params[:provider],
+      :identity => identity)
+    log_in(account.identity)
   end
 
   # This is called directly by Omniauth as a rack method.
