@@ -1,8 +1,9 @@
 GIT
   remote: git://github.com/amedia/hanuman-client-ruby.git
-  revision: d6c8b43ef1b6e806a7e6f1fc2302fccecea82da7
+  revision: 343b5e2c6231760d23ef46d930705e1da6244715
   specs:
     hanuman-client (0.0.3)
+      rest-client
       savon (~> 2.3)
 
 GIT
