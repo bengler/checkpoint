@@ -175,7 +175,7 @@ class CheckpointV1 < Sinatra::Base
     halt 500, "No registered realm for #{request.host}" unless current_realm
 
     begin
-      account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm)
+      account = Account.declare_with_omniauth!(request.env['omniauth.auth'], current_realm)
       log_in(account.identity)
     rescue Account::InUseError => e
       redirect url_for_failure(:message => :account_in_use)

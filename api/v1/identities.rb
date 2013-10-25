@@ -21,6 +21,7 @@ class CheckpointV1 < Sinatra::Base
 
         if account_data
           account_data[:identity] = identity
+          account_data[:realm_id] = current_realm.id
           Account.declare!(account_data)
         end
       end
