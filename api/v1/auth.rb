@@ -110,7 +110,7 @@ class CheckpointV1 < Sinatra::Base
     if on_primary_domain?
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
-
+    else
       # Proceed on primary domain rewriting the current URL.
       uri = URI.parse(request.url)
       uri.host = current_realm.primary_domain_name
