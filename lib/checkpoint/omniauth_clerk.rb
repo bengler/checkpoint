@@ -22,6 +22,7 @@ class OmniauthClerk
       :image_url =>    auth_data['info']['image'],
       :description =>  auth_data['info']['description'],
       :email =>        auth_data['info']['email'],
+      :phone =>        auth_data['info']['phone'],
       :profile_url =>  profile_url
     }
     attributes.merge(additional_attributes)
