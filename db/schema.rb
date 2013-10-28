@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130919084945) do
+ActiveRecord::Schema.define(:version => 20131028072812) do
 
   create_table "access_group_memberships", :force => true do |t|
     t.integer  "access_group_id", :null => false
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20130919084945) do
     t.datetime "synced_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "phone"
   end
 
   add_index "accounts", ["identity_id"], :name => "index_accounts_on_identity_id"
