@@ -166,6 +166,15 @@ class CheckpointV1 < Sinatra::Base
     else
       halt 500, "Invalid strategy for provider: #{params[:provider]}"
     end
+
+    # FIXME: Until Origo and Vanilla support state
+    if strategy.to_s =~ /Vanilla|Origo/
+      if strategy.options.respond_to?(:provider_ignores_state)
+        logger.warn "Setting strategy to ignore state"
+        strategy.options.provider_ignores_state = true
+      end
+    end
+
     strategy.options[:scope] = service_keys.scope if service_keys.scope
     strategy.options[:client_options].site = service_keys.site if service_keys.site
   end
