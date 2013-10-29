@@ -1,0 +1,29 @@
+# Hanuman SOAP service configuration
+
+common: &COMMON
+  namespace: http://v2.webservice.hanuman.api.no/
+  documentation: http://doc.api.no/snapshot/hanuman/webservicev2.html
+
+development:
+  rest_endpoint_base: http://admin.test.api.no/hanuman/
+  endpoint_base: http://admin.test.api.no/hanuman/service/v2
+  logfile: log/hanuman_development.log
+  <<: *COMMON
+
+staging:
+  rest_endpoint_base: http://siam.dev.abctech-thailand.com/hanuman/
+  endpoint_base: http://siam.dev.abctech-thailand.com/hanuman/service/v2
+  logfile: log/hanuman_staging.log
+  <<: *COMMON
+
+production:
+  rest_endpoint_base: http://admin.api.no/hanuman/
+  endpoint_base: http://admin.api.no/hanuman/service/v2
+  logfile: log/hanuman_production.log
+  <<: *COMMON
+
+test:
+  rest_endpoint_base: http://example.org/this_should_be_stubbed/
+  endpoint_base: http://example.org/this_should_be_stubbed
+  logfile: log/hanuman_test.log
+  <<: *COMMON
