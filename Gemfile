@@ -22,7 +22,7 @@ gem 'pebblebed', ">=0.1.0"
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git://github.com/bengler/pebbles-cors.git'
 gem 'pebbles-path', '>=0.0.3'
-gem 'hanuman-client', :git => 'git://github.com/amedia/hanuman-client-ruby.git', :branch => 'checkpoint-strategy'
+gem 'hanuman-client', :git => 'git://github.com/amedia/hanuman-client-ruby.git'
 gem 'checkpoint-strategy', :git => 'git://github.com/bengler/checkpoint-strategy.git'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'dalli', '~> 2.1.0'
