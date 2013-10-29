@@ -24,13 +24,13 @@ GIT
 
 GIT
   remote: git://github.com/bengler/omniauth-vanilla.git
-  revision: 2ebd40063eb0d6766cb11f55ba01ce101182a47e
+  revision: a206972ed167bc268aa134268b21a0350349adc0
   specs:
-    omniauth-vanilla (0.0.8)
+    omniauth-vanilla (0.0.9)
       multi_json
       oauth
-      omniauth (>= 1.0.0)
-      omniauth-oauth2 (>= 1.0.0)
+      omniauth (~> 1.1.4)
+      omniauth-oauth2 (~> 1.1.0)
 
 GIT
   remote: git://github.com/bengler/pebbles-cors.git
