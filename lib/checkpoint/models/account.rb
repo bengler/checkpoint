@@ -32,11 +32,33 @@ class Account < ActiveRecord::Base
     # with the same provider and uid exists, but for another identity, an InUseError is raised.
     def declare!(attributes)
       attributes.symbolize_keys!
+
+      identity = attributes[:identity]
+
+      account = Account.where(
+        :realm_id => attributes[:realm_id],
+        :provider => attributes[:provider],
+        :uid => attributes[:uid]).first
+
+      if identity && account && account.identity_id != identity.id
+        # Oh noes! A real, unresolvable conflict!
+        raise InUseError.new("Account is bound to a different identity", :identity_id => account.identity_id)
+      end
+
+      identity ||= account.try(:identity) if account
+      identity ||= Identity.create!(:realm_id => attributes[:realm_id])
+      attributes[:identity] = identity
+
+      if account
+        account.attributes = attributes
+        account.save!
+        return account
+      end
+
       begin
         # Use (sub-)transaction to ensure errors can be recovered
         transaction do
-          # Optimistically we just go for it. Validations and an uniqueness-index will reject us if we are
-          # in error.
+          # Validations and an uniqueness-index will reject us if we are in error.
           return Account.create!(attributes)
         end
       rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
@@ -51,70 +73,17 @@ class Account < ActiveRecord::Base
           # Reraise unless uniqueness violation
           raise unless e.message =~ /violates.*account_uniqueness_index/
         end
-
-        target_identity = attributes[:identity] || Identity.find(attributes[:identity_id])
-        account = Account.where(
-          :uid => attributes[:uid],
-          :provider => attributes[:provider],
-          :realm_id => target_identity.try(:realm_id)
-        ).first
-        if account.identity_id == target_identity.id
-          # Fine. We are declaring a potential update on an existing account. Update in place
-          account.attributes = attributes
-          account.save!
-          return account
-        else
-          # Oh noes! A real, unresolvable conflict!
-          raise InUseError.new("Account is bound to a different identity", :identity_id => account.identity_id)
-        end
       end
     end
 
-    # Creates or updates an account from auth data as provided by
-    # omniauth. An existing identity or a realm must be provided
-    # see https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema for an overview of the data omniauth provides
-    # in the options. E.g.:
-    #     Account.declare_with_omniauth(auth, :realm => current_realm) # creates a new user
-    #     Account.declare_with_omniauth(auth, :identity => current_identity) # attaches an account to an existing identity
-    # If the account was previously attached to an identity, an InUseError exception will be raised.
-    def declare_with_omniauth(auth_data, options = {})
-      raise ArgumentError, "Identity or realm must be specified" unless (options[:realm] || options[:identity])
-      # Attach to specified identity?
-      identity = options[:identity]
-      # Use an implied identity?
-      identity ||= Account.where(
-        :realm_id => options[:realm].id,
-        :provider => auth_data['provider'],
-        :uid => auth_data['uid']).first.try(:identity)
-      # Create a new identity!
-      identity ||= Identity.create!(:realm => options[:realm])
-
-      # Try find profile_url
-      profile_url = nil
-      if auth_data['info']['urls'] and auth_data['info']['urls'].any?
-        profile_url = auth_data['info']['urls'][auth_data['provider'].titleize]
-      elsif auth_data['extra']['raw_info']
-        profile_url = auth_data['extra']['raw_info']['link']
-      end
-
-      account = declare!(
-        :provider => auth_data['provider'],
-        :uid => auth_data['uid'],
-        :realm_id => options[:realm].try(:id) || identity.realm.id,
-        :identity =>     identity,
-        :token =>        auth_data['credentials']['token'],
-        :secret =>       auth_data['credentials']['secret'],
-        :nickname =>     auth_data['info']['nickname'],
-        :name =>         auth_data['info']['name'],
-        :location =>     auth_data['info']['location'],
-        :image_url =>    auth_data['info']['image'],
-        :description =>  auth_data['info']['description'],
-        :email =>        auth_data['info']['email'],
-        :profile_url =>  profile_url
-      )
-      account
+    # Creates or updates an account from auth data as provided by omniauth.
+    def declare_with_omniauth!(auth_data, realm)
+      attributes = OmniauthClerk.account_attributes(auth_data, :realm_id => realm.id)
+      Account.declare!(attributes)
     end
+
   end
+
 
   def authorized?
     !!credentials

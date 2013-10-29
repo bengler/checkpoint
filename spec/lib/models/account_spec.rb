@@ -154,7 +154,7 @@ describe Account do
     end
 
     it "gets the proper fields set when declared" do
-      account = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account = Account.declare_with_omniauth!(twitter_auth, realm)
       account.provider.should eq "twitter"
       account.token.should eq "sometoken"
       account.secret.should eq "somesecret"
@@ -167,50 +167,62 @@ describe Account do
     end
 
     it "creates identity if missing" do
-      account = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account = Account.declare_with_omniauth!(twitter_auth, realm)
       account.identity.should be_a_kind_of(Identity)
     end
 
     it "declaring the same account twice should yield the same account with the same identity" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account2 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account1 = Account.declare_with_omniauth!(twitter_auth, realm)
+      account2 = Account.declare_with_omniauth!(twitter_auth, realm)
       account1.identity.should eq account2.identity
     end
 
     it "does not override existing identity" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
-      account1.identity.should eq account2.identity
+      account_with_twitter = Account.declare_with_omniauth!(twitter_auth, realm)
+
+      facebook_account_attributes = OmniauthClerk.account_attributes(facebook_auth,
+        {:realm_id => realm.id, :identity => account_with_twitter.identity})
+      account_with_facebook = Account.declare!(facebook_account_attributes)
+
+      account_with_twitter.id.should_not eq account_with_facebook.id
+      account_with_twitter.identity.should eq account_with_facebook.identity
     end
 
     it "creates different identities for different users" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account2 = Account.declare_with_omniauth(other_twitter_auth, :realm => realm)
+      account1 = Account.declare_with_omniauth!(twitter_auth, realm)
+      account2 = Account.declare_with_omniauth!(other_twitter_auth, realm)
       account1.identity.should_not eq account2.identity
     end
 
     it "cannot be bound to an identity if it already is attached to another" do
       # Create two different identitites for the same physical person
-      account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
+      account_with_twitter = Account.declare_with_omniauth!(twitter_auth, realm)
+      account_with_facebook = Account.declare_with_omniauth!(facebook_auth, realm)
       Identity.count.should == 2
+
+      twitter_attributes = OmniauthClerk.account_attributes(twitter_auth,
+        {:realm_id => realm.id, :identity => account_with_facebook.identity})
 
       # Try to attach the twitter account to the identity formerly having just a FB-account.
       lambda {
-        a = Account.declare_with_omniauth(twitter_auth, :identity => account_with_facebook.identity)
+        a = Account.declare!(twitter_attributes)
       }.should raise_error(Account::InUseError)
     end
 
 
     it "sets a primary account when the identity is first created" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account1.identity.primary_account.should eq account1
-      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
-      account1.identity.primary_account.should eq account1
+      account_with_twitter = Account.declare_with_omniauth!(twitter_auth, realm)
+      account_with_twitter.identity.primary_account.should eq account_with_twitter
+
+      facebook_account_attributes = OmniauthClerk.account_attributes(facebook_auth,
+        {:realm_id => realm.id, :identity => account_with_twitter.identity})
+      account_with_facebook = Account.declare!(facebook_account_attributes)
+
+      account_with_twitter.identity.primary_account.should eq account_with_twitter
     end
 
     it "unsets primary_account when an account is deleted" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
+      account1 = Account.declare_with_omniauth!(twitter_auth, realm)
       identity = account1.identity
       identity.reload
       identity.primary_account.should eq account1
@@ -220,18 +232,22 @@ describe Account do
     end
 
     it "silently picks a different primary_account when one of many accounts is deleted" do
-      account1 = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account2 = Account.declare_with_omniauth(facebook_auth, :identity => account1.identity)
-      identity = account1.identity
-      identity.primary_account.should eq account1
-      account1.destroy
+      account_with_twitter = Account.declare_with_omniauth!(twitter_auth, realm)
+
+      facebook_account_attributes = OmniauthClerk.account_attributes(facebook_auth,
+        {:realm_id => realm.id, :identity => account_with_twitter.identity})
+      account_with_facebook = Account.declare!(facebook_account_attributes)
+
+      identity = account_with_twitter.identity
+      identity.primary_account.should eq account_with_twitter
+      account_with_twitter.destroy
       identity.reload
-      identity.primary_account.should eq account2
+      identity.primary_account.should eq account_with_facebook
     end
 
     it "Provides profile urls" do
-      account_with_twitter = Account.declare_with_omniauth(twitter_auth, :realm => realm)
-      account_with_facebook = Account.declare_with_omniauth(facebook_auth, :realm => realm)
+      account_with_twitter = Account.declare_with_omniauth!(twitter_auth, realm)
+      account_with_facebook = Account.declare_with_omniauth!(facebook_auth, realm)
       account_with_twitter.profile_url.should eq  "http://twitter.com/svale"
       account_with_facebook.profile_url.should eq  "http://facebook.com/svale"
     end

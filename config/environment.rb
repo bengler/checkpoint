@@ -21,6 +21,8 @@ ActiveRecord::Base.add_observer RiverNotifications.instance
 ActiveRecord::Base.establish_connection($config[environment])
 $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
 
+require 'config/strategies' if File.exists?('config/strategies.rb')
+
 Pebblebed.config do
   service :vanilla
   service :checkpoint

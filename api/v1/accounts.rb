@@ -91,7 +91,8 @@ class CheckpointV1 < Sinatra::Base
       attributes = {
         :uid => uid,
         :identity => identity,
-        :provider => provider
+        :provider => provider,
+        :realm_id => current_identity.realm_id
       }.merge(params.slice(
         *%w(token secret nickname
           name location description profile_url image_url email)))

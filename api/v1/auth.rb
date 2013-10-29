@@ -119,6 +119,32 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
+  post '/login/:provider' do
+    strategy = Checkpoint.strategies.find do |strategy|
+      strategy if strategy.supports? params[:provider]
+    end
+
+    halt 400, "No strategy can handle the \"#{params[:provider]}\" provider" unless strategy
+
+    provider = strategy.get_provider(params[:provider])
+
+    halt 400, 'Requested provider does not support the direct authentication mode' unless provider.mode == 'direct'
+
+    attributes = begin
+      provider.authenticate(params)
+    rescue Checkpoint::Strategy::InvalidCredentialsError => ex
+      halt 403, ex.message
+    end
+
+    attributes[:realm_id] = current_realm.id
+    account = begin
+      Account.declare!(attributes)
+    rescue Account::InUseError => e
+      redirect url_for_failure(:message => :account_in_use)
+    end
+    log_in(account.identity)
+  end
+
   # This is called directly by Omniauth as a rack method.
   # OMNIAUTH SWALLOWS ALL HTTP ERRORS AND EXCEPTIONS.
   get '/auth/:provider/setup' do
@@ -148,7 +174,7 @@ class CheckpointV1 < Sinatra::Base
     halt 500, "No registered realm for #{request.host}" unless current_realm
 
     begin
-      account = Account.declare_with_omniauth(request.env['omniauth.auth'], :realm => current_realm)
+      account = Account.declare_with_omniauth!(request.env['omniauth.auth'], current_realm)
       log_in(account.identity)
     rescue Account::InUseError => e
       redirect url_for_failure(:message => :account_in_use)
