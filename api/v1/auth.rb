@@ -119,30 +119,29 @@ class CheckpointV1 < Sinatra::Base
     end
   end
 
-  require 'lib/checkpoint_strategy' # Move this somewhere more suitable
   post '/login/:provider' do
-    if params[:provider] == 'hanuman'
-      strategy = Hanuman::CheckpointStrategy.new
-      begin
-        user = strategy.authenticate(params[:username], params[:password])
-      rescue Hanuman::ServiceError => ex
-        halt 403, ex.message
-      end
-    else
-      halt 404, "No strategy for handling POST to /login/#{params[:provider]}"
+    strategy = Checkpoint.strategies.find do |strategy|
+      strategy if strategy.supports? params[:provider]
     end
-    identity = Account.where(
-      :realm_id => current_realm.id,
-      :provider => params[:provider],
-      :uid      => user[:uid]).first.try(:identity)
-    identity ||= Identity.create!(:realm => current_realm)
-    account = Account.declare!(
-      :uid      => user[:uid],
-      :name     => user[:name],
-      :email    => user[:email],
-      :realm_id => current_realm.id,
-      :provider => params[:provider],
-      :identity => identity)
+
+    halt 400, "No strategy can handle the \"#{params[:provider]}\" provider" unless strategy
+
+    provider = strategy.get_provider(params[:provider])
+
+    halt 400, 'Requested provider does not support the direct authentication mode' unless provider.mode == 'direct'
+
+    attributes = begin
+      provider.authenticate(params)
+    rescue Checkpoint::Strategy::InvalidCredentialsError => ex
+      halt 403, ex.message
+    end
+
+    attributes[:realm_id] = current_realm.id
+    account = begin
+      Account.declare!(attributes)
+    rescue Account::InUseError => e
+      redirect url_for_failure(:message => :account_in_use)
+    end
     log_in(account.identity)
   end
 

@@ -21,10 +21,7 @@ ActiveRecord::Base.add_observer RiverNotifications.instance
 ActiveRecord::Base.establish_connection($config[environment])
 $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
 
-require 'hanuman'
-File.open('config/hanuman.yml') do |file|
-  Hanuman::Config.load file, environment
-end
+require 'config/strategies' if File.exists?('config/strategies.rb')
 
 Pebblebed.config do
   service :vanilla
