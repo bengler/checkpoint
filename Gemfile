@@ -18,8 +18,6 @@ gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/bengler/omniauth
 gem 'omniauth-vanilla', :git => 'git://github.com/bengler/omniauth-vanilla.git'
 gem 'omniauth-evernote'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
-gem 'hanuman-client', :git => 'git://github.com/amedia/hanuman-client-ruby.git', :branch => 'checkpoint-strategy'
-gem 'checkpoint-strategy', :git => 'git://github.com/bengler/checkpoint-strategy.git'
 gem 'pebblebed', ">=0.1.0"
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git://github.com/bengler/pebbles-cors.git'
