@@ -6,11 +6,13 @@ Checkpoint is a centralized authentication broker for web applications that supp
 
 ## Concepts
 
-* *Realm* - the security context for your application. A given session is valid for a specific realm. Realms may span any number of services, but they should ideally be construed as a single coherent 'brand' in the mind of your users. An example realm could be "google" where all the services provided within the 'google' realm shared identities across services.
+* *Realm* - The security context for your application. A given session is valid for a specific realm. Realms may span any number of services, but they should ideally be construed as a single coherent 'brand' in the mind of your users. An example realm could be "google" where all the services provided within the 'google' realm shared identities across services.
 * *Domain* - A realm is connected to a number of domains (e.g. 'google' realm could be attached to the domains 'maps.google.com' and 'reader.google.com' and even 'youtube.com'). Checkpoint looks at the current host domain to determine the current realm when e.g. logging a user in.
-* *Identity* - represents one specific person. An identity may have a number of accounts.
-* *Account* - a verified account with a specific provider that can be used to log in to a specific identity.
-* *Provider* - refers to an authentication mechanism, e.g. Twitter or Facebook.
+* *Identity* - Represents one specific person. An identity may have a number of accounts.
+* *Account* - A verified account with a specific provider that can be used to log in to a specific identity.
+* *Provider* - An actual authenication service, e.g. Twitter or Facebook. A provider may offer several authentication strategies.
+* *Strategy* - An authentication mechanism, e.g. omniauth. Different providers can offer authentication by the same strategy. See below for implementing custom strategies.
+
 
 ## Basic config
 
@@ -78,6 +80,12 @@ Identities support arbitrary sets of tags. (A tag can be any string, including s
 For example, if you develop apps A and B, and these apps tag their identities accordingly, then it's trivial to determine which identities came from which app. If, say, app B is discontinued or must be moved to a separate realm, it's easy to purge/move the identities if they have been tagged correctly.
 
 Tagging is entirely-freeform and can serve any purpose, however.
+
+
+## Custom strategy and provider
+
+A customized installation of Checkpoint might need to implement its own provider and strategy for authentication against an existing user/password store. Refer to `config/strategies-example.rb` and the [checkpoint-strategy](https://github.com/bengler/checkpoint-strategy) gem to set up a Checkpoint compliant provider and strategy.
+
 
 ## Known weaknesses
 
