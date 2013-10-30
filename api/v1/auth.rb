@@ -133,7 +133,7 @@ class CheckpointV1 < Sinatra::Base
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
-      halt 403, ex.message
+      redirect url_for_failure(:message => :invalid_credentials, :text => ex.message)
     end
 
     attributes[:realm_id] = current_realm.id
@@ -142,7 +142,16 @@ class CheckpointV1 < Sinatra::Base
     rescue Account::InUseError => e
       redirect url_for_failure(:message => :account_in_use)
     end
+
     log_in(account.identity)
+
+    unless request.xhr?
+      # Make sure the target URL is fully qualified with domain.
+      target_url = URI.parse(params[:redirect_to] || '/login/succeeded')
+      target_url.host ||= request.host
+      target_url.scheme ||= request.scheme
+      redirect target_url
+    end
   end
 
   # This is called directly by Omniauth as a rack method.
