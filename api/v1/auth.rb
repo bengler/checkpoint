@@ -24,7 +24,7 @@ class CheckpointV1 < Sinatra::Base
       uri.to_s
     end
 
-    def url_for_failure(params = {})
+    def url_for_failure(params = {}, url)
       params = {:status => 'failed'}.merge(params)
       if (return_url = session[:redirect_to])
         if return_url =~ /_completion/
@@ -33,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
           return url_with_params(return_url, params)
         end
       else
-        return_url = "http://#{request.host}/login/failed"
+        return_url = "http://#{url}" || "http://#{request.host}/login/failed"
       end
       return url_with_params(return_url, params)
     end
@@ -133,14 +133,14 @@ class CheckpointV1 < Sinatra::Base
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
-      redirect url_for_failure(:message => :invalid_credentials, :text => ex.message)
+      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message}, params[:failure_url])
     end
 
     attributes[:realm_id] = current_realm.id
     account = begin
       Account.declare!(attributes)
     rescue Account::InUseError => e
-      redirect url_for_failure(:message => :account_in_use)
+      redirect url_for_failure({:message => :account_in_use}, params[:failure_url])
     end
 
     log_in(account.identity)
