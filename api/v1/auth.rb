@@ -33,7 +33,7 @@ class CheckpointV1 < Sinatra::Base
           return url_with_params(return_url, params)
         end
       else
-        return_url = "http://#{url}" || "http://#{request.host}/login/failed"
+        return_url = "#{url}" || "http://#{request.host}/login/failed"
       end
       return url_with_params(return_url, params)
     end
