@@ -1,4 +1,4 @@
-require "hanuman/strategy"
+require "hanuman/checkpoint/strategy"
 require "hanuman/config"
 
 File.open("config/hanuman.yml") do |f|

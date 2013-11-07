@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/amedia/hanuman-client-ruby.git
-  revision: 85cd596ce135d356002a0fe9d8d9f4ea12b28291
+  revision: 9501ed41a726f3289865b8c90a968b8ce0b239bb
   specs:
     hanuman-client (0.0.3)
       checkpoint-strategy (~> 0.0.1)
