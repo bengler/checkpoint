@@ -25,7 +25,7 @@ class CheckpointV1 < Sinatra::Base
       params.delete('captures')
       # Todo: add a test case for this
       if current_identity && current_identity.god && identity.realm == current_realm
-        pg :callback_result, :locals => {:allowed => true, :url => request.url}
+        pg :callback_result, :locals => {:allowed => true, :url => request.url, :reason => "You are God!"}
       elsif banned_path = Banning.banned?(params.to_options)
         pg :callback_result, :locals => {:allowed => false, :url => request.url,
           :reason => "This identity is banned from '#{banned_path}'."}
