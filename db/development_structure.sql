@@ -42,6 +42,25 @@ CREATE TABLE access_group_memberships (
 
 
 --
+-- Name: access_group_memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE access_group_memberships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: access_group_memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE access_group_memberships_id_seq OWNED BY access_group_memberships.id;
+
+
+--
 -- Name: access_group_subtrees; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -55,6 +74,25 @@ CREATE TABLE access_group_subtrees (
 
 
 --
+-- Name: access_group_subtrees_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE access_group_subtrees_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: access_group_subtrees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE access_group_subtrees_id_seq OWNED BY access_group_subtrees.id;
+
+
+--
 -- Name: access_groups; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -65,6 +103,25 @@ CREATE TABLE access_groups (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: access_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE access_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: access_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE access_groups_id_seq OWNED BY access_groups.id;
 
 
 --
@@ -87,8 +144,8 @@ CREATE TABLE accounts (
     image_url text,
     email text,
     synced_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     phone text
 );
 
@@ -213,63 +270,6 @@ ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
 
 
 --
--- Name: group_memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE group_memberships_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: group_memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE group_memberships_id_seq OWNED BY access_group_memberships.id;
-
-
---
--- Name: group_subtrees_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE group_subtrees_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: group_subtrees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE group_subtrees_id_seq OWNED BY access_group_subtrees.id;
-
-
---
--- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE groups_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE groups_id_seq OWNED BY access_groups.id;
-
-
---
 -- Name: identities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -278,8 +278,8 @@ CREATE TABLE identities (
     realm_id integer NOT NULL,
     primary_account_id integer,
     god boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     last_seen_on date,
     fingerprints tsvector,
     tags tsvector
@@ -386,8 +386,8 @@ CREATE TABLE realms (
     title text,
     label text NOT NULL,
     service_keys text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     primary_domain_id integer
 );
 
@@ -428,8 +428,8 @@ CREATE TABLE sessions (
     id integer NOT NULL,
     identity_id integer,
     key text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -456,21 +456,21 @@ ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY access_group_memberships ALTER COLUMN id SET DEFAULT nextval('group_memberships_id_seq'::regclass);
+ALTER TABLE ONLY access_group_memberships ALTER COLUMN id SET DEFAULT nextval('access_group_memberships_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY access_group_subtrees ALTER COLUMN id SET DEFAULT nextval('group_subtrees_id_seq'::regclass);
+ALTER TABLE ONLY access_group_subtrees ALTER COLUMN id SET DEFAULT nextval('access_group_subtrees_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY access_groups ALTER COLUMN id SET DEFAULT nextval('groups_id_seq'::regclass);
+ALTER TABLE ONLY access_groups ALTER COLUMN id SET DEFAULT nextval('access_groups_id_seq'::regclass);
 
 
 --

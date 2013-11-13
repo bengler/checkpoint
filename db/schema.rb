@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# encoding: ISO-8859-1
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -57,8 +57,8 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
     t.text     "image_url"
     t.text     "email"
     t.datetime "synced_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.text     "phone"
   end
 
@@ -102,8 +102,8 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
     t.integer  "realm_id",                              :null => false
     t.integer  "primary_account_id"
     t.boolean  "god",                :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.date     "last_seen_on"
     t.tsvector "fingerprints"
     t.tsvector "tags"
@@ -143,8 +143,8 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
     t.text     "title"
     t.text     "label",             :null => false
     t.text     "service_keys"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "primary_domain_id"
   end
 
@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
   create_table "sessions", :force => true do |t|
     t.integer  "identity_id"
     t.text     "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "sessions", ["identity_id"], :name => "index_sessions_on_identity_id"
