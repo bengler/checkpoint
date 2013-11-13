@@ -1,8 +1,14 @@
 GIT
-  remote: git://github.com/amedia/hanuman-client-ruby.git
-  revision: 85cd596ce135d356002a0fe9d8d9f4ea12b28291
+  remote: git://github.com/amedia/amedia-properties-ruby.git
+  revision: cfed269ec0792652fd85381be634c53928786364
   specs:
-    hanuman-client (0.0.3)
+    amedia-properties (0.0.2)
+
+GIT
+  remote: git://github.com/amedia/hanuman-client-ruby.git
+  revision: 1491eb1b900ae04dd7af2cab0b907735cb78e3bf
+  specs:
+    hanuman-client (0.0.4)
       checkpoint-strategy (~> 0.0.1)
       savon (~> 2.3)
 
@@ -247,6 +253,7 @@ DEPENDENCIES
   activerecord (~> 3.2)
   activesupport (~> 3.2)
   airbrake (~> 3.1.4)
+  amedia-properties!
   ar-tsvectors (~> 1.0)
   bengler_test_helper!
   checkpoint-strategy!
