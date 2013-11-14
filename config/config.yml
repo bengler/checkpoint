@@ -1,16 +1,16 @@
 development:
-  gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/amedia-properties_development.log
+  gaia_endpoint_base: http://hennikul-laptop.localdomain:9050/gaia/api/public/v1/
+  logfile: log/common_development.log
 
 staging:
   gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/amedia-properties_staging.log
+  logfile: log/common_staging.log
 
 production:
   gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/amedia-properties.log
+  logfile: log/common.log
 
 test:
   gaia_endpoint_base: http://example.org/this_should_be_stubbed/
-  logfile: log/amedia-properties_test.log
+  logfile: log/common_test.log
 

@@ -21,12 +21,12 @@ if environment == 'test'
     end
   end
 else 
-  File.open("config/amedia-properties.yml", 'r') do |f|
+  File.open("config/config.yml", 'r') do |f|
     Amedia::Properties::Config.load f, environment
   end
 end
 
-File.open("config/hanuman.yml", 'r') do |f|
+File.open("config/config.yml", 'r') do |f|
   Hanuman::Config.load(f , environment)
 end
 
