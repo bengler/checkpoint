@@ -5,6 +5,8 @@ class Identity < ActiveRecord::Base
   has_many :accounts, :dependent => :destroy,
     :after_add => :update_fingerprints_from_account!
   has_many :sessions, :dependent => :destroy
+  has_many :identity_fingerprints, :dependent => :destroy
+  has_many :identity_tags, :dependent => :destroy
   belongs_to :primary_account, :class_name => 'Account'
   belongs_to :realm
 
