@@ -11,8 +11,9 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON] A collection of identities
 
   get '/fingerprints/:fingerprints/identities' do |fingerprints|
-    identities = Identity.where(:realm_id => current_realm.id).
-      where(["fingerprints @@ ?", fingerprints.split(',').join('|')])
+    identities = Identity.joins(:identity_fingerprints).
+      where(:realm_id => current_realm.id).
+      where("identity_fingerprints.fingerprint in (?)", fingerprints.split(','))
     pg :identities, :locals => { :identities => identities }
   end
 end

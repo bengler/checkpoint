@@ -98,13 +98,11 @@ class Account < ActiveRecord::Base
     {:token => token, :secret => secret}
   end
 
-  # Computes one or more hashes of the permanent components of the account 
+  # Computes one or more hashes of the permanent components of the account
   # data, which can function as a fingerprint to recognize future duplicate
   # accounts. This makes it possible to ban accounts purely based on
   # fingerprints.
   def fingerprints
-    # Note: Fingerprints must always be lowercase due to current limitations in 
-    # ar-tsvectors and Postgres indexing.
     digest = Digest::SHA256.new
     digest.update(self.provider.to_s)
     digest.update(self.uid.to_s)

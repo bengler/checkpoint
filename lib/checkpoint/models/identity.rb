@@ -16,12 +16,6 @@ class Identity < ActiveRecord::Base
 
   validates_presence_of :realm_id
 
-  ts_vector :tags
-  ts_vector :fingerprints
-
-  # Make sure fingerprints cannot be assigned directly
-  private :fingerprints=
-
   scope :having_realm, lambda { |realm|
     where(:realm_id => realm.id)
   }
@@ -114,9 +108,18 @@ class Identity < ActiveRecord::Base
 
   def update_fingerprints_from_account!(account)
     if account and (fingerprints = account.fingerprints)
-      self.send(:fingerprints=, fingerprints | self.fingerprints)
-      save(validate: false) unless new_record?
+      fingerprints.each do |fingerprint|
+        if !identity_fingerprints.any? {|fp| fp.fingerprint == fingerprint }
+          identity_fingerprints.create(:fingerprint => fingerprint)
+        end
+      end
     end
+  end
+
+  # Method added for convenience after extracting fingerprints
+  # into separate model and table
+  def fingerprints
+    identity_fingerprints.pluck(:fingerprint)
   end
 
   private

@@ -57,15 +57,16 @@ class Banning < ActiveRecord::Base
 
   # The identities affected by this ban
   def identities
-    Identity.where(:realm_id => self.realm.id).
-      where(["fingerprints @@ ?", fingerprint])
+    Identity.joins(:identity_fingerprints).where(:realm_id => self.realm.id).
+      where("identity_fingerprints.fingerprint" => fingerprint)
   end
 
   # Returns all identities banned in a given path
   def self.identities_in_path(path)
     realm = Realm.find_by_label(realm) if realm.is_a?(String)
     Identity.where(:realm_id => realm.id).
-      joins('bannings on identities.fingerprints @@ to_tsquery(bannings.fingerprint)').
+      joins('identity_fingerprints on identities.id = identity_fingerprints.identity_id').
+      joins('bannings on identity_fingerprints.fingerprint = bannings.fingerprint').
       joins('locations on bannings.location_id = locations.id').
       where(:locations => Pebbles::Path.to_conditions(path))
   end
