@@ -116,10 +116,20 @@ class Identity < ActiveRecord::Base
     end
   end
 
-  # Method added for convenience after extracting fingerprints
-  # into separate model and table
   def fingerprints
     identity_fingerprints.pluck(:fingerprint)
+  end
+
+  def tags
+    identity_tags.pluck(:tag)
+  end
+
+  def tags=(tags)
+    tags.each do |tag|
+      if !identity_tags.any? {|t| t.tag == tag }
+        identity_tags.create(:tag => tag)
+      end
+    end
   end
 
   private
