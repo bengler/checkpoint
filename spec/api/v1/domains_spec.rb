@@ -64,6 +64,7 @@ describe "Domains" do
     result = JSON.parse(last_response.body)
     result['allowed'].should eq true
     get "/domains/mystuff.com/allows/pinshing.com"
+    last_response.should be_ok, last_response.errors
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
     post "/realms/area51/domains/mystuff.com/origins", :origin => "pinshing.com", :session => somegod_session

@@ -46,9 +46,8 @@ describe "Bannings" do
   end
 
   let :crook do
-    result = Identity.new(:realm => realm)
-    result.send(:fingerprints=, ['fingerprint1'])
-    result.save!
+    result = Identity.create(:realm => realm)
+    result.identity_fingerprints.create(:fingerprint => 'fingerprint1')
     result
   end
 
@@ -79,9 +78,8 @@ describe "Bannings" do
       end
 
       it 'can filter on identity' do
-        crook2 = Identity.new(:realm => realm)
-        crook2.send(:fingerprints=, ['fingerprint2'])
-        crook2.save!
+        crook2 = Identity.create(:realm => realm)
+        crook2.identity_fingerprints.create(:fingerprint => 'fingerprint2')
 
         Banning.declare!(path: "area51", fingerprint: crook2.fingerprints.first)
         Banning.declare!(path: "area51", fingerprint: crook.fingerprints.first)
@@ -111,9 +109,8 @@ describe "Bannings" do
       end
 
       it 'fails with 403 if identity belongs to other realm' do
-        foreigner = Identity.new(:realm => other_realm)
-        foreigner.send(:fingerprints=, ['fingerprint1'])
-        foreigner.save!
+        foreigner = Identity.create(:realm => other_realm)
+        foreigner.identity_fingerprints.create(:fingerprint => 'fingerprint1')
 
         checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51").and_return(DeepStruct.wrap(:allowed => false))
         Pebblebed::Connector.any_instance.stub(:checkpoint => checkpoint)
@@ -170,8 +167,10 @@ describe "Bannings" do
   end
 
   it "will remove any necessary effective bans to lift ban on specific path for specific identity" do
-    crook.send(:fingerprints=, ['fingerprint1', 'fingerprint2'])
-    crook.save!
+    crook.identity_fingerprints = [
+      IdentityFingerprint.create(:identity => crook, :fingerprint => 'fingerprint1'),
+      IdentityFingerprint.create(:identity => crook, :fingerprint => 'fingerprint2'),
+    ]
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     Banning.declare!(:path => "area51.a.b", :fingerprint => 'fingerprint2')
     checkpoint.should_receive(:post).with("/callbacks/allowed/moderate/post.any:area51.a.b.c.d.e").and_return(DeepStruct.wrap(:allowed => true))

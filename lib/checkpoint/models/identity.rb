@@ -14,6 +14,9 @@ class Identity < ActiveRecord::Base
   before_destroy :invalidate_cache
   before_update :invalidate_cache
 
+  after_save :update_tags
+  after_save :add_new_fingerprints
+
   validates_presence_of :realm_id
 
   scope :having_realm, lambda { |realm|
@@ -108,34 +111,64 @@ class Identity < ActiveRecord::Base
 
   def update_fingerprints_from_account!(account)
     if account and (fingerprints = account.fingerprints)
-      fingerprints.each do |fingerprint|
-        if !identity_fingerprints.any? {|fp| fp.fingerprint == fingerprint }
-          identity_fingerprints.create(:fingerprint => fingerprint)
-        end
+      if new_record?
+        @new_fingerprints = fingerprints
+        @fingerprints = (@fingerprints || []) + fingerprints
+      else
+        add_new_fingerprints(fingerprints)
       end
     end
   end
 
   def fingerprints
-    identity_fingerprints.pluck(:fingerprint)
+    @fingerprints ||= identity_fingerprints.pluck(:fingerprint)
   end
-
+  
   def tags
-    identity_tags.pluck(:tag)
+    @tags ||= identity_tags.pluck(:tag)
   end
 
-  def tags=(tags)
-    tags.each do |tag|
-      if !identity_tags.any? {|t| t.tag == tag }
-        identity_tags.create(:tag => tag)
-      end
-    end
+  def tags=(new_tags = [])
+    @new_tags = new_tags
   end
 
   private
 
-    def initialize_last_seen
-      self.last_seen_on ||= Time.now.to_date
+  def update_tags
+    if @new_tags
+      remove_obsoleted_tags
+      add_new_tags
+      @new_tags = @tags = nil
     end
+    true
+  end
+
+  def remove_obsoleted_tags
+    if @new_tags.empty?
+      identity_tags.destroy_all
+    else
+      identity_tags.where("NOT tag IN (?)", @new_tags).destroy_all
+    end
+  end
+
+  def add_new_tags
+    (@new_tags - tags).each do |tag|
+      identity_tags.create(:tag => tag)
+    end
+  end
+
+  def add_new_fingerprints(new_fingerprints = @new_fingerprints)
+    if new_fingerprints
+      (new_fingerprints - identity_fingerprints.pluck(:fingerprint)).each do |fp|
+        identity_fingerprints.create(:fingerprint => fp)
+      end
+      @new_fingerprints = @fingerprints = nil
+    end
+    true
+  end
+
+  def initialize_last_seen
+    self.last_seen_on ||= Time.now.to_date
+  end
 
 end

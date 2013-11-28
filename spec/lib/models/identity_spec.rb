@@ -187,5 +187,22 @@ describe Identity do
 
     end
 
+    context "tags" do
+      let(:me) { Identity.create!(:realm => realm, :tags => ["bar", "foo"]) }
+      it "stores tags on create" do
+        me.tags.sort.should eq ["bar", "foo"]
+      end
+      it "replaces tags after changed" do
+        me.tags = ["bar", "baz"]
+        me.save!
+        me.tags.sort.should eq ["bar", "baz"]
+      end
+      it "removes tags after changed to empty array" do
+        me.tags = []
+        me.save!
+        me.tags.sort.should eq []
+      end
+    end
+
   end
 end

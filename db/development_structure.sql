@@ -246,7 +246,7 @@ CREATE TABLE domains (
     realm_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    origins tsvector
+    origins text
 );
 
 
@@ -280,9 +280,9 @@ CREATE TABLE identities (
     god boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    last_seen_on date,
-    fingerprints tsvector,
-    tags tsvector
+    last_seen_on date--,
+    --fingerprints tsvector,
+    --tags tsvector
 );
 
 
@@ -303,6 +303,36 @@ CREATE SEQUENCE identities_id_seq
 --
 
 ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+
+
+--
+-- Name: identity_fingerprints; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE identity_fingerprints (
+    id integer NOT NULL,
+    identity_id integer NOT NULL,
+    fingerprint text NOT NULL
+);
+
+
+--
+-- Name: identity_fingerprints_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE identity_fingerprints_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: identity_fingerprints_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE identity_fingerprints_id_seq OWNED BY identity_fingerprints.id;
 
 
 --
@@ -335,6 +365,36 @@ CREATE SEQUENCE identity_ips_id_seq
 --
 
 ALTER SEQUENCE identity_ips_id_seq OWNED BY identity_ips.id;
+
+
+--
+-- Name: identity_tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE identity_tags (
+    id integer NOT NULL,
+    identity_id integer NOT NULL,
+    tag text NOT NULL
+);
+
+
+--
+-- Name: identity_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE identity_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: identity_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE identity_tags_id_seq OWNED BY identity_tags.id;
 
 
 --
@@ -512,7 +572,21 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY identity_fingerprints ALTER COLUMN id SET DEFAULT nextval('identity_fingerprints_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY identity_ips ALTER COLUMN id SET DEFAULT nextval('identity_ips_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY identity_tags ALTER COLUMN id SET DEFAULT nextval('identity_tags_id_seq'::regclass);
 
 
 --
@@ -601,11 +675,27 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: identity_fingerprints_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY identity_fingerprints
+    ADD CONSTRAINT identity_fingerprints_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: identity_ips_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY identity_ips
     ADD CONSTRAINT identity_ips_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identity_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY identity_tags
+    ADD CONSTRAINT identity_tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -706,7 +796,7 @@ CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
 -- Name: index_fingerprints_on_identities; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_fingerprints_on_identities ON identities USING gist (fingerprints);
+--CREATE INDEX index_fingerprints_on_identities ON identities USING gist (fingerprints);
 
 
 --
@@ -731,6 +821,20 @@ CREATE INDEX index_identities_on_realm_id ON identities USING btree (realm_id);
 
 
 --
+-- Name: index_identity_fingerprints_on_fingerprint; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_identity_fingerprints_on_fingerprint ON identity_fingerprints USING btree (fingerprint);
+
+
+--
+-- Name: index_identity_fingerprints_on_identity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_identity_fingerprints_on_identity_id ON identity_fingerprints USING btree (identity_id);
+
+
+--
 -- Name: index_identity_ips_on_address; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -742,6 +846,20 @@ CREATE INDEX index_identity_ips_on_address ON identity_ips USING btree (address)
 --
 
 CREATE INDEX index_identity_ips_on_identity_id ON identity_ips USING btree (identity_id);
+
+
+--
+-- Name: index_identity_tags_on_identity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_identity_tags_on_identity_id ON identity_tags USING btree (identity_id);
+
+
+--
+-- Name: index_identity_tags_on_tag; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_identity_tags_on_tag ON identity_tags USING btree (tag);
 
 
 --

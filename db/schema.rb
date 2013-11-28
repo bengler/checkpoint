@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028072812) do
+ActiveRecord::Schema.define(:version => 20131128163257) do
 
   create_table "access_group_memberships", :force => true do |t|
     t.integer  "access_group_id", :null => false
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
     t.integer  "realm_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.tsvector "origins"
+    t.text     "origins"
   end
 
   add_index "domains", ["name"], :name => "index_domains_on_name", :unique => true
@@ -112,6 +112,14 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
   add_index "identities", ["fingerprints"], :name => "index_fingerprints_on_identities"
   add_index "identities", ["realm_id"], :name => "index_identities_on_realm_id"
 
+  create_table "identity_fingerprints", :force => true do |t|
+    t.integer "identity_id", :null => false
+    t.text    "fingerprint", :null => false
+  end
+
+  add_index "identity_fingerprints", ["fingerprint"], :name => "index_identity_fingerprints_on_fingerprint"
+  add_index "identity_fingerprints", ["identity_id"], :name => "index_identity_fingerprints_on_identity_id"
+
   create_table "identity_ips", :force => true do |t|
     t.text     "address",     :null => false
     t.integer  "identity_id", :null => false
@@ -121,6 +129,14 @@ ActiveRecord::Schema.define(:version => 20131028072812) do
 
   add_index "identity_ips", ["address"], :name => "index_identity_ips_on_address"
   add_index "identity_ips", ["identity_id"], :name => "index_identity_ips_on_identity_id"
+
+  create_table "identity_tags", :force => true do |t|
+    t.integer "identity_id", :null => false
+    t.text    "tag",         :null => false
+  end
+
+  add_index "identity_tags", ["identity_id"], :name => "index_identity_tags_on_identity_id"
+  add_index "identity_tags", ["tag"], :name => "index_identity_tags_on_tag"
 
   create_table "locations", :force => true do |t|
     t.text     "label_0"

@@ -6,11 +6,11 @@ class CreateIdentityFingerprints < ActiveRecord::Migration
       t.text :fingerprint, :null => false
     end
 
-    Identity.where("fingerprints IS NOT NULL").each_with_index do |identity, index|
-      identity.fingerprints.each do |fingerprint|
-        IdentityFingerprint.create identity_id: identity.id, fingerprint: fingerprint
-      end
-    end
+    # Identity.where("fingerprints IS NOT NULL").each_with_index do |identity, index|
+    #   identity.fingerprints.each do |fingerprint|
+    #     IdentityFingerprint.create identity_id: identity.id, fingerprint: fingerprint
+    #   end
+    # end
 
     add_index :identity_fingerprints, [:identity_id]
     add_index :identity_fingerprints, [:fingerprint]

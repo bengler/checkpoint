@@ -214,6 +214,7 @@ describe "Identities" do
         account: {provider: 'twitter', nickname: 'nick', uid: '2'},
         identity: {tags: ['foo was here', 'kilroy was here']}
       }
+      # last_response.should be_ok, last_response.errors
       result = JSON.parse(last_response.body)
       identity = Identity.where(id: result['identity']['id']).first
       identity.tags.sort.should eq ['foo was here', 'kilroy was here']
