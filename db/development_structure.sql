@@ -280,9 +280,7 @@ CREATE TABLE identities (
     god boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    last_seen_on date--,
-    --fingerprints tsvector,
-    --tags tsvector
+    last_seen_on date
 );
 
 
@@ -790,13 +788,6 @@ CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
 --
 
 CREATE INDEX index_domains_on_realm_id ON domains USING btree (realm_id);
-
-
---
--- Name: index_fingerprints_on_identities; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
---CREATE INDEX index_fingerprints_on_identities ON identities USING gist (fingerprints);
 
 
 --

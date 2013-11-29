@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131128163257) do
+ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "access_group_memberships", :force => true do |t|
     t.integer  "access_group_id", :null => false
@@ -105,11 +105,8 @@ ActiveRecord::Schema.define(:version => 20131128163257) do
     t.datetime "created_at",                            :null => false
     t.datetime "updated_at",                            :null => false
     t.date     "last_seen_on"
-    t.tsvector "fingerprints"
-    t.tsvector "tags"
   end
 
-  add_index "identities", ["fingerprints"], :name => "index_fingerprints_on_identities"
   add_index "identities", ["realm_id"], :name => "index_identities_on_realm_id"
 
   create_table "identity_fingerprints", :force => true do |t|
