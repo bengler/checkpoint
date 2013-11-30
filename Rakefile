@@ -9,6 +9,7 @@ task :environment do
 end
 
 task "db:schema:load" => :environment
+task "db:schema:dump" => :environment
 
 namespace :db do
   desc "bootstrap db user, recreate, run migrations"
