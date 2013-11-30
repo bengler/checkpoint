@@ -8,6 +8,8 @@ task :environment do
   ActiveRecord::Base.logger.level = Logger::INFO if ActiveRecord::Base.logger
 end
 
+task "db:schema:load" => :environment
+
 namespace :db do
   desc "bootstrap db user, recreate, run migrations"
   task :bootstrap do
@@ -32,7 +34,7 @@ end
 
 namespace :maintenance do
   desc "delete anonymous identities that have not been seen for a month"
-  task :delete_inactive_anonymous_identities => :environment do    
+  task :delete_inactive_anonymous_identities => :environment do
     Identity.anonymous.not_seen_for_more_than_days(30).find_in_batches(:batch_size => 300) do |identities|
       print '.'
       Identity.connection.transaction do

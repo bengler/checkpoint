@@ -7,7 +7,7 @@ gem 'rack-contrib'
 
 gem 'activerecord', '~> 3.2', :require => 'active_record'
 gem 'activesupport', '~> 3.2'
-gem 'pg'
+gem 'mysql2', '~> 0.3.14'
 gem 'omniauth', '~> 1.1.4'
 gem 'omniauth-twitter', :git => 'git://github.com/arunagw/omniauth-twitter.git'
 gem 'omniauth-facebook', '~> 1.4.1'
@@ -33,7 +33,6 @@ gem 'rake'
 gem 'queryparams'
 gem 'simpleidn', '~> 0.0.4'
 gem 'rest-client', :require => false  # Used by origo.thor
-gem 'ar-tsvectors', '~> 1.0', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
 
 group :development, :test do

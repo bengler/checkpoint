@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "access_group_subtrees", :force => true do |t|
     t.integer  "access_group_id", :null => false
-    t.text     "location",        :null => false
+    t.string   "location",        :null => false
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "access_groups", :force => true do |t|
     t.integer  "realm_id",   :null => false
-    t.text     "label"
+    t.string   "label"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -45,21 +45,21 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   create_table "accounts", :force => true do |t|
     t.integer  "identity_id"
     t.integer  "realm_id",    :null => false
-    t.text     "provider",    :null => false
-    t.text     "uid",         :null => false
-    t.text     "token"
-    t.text     "secret"
-    t.text     "nickname"
-    t.text     "name"
-    t.text     "location"
+    t.string   "provider",    :null => false
+    t.string   "uid",         :null => false
+    t.string   "token"
+    t.string   "secret"
+    t.string   "nickname"
+    t.string   "name"
+    t.string   "location"
     t.text     "description"
-    t.text     "profile_url"
-    t.text     "image_url"
-    t.text     "email"
+    t.string   "profile_url"
+    t.string   "image_url"
+    t.string   "email"
     t.datetime "synced_at"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.text     "phone"
+    t.string   "phone"
   end
 
   add_index "accounts", ["identity_id"], :name => "index_accounts_on_identity_id"
@@ -67,8 +67,8 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   add_index "accounts", ["realm_id"], :name => "index_accounts_on_realm_id"
 
   create_table "bannings", :force => true do |t|
-    t.text     "fingerprint"
-    t.text     "path"
+    t.string   "fingerprint"
+    t.string   "path"
     t.integer  "location_id"
     t.integer  "realm_id"
     t.datetime "created_at",  :null => false
@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   add_index "bannings", ["fingerprint", "path"], :name => "index_bannings_on_fingerprint_and_path"
 
   create_table "callbacks", :force => true do |t|
-    t.text     "url",         :null => false
-    t.text     "path",        :null => false
+    t.string   "url",         :null => false
+    t.string   "path",        :null => false
     t.integer  "location_id", :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   add_index "callbacks", ["location_id"], :name => "index_callbacks_on_location_id"
 
   create_table "domains", :force => true do |t|
-    t.text     "name"
+    t.string   "name"
     t.integer  "realm_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -111,14 +111,14 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "identity_fingerprints", :force => true do |t|
     t.integer "identity_id", :null => false
-    t.text    "fingerprint", :null => false
+    t.string  "fingerprint", :null => false
   end
 
   add_index "identity_fingerprints", ["fingerprint"], :name => "index_identity_fingerprints_on_fingerprint"
   add_index "identity_fingerprints", ["identity_id"], :name => "index_identity_fingerprints_on_identity_id"
 
   create_table "identity_ips", :force => true do |t|
-    t.text     "address",     :null => false
+    t.string   "address",     :null => false
     t.integer  "identity_id", :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -129,23 +129,23 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "identity_tags", :force => true do |t|
     t.integer "identity_id", :null => false
-    t.text    "tag",         :null => false
+    t.string  "tag",         :null => false
   end
 
   add_index "identity_tags", ["identity_id"], :name => "index_identity_tags_on_identity_id"
   add_index "identity_tags", ["tag"], :name => "index_identity_tags_on_tag"
 
   create_table "locations", :force => true do |t|
-    t.text     "label_0"
-    t.text     "label_1"
-    t.text     "label_2"
-    t.text     "label_3"
-    t.text     "label_4"
-    t.text     "label_5"
-    t.text     "label_6"
-    t.text     "label_7"
-    t.text     "label_8"
-    t.text     "label_9"
+    t.string   "label_0"
+    t.string   "label_1"
+    t.string   "label_2"
+    t.string   "label_3"
+    t.string   "label_4"
+    t.string   "label_5"
+    t.string   "label_6"
+    t.string   "label_7"
+    t.string   "label_8"
+    t.string   "label_9"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   add_index "locations", ["label_0", "label_1", "label_2", "label_3", "label_4", "label_5", "label_6", "label_7", "label_8", "label_9"], :name => "index_location_on_labels", :unique => true
 
   create_table "realms", :force => true do |t|
-    t.text     "title"
-    t.text     "label",             :null => false
+    t.string   "title"
+    t.string   "label",             :null => false
     t.text     "service_keys"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   create_table "sessions", :force => true do |t|
     t.integer  "identity_id"
-    t.text     "key"
+    t.string   "key"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end

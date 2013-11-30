@@ -107,8 +107,6 @@ GEM
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
-    ar-tsvectors (1.0.0)
-      activerecord (>= 3.0)
     arel (3.0.2)
     backports (3.3.4)
     builder (3.0.4)
@@ -140,6 +138,7 @@ GEM
     multi_json (1.8.2)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
+    mysql2 (0.3.14)
     nokogiri (1.5.10)
     nori (2.3.0)
     oauth (0.4.7)
@@ -179,7 +178,6 @@ GEM
     pebbles-uid (0.0.16)
     petroglyph (0.0.7)
       tilt
-    pg (0.17.0)
     queryparams (0.0.3)
     rack (1.5.2)
     rack-contrib (1.1.0)
@@ -254,13 +252,13 @@ DEPENDENCIES
   activesupport (~> 3.2)
   airbrake (~> 3.1.4)
   amedia-properties!
-  ar-tsvectors (~> 1.0)
   bengler_test_helper!
   checkpoint-strategy!
   curb (>= 0.7.14)
   dalli (~> 2.1.0)
   hanuman-client!
   memcache_mock
+  mysql2 (~> 0.3.14)
   omniauth (~> 1.1.4)
   omniauth-contrib (~> 1.0.0)!
   omniauth-evernote
@@ -276,7 +274,6 @@ DEPENDENCIES
   pebbles-path (>= 0.0.3)
   pebbles-uid
   petroglyph
-  pg
   queryparams
   rack-contrib
   rack-test
