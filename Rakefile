@@ -8,9 +8,6 @@ task :environment do
   ActiveRecord::Base.logger.level = Logger::INFO if ActiveRecord::Base.logger
 end
 
-task "db:schema:load" => :environment
-task "db:schema:dump" => :environment
-
 namespace :db do
   desc "bootstrap db user, recreate, run migrations"
   task :bootstrap do
@@ -31,6 +28,23 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
   end
+
+  namespace :schema do
+    task :load => :environment
+    task :dump => :environment
+  end
+
+  namespace :structure do
+    desc 'Dump database schema to development_structure.sql'
+    task :dump => :environment do
+      database, username, password = ActiveRecord::Base.connection_config.
+        values_at(:database, :username, :password)
+      filename = File.expand_path('db/development_structure.sql', __FILE__)
+      # FIXME: Add Tempfile block so that the real file will only be touch when dump ok
+      system "mysqldump -u #{username} -p #{password} --no-data #{database} > #{filename}"
+    end
+  end
+
 end
 
 namespace :maintenance do
