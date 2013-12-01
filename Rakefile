@@ -1,5 +1,6 @@
 $:.unshift(File.dirname(__FILE__))
 
+require 'tempfile'
 require 'sinatra/activerecord/rake'
 require 'bengler_test_helper/tasks' if ['development', 'test'].include?(ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development')
 
@@ -34,14 +35,48 @@ namespace :db do
     task :dump => :environment
   end
 
+  namespace :test do
+    task :create do
+      ENV['RACK_ENV'] = 'test'
+      Rake::Task['environment'].invoke
+      database, username, password = ActiveRecord::Base.connection_config.
+        values_at(:database, :username, :password)
+      system "mysql -u#{username} -p#{password} -e 'DROP DATABASE IF EXISTS #{database}'"
+      system "mysql -u#{username} -p#{password} -e 'CREATE DATABASE IF EXISTS #{database}'"
+    end
+    task :prepare do
+      ENV['RACK_ENV'] = 'test'
+      Rake::Task['environment'].invoke
+      Rake::Task['db:test:create'].invoke
+      Rake::Task['db:structure.load'].invoke
+    end
+  end
+
   namespace :structure do
     desc 'Dump database schema to development_structure.sql'
     task :dump => :environment do
       database, username, password = ActiveRecord::Base.connection_config.
         values_at(:database, :username, :password)
       filename = File.expand_path('db/development_structure.sql', __FILE__)
-      # FIXME: Add Tempfile block so that the real file will only be touch when dump ok
-      system "mysqldump -u #{username} -p #{password} --no-data #{database} > #{filename}"
+      Tempfile.open('structure') do |tempfile|
+        tempfile.close
+        system "mysqldump -u#{username} -p#{password} --no-data #{database} > #{filename}" or
+          abort "Failed to dump database schema: #{$!}"
+        old_schema = File.read(filename)
+        new_schema = File.read(tempfile.path)
+        if new_schema != old_schema
+          File.open(filename, 'w') {|f| f.write new_schema }
+        else
+          $stderr.puts "Schema unchanged, not updating #{filename}."
+        end
+      end
+    end
+    desc 'Load database schema from development_structure.sql'
+    task :load => :environment do
+      database, username, password = ActiveRecord::Base.connection_config.
+        values_at(:database, :username, :password)
+      filename = File.expand_path('db/development_structure.sql', __FILE__)
+      system "mysql -u#{username} -p#{password} #{database} < #{filename}"
     end
   end
 
