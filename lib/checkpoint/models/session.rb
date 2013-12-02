@@ -40,7 +40,7 @@ class Session < ActiveRecord::Base
   def self.identity_id_for_session(session_key)
     return $memcached.fetch(cache_key(session_key)) {
       Session.connection.select_value(
-        "select identity_id from sessions where key = '#{session_key}'")
+        "select identity_id from sessions where #{Session.connection.quote_column_name "key"} = '#{session_key}'")
     }.try(:to_i)
   end
 
