@@ -36,31 +36,32 @@ namespace :db do
   end
 
   namespace :test do
+    task(:create).clear
     task :create do
       ENV['RACK_ENV'] = 'test'
       Rake::Task['environment'].invoke
       database, username, password = ActiveRecord::Base.connection_config.
         values_at(:database, :username, :password)
       system "mysql -u#{username} -p#{password} -e 'DROP DATABASE IF EXISTS #{database}'"
-      system "mysql -u#{username} -p#{password} -e 'CREATE DATABASE IF EXISTS #{database}'"
+      system "mysql -u#{username} -p#{password} -e 'CREATE DATABASE #{database}'"
     end
+    task(:prepare).clear
     task :prepare do
-      ENV['RACK_ENV'] = 'test'
-      Rake::Task['environment'].invoke
       Rake::Task['db:test:create'].invoke
-      Rake::Task['db:structure.load'].invoke
+      Rake::Task['db:structure:load'].invoke
     end
   end
 
   namespace :structure do
+    task(:dump).clear
     desc 'Dump database schema to development_structure.sql'
     task :dump => :environment do
       database, username, password = ActiveRecord::Base.connection_config.
         values_at(:database, :username, :password)
-      filename = File.expand_path('db/development_structure.sql', __FILE__)
+      filename = File.expand_path('db/development_structure.sql')
       Tempfile.open('structure') do |tempfile|
         tempfile.close
-        system "mysqldump -u#{username} -p#{password} --no-data #{database} > #{filename}" or
+        system "mysqldump -u#{username} -p#{password} --no-data #{database} > #{tempfile.path}" or
           abort "Failed to dump database schema: #{$!}"
         old_schema = File.read(filename)
         new_schema = File.read(tempfile.path)
@@ -71,11 +72,12 @@ namespace :db do
         end
       end
     end
+    task(:load).clear
     desc 'Load database schema from development_structure.sql'
     task :load => :environment do
       database, username, password = ActiveRecord::Base.connection_config.
         values_at(:database, :username, :password)
-      filename = File.expand_path('db/development_structure.sql', __FILE__)
+      filename = File.expand_path('db/development_structure.sql')
       system "mysql -u#{username} -p#{password} #{database} < #{filename}"
     end
   end
