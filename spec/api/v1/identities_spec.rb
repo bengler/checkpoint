@@ -318,7 +318,7 @@ describe "Identities" do
     describe "security" do
       it "is available for everyone" do
         get "/identities/find", :q => "foo", :session => "bar"
-        last_response.status.should eq(200)
+        last_response.should be_ok, last_response.errors
       end
     end
 
