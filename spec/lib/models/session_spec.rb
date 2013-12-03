@@ -28,7 +28,7 @@ describe Session do
   it "Retrieves identities from keys in the database and caches them" do
     session = Session.create!(:identity => identity)
     Session.identity_id_for_session(session.key).should eq identity.id
-    $memcached.get(session.cache_key).should eq identity.id.to_s
+    $memcached.get(session.cache_key).should eq identity.id
   end
 
   it "Reads identites from the cache if a key exists" do
