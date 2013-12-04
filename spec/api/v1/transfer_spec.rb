@@ -92,7 +92,7 @@ describe "Transfers" do
       get "/transfer", {:target => target_url, :session => session.key},
         {'HTTP_HOST' => target_domain.name}
       last_response.status.should eq 302
-      last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=specialsecretsession/
+      last_response.header["Set-Cookie"].should =~ /aid\.session\=specialsecretsession/
       last_response.location.should eq target_url
     end
 
@@ -100,7 +100,7 @@ describe "Transfers" do
       get "/transfer", {:target => target_url, :session => 'i_do_not_exist'},
         {'HTTP_HOST' => target_domain.name}
       last_response.status.should eq 302
-      last_response.header["Set-Cookie"].should =~ /checkpoint\.session\=i_do_not_exist/
+      last_response.header["Set-Cookie"].should =~ /aid\.session\=i_do_not_exist/
       last_response.location.should eq target_url
     end
   end
