@@ -6,7 +6,8 @@ class Session < ActiveRecord::Base
   after_destroy :invalidate_cache
   after_save :invalidate_cache
 
-  COOKIE_NAME = "checkpoint.session".freeze
+  # Changed so our Checkpoint can coexist with Bengler's Checkpoint [AID-72]
+  COOKIE_NAME = "aid.session".freeze
 
   DEFAULT_EXPIRY = Time.parse("2100-01-01").freeze
 
