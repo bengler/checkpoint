@@ -26,15 +26,15 @@ describe "Session cookies" do
   end
 
   it 'automatically sets a session cookie' do
-    rack_mock_session.cookie_jar['aid.session'].should == nil
+    rack_mock_session.cookie_jar[Session::COOKIE_NAME].should == nil
     get "/identities/me", {}, {'HTTP_HOST' => 'example.com'}
     last_response.status.should eq 200
     last_response.headers.should include('Set-Cookie')
-    rack_mock_session.cookie_jar['aid.session'].should_not == nil
+    rack_mock_session.cookie_jar[Session::COOKIE_NAME].should_not == nil
   end
 
   it 'sets a long expiry on primary domain session cookie' do
-    rack_mock_session.cookie_jar['aid.session'].should == nil
+    rack_mock_session.cookie_jar[Session::COOKIE_NAME].should == nil
     get "/identities/me", {}, {'HTTP_HOST' => 'example.com'}
     last_response.status.should eq 200
     last_response.headers.should include('Set-Cookie')
@@ -47,7 +47,7 @@ describe "Session cookies" do
   end
 
   it 'sets no expiry on secondary domain session cookie' do
-    rack_mock_session.cookie_jar['aid.session'].should == nil
+    rack_mock_session.cookie_jar[Session::COOKIE_NAME].should == nil
     get "/identities/me", {}, {'HTTP_HOST' => 'example.org'}
     last_response.status.should eq 200
     last_response.headers.should include('Set-Cookie')

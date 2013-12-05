@@ -85,14 +85,14 @@ describe "Transfers" do
       params['session'].first.should eq session.key
 
       # remove stub for current_session_key
-      app.filters[:before].pop 
+      app.filters[:before].pop
     end
 
     it "receives a transfer at the destination domain, sets the session key and redirects to the final target" do
       get "/transfer", {:target => target_url, :session => session.key},
         {'HTTP_HOST' => target_domain.name}
       last_response.status.should eq 302
-      last_response.header["Set-Cookie"].should =~ /aid\.session\=specialsecretsession/
+      last_response.header["Set-Cookie"].should =~ /#{Session::COOKIE_NAME}=specialsecretsession/
       last_response.location.should eq target_url
     end
 
@@ -100,7 +100,7 @@ describe "Transfers" do
       get "/transfer", {:target => target_url, :session => 'i_do_not_exist'},
         {'HTTP_HOST' => target_domain.name}
       last_response.status.should eq 302
-      last_response.header["Set-Cookie"].should =~ /aid\.session\=i_do_not_exist/
+      last_response.header["Set-Cookie"].should =~ /#{Session::COOKIE_NAME}=i_do_not_exist/
       last_response.location.should eq target_url
     end
   end
