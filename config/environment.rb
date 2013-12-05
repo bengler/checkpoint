@@ -25,6 +25,6 @@ require File.expand_path('config/strategies.rb') if File.exists?('config/strateg
 
 Pebblebed.config do
   service :vanilla
-  service :checkpoint, :path => '/api/aid/v1'
+  service :checkpoint, :path => '/api/aid'
   session_cookie 'aid.session'
 end
