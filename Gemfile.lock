@@ -13,6 +13,20 @@ GIT
       savon (~> 2.3)
 
 GIT
+  remote: git://github.com/amedia/sinatra-ping
+  revision: 96dcdd3fe0ece00a0fa6bd02c95816379819c790
+  specs:
+    sinatra-ping (0.0.2)
+      sinatra
+
+GIT
+  remote: git://github.com/amedia/sinatra-restful
+  revision: c88c7a8bd7621383ec1c4dde4e507f6d3b4f3a67
+  specs:
+    sinatra-restful (0.0.1)
+      sinatra (~> 1.4)
+
+GIT
   remote: git://github.com/arunagw/omniauth-twitter.git
   revision: df57b8b8d35f6d7ac9c24256413764bad3f160dd
   specs:
@@ -51,6 +65,22 @@ GIT
       oauth
       omniauth (>= 1.0.0)
       omniauth-oauth2 (>= 1.0.0)
+
+GIT
+  remote: git://github.com/bengler/pebblebed.git
+  revision: e8b0c2447f535c21a59edf304604997a0dd62ccd
+  specs:
+    pebblebed (0.1.3)
+      activesupport
+      bunny (~> 0.8.0)
+      curb (>= 0.8.4)
+      deepstruct (>= 0.0.4)
+      futurevalue
+      i18n
+      nokogiri
+      pathbuilder
+      queryparams
+      yajl-ruby
 
 GIT
   remote: git://github.com/bengler/pebbles-cors.git
@@ -128,7 +158,7 @@ GEM
     httpi (2.1.0)
       rack
       rubyntlm (~> 0.3.2)
-    i18n (0.6.5)
+    i18n (0.6.9)
     json (1.8.1)
     jwt (0.1.8)
       multi_json (>= 1.5)
@@ -162,17 +192,6 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth2
     pathbuilder (0.0.2)
-    pebblebed (0.1.3)
-      activesupport
-      bunny (~> 0.8.0)
-      curb (>= 0.8.4)
-      deepstruct (>= 0.0.4)
-      futurevalue
-      i18n
-      nokogiri
-      pathbuilder
-      queryparams
-      yajl-ruby
     pebbles-path (0.0.3)
       pebbles-uid (>= 0.0.6)
     pebbles-uid (0.0.16)
@@ -269,7 +288,7 @@ DEPENDENCIES
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
   omniauth-vanilla!
-  pebblebed (>= 0.1.0)
+  pebblebed (>= 0.1.0)!
   pebbles-cors!
   pebbles-path (>= 0.0.3)
   pebbles-uid
@@ -285,6 +304,8 @@ DEPENDENCIES
   sinatra
   sinatra-activerecord
   sinatra-contrib
+  sinatra-ping!
+  sinatra-restful!
   thor
   timecop (~> 0.3.5)
   unicorn (~> 4.1.1)

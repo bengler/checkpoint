@@ -166,7 +166,7 @@
   <div class="container">
     <h1>Menneske eller maskin?</h1>
     <h2>For å unngå misbruk må vi dessverre sjekke at du er et menneske</h2>
-    <form action="/api/checkpoint/v1/auth/captcha" method="post">
+    <form action="<%= self.class.api_path %>/auth/captcha" method="post">
       <div id="reCaptcha">
 
         <% if error %>

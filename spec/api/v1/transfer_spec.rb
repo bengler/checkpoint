@@ -78,7 +78,7 @@ describe "Transfers" do
       get "/transfer", :target => target_url
 
       last_response.status.should eq 302
-      last_response.location.should =~ %r{^http://example.com/api/checkpoint/v1/transfer}
+      last_response.location.should =~ %r{^http://example.com#{CheckpointV1.api_path}/transfer}
 
       params = CGI.parse(URI.parse(last_response.location).query)
       params['target'].first.should eq target_url

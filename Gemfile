@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'sinatra-activerecord'
+gem 'sinatra-ping', git: 'git://github.com/amedia/sinatra-ping'
+gem 'sinatra-restful', git: 'git://github.com/amedia/sinatra-restful'
 gem 'rack-contrib'
 
 gem 'activerecord', '~> 3.2', :require => 'active_record'
@@ -18,7 +20,7 @@ gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/bengler/omniauth
 gem 'omniauth-vanilla', :git => 'git://github.com/bengler/omniauth-vanilla.git'
 gem 'omniauth-evernote'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
-gem 'pebblebed', ">=0.1.0"
+gem 'pebblebed', ">=0.1.0", :git => 'git://github.com/bengler/pebblebed.git'
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git://github.com/bengler/pebbles-cors.git'
 gem 'pebbles-path', '>=0.0.3'

@@ -7,7 +7,7 @@ require 'rack/contrib'
 ENV['RACK_ENV'] ||= 'development'
 set :environment, ENV['RACK_ENV'].to_sym
 
-map "/api/checkpoint/v1" do
+map CheckpointV1.api_path do
   use Rack::PostBodyContentTypeParser
   use Rack::MethodOverride
   use Rack::Session::Cookie, :key => 'checkpoint.cookie'
@@ -23,7 +23,7 @@ map "/api/checkpoint/v1" do
 
     on_failure do |env|
       message_key = env['omniauth.error.type']
-      new_path = "/api/checkpoint/v1/auth/failure?message=#{message_key}"
+      new_path = "#{CheckpointV1.api_path}/auth/failure?message=#{message_key}"
       [302, {'Location' => new_path, 'Content-Type'=> 'text/html'}, []]
     end
   end
@@ -34,4 +34,8 @@ map "/api/checkpoint/v1" do
   end
 
   run CheckpointV1
+end
+
+map '/checkpoint' do
+  run Sinatra::Ping::Controller
 end

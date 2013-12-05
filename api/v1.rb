@@ -6,6 +6,11 @@ require 'sinatra/petroglyph'
 Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
+
+  def self.api_path
+    '/api/aid/v1'
+  end
+
   set :root, "#{File.dirname(__FILE__)}/v1"
   set :protection, :except => :http_origin
 
@@ -14,6 +19,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   register Sinatra::Pebblebed
+  register Sinatra::Restful
 
   error ActiveRecord::RecordNotFound do
     halt 404, "Record not found"
@@ -209,7 +215,7 @@ class CheckpointV1 < Sinatra::Base
         redirect url
       else
         # Use the transfer mechanism to redirect across domains
-        redirect url_with_query_params("/api/checkpoint/v1/transfer", :target => url)
+        redirect url_with_query_params("#{CheckpointV1.api_path}/transfer", :target => url)
       end
     end
 
