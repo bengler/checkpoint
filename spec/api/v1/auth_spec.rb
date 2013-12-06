@@ -213,7 +213,7 @@ describe "Authorizations" do
       session.cookie_jar[Session::COOKIE_NAME + ".sentinel"] = "mocksessionkey"
       session.cookie_jar[Session::COOKIE_NAME].should eq session_key
 
-      browser.get '/logout', {}, 'HTTP_REFERER' => "http://example.org/very/special/page"
+      browser.post '/logout', {}, 'HTTP_REFERER' => "http://example.org/very/special/page"
       browser.last_response.status.should eq 302
       browser.last_response.header['Location'].should eq "http://example.org/very/special/page"
 
@@ -222,7 +222,23 @@ describe "Authorizations" do
     end
 
     it "respects redirect_to parameter when logging out" do
-      get "/logout", :redirect_to => "http://wired.com"
+      post "/logout", :redirect_to => "http://wired.com"
+      last_response.status.should eq 302
+      last_response.location.should eq "http://wired.com"
+    end
+
+    it "will not redirect to referrer if preferred Accept type is JSON and no redirect_to param is given" do
+      headers = {
+          'HTTP_REFERER' => "http://example.org/very/special/page",
+          'HTTP_ACCEPT' => "application/json,text/plain,*/*",
+      }
+      post "/logout", nil, headers
+      last_response.status.should eq 200
+      last_response.location.should be_nil
+    end
+
+    it "redirects to to redirect_to param if it is given, even if preferred Accept type is JSON" do
+      post "/logout", {:redirect_to => "http://wired.com"}, {'HTTP_REFERER' => "http://example.org/very/special/page"}
       last_response.status.should eq 302
       last_response.location.should eq "http://wired.com"
     end

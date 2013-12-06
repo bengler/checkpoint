@@ -222,7 +222,9 @@ class CheckpointV1 < Sinatra::Base
   post '/logout' do
     halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
-    halt 200, {status: "Logged out"}.to_json if request.xhr?
+    if request.xhr? || request.preferred_type.to_s == 'application/json' && !params.has_key?(:redirect_to)
+      halt 200, '{"status": "Logged out"}'
+    end
     redirect params[:redirect_to] || request.referer
   end
 
