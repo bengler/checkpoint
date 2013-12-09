@@ -33,12 +33,21 @@ class Domain < ActiveRecord::Base
   end
 
   def allow_origin?(origin)
+    origin = canonical_domain(origin)
     # First check if the origin resolves to same realm as self
     origin_domain = Domain.resolve_from_host_name(origin)
     return true if origin_domain && origin_domain.realm == self.realm
     # Did not, then check if it is explicitly listed as a valid origin
     all_hosts =  (realm.domains.map(&:name) << origins).compact.flatten.uniq
     all_hosts.include?(SimpleIDN.to_ascii(origin))
+  end
+
+  def canonical_domain(origin)
+    if realm == 'amedia'
+      Amedia::Properties.publications_service.get_www_domain(origin)
+    else
+      origin
+    end
   end
 
   def add_origin(origin)
