@@ -77,11 +77,11 @@ class Domain < ActiveRecord::Base
               ips = TCPSocket.gethostbyname(SimpleIDN.to_ascii(host_name))
               ips.select! { |s| s.is_a?(String) && ip_address?(s) }
               domain = Domain.where(:name => ips).first if ips.any?
-            rescue SocketError => e
+            rescue SocketError
               logger.error("Socket error resolving #{host_name}")
             end
           end
-        rescue Timeout::Error => e
+        rescue Timeout::Error
           logger.error("Timeout resolving #{host_name} via DNS")
         end
       end
