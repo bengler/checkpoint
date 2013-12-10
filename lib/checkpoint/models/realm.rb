@@ -37,8 +37,22 @@ class Realm < ActiveRecord::Base
     end
   end
 
+  def self.get_canonical_hostname(url)
+    if url.index('://')
+      hostname = URI.parse(url).host
+    else
+      hostname = url
+    end
+    if hostname[/api[.]no$/]
+      Amedia::Properties.publications_service.get_top_domain(hostname) || hostname
+    else
+      hostname
+    end
+  end
+
   def self.find_by_url(url)
-    search_strings_for_url(url) do |domain|
+    hostname = get_canonical_hostname(url)
+    search_strings_for_hostname(hostname) do |domain|
       result = Domain.resolve_from_host_name(domain).try(:realm)
       return result if result
     end
@@ -72,11 +86,15 @@ class Realm < ActiveRecord::Base
 
   private
 
+  def self.search_strings_for_url(url, &block)
+    host = url[/(?:https?\:\/\/)?([^\/\:]+)/,1]
+    search_strings_for_hostname(host, &block)
+  end
+
   # Provided a block, this method will yield variations on the host with increasing
   # specificity: 'foo.bar.example.com' will yield
   # "foo.bar.example.com", "bar.example.com", "example.com".
-  def self.search_strings_for_url(url, &block)
-    host = url[/(?:https?\:\/\/)?([^\/\:]+)/,1]
+  def self.search_strings_for_hostname(host, &block)
     if host.include?('.')
       candidate = host.split('.')
       while candidate.size > 1
