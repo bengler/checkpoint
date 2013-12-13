@@ -1,1 +1,8 @@
 * Logging out does not remove the cookie.
+
+* Setup Puppet to create config/site.rb in v3snapshot:
+
+  ikea repository:
+  + svn co svn+ssh://svn.api.no/var/lib/svn/repos/svn/trunk/ikea
+  + create file basics/ruby_dist/config/checkpoint.site.rb.template
+  + modify file puppet/master/manifests/classes/ruby_app/setup.pp
