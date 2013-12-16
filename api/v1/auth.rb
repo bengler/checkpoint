@@ -150,6 +150,8 @@ class CheckpointV1 < Sinatra::Base
       target_url = URI.parse(params[:redirect_to] || '/login/succeeded')
       target_url.host ||= request.host
       target_url.scheme ||= request.scheme
+      target_url.query ||= ''
+      target_url.query += "session=#{current_session.key}"
       redirect target_url
     end
   end
