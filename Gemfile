@@ -45,7 +45,9 @@ group :development, :test do
   gem 'vcr'
   gem 'timecop', '~> 0.3.5'
   gem 'rack-test'
-  gem "memcache_mock"
+  gem 'memcache_mock'
+  gem 'pry'
+  gem 'awesome_print'
 end
 
 group :production do
