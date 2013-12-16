@@ -43,7 +43,7 @@ class Domain < ActiveRecord::Base
   end
 
   def canonical_domain(origin)
-    if realm == 'amedia'
+    if realm.label == 'amedia'
       Amedia::Properties.publications_service.get_www_domain(origin)
     else
       origin
