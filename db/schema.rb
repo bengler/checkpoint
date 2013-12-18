@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131129122554) do
+ActiveRecord::Schema.define(:version => 20131218090819) do
 
   create_table "access_group_memberships", :force => true do |t|
     t.integer  "access_group_id", :null => false
@@ -87,12 +87,16 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
 
   add_index "callbacks", ["location_id"], :name => "index_callbacks_on_location_id"
 
+  create_table "domain_origins", :force => true do |t|
+    t.integer "domain_id", :null => false
+    t.string  "host",      :null => false
+  end
+
   create_table "domains", :force => true do |t|
     t.string   "name"
     t.integer  "realm_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "origins"
   end
 
   add_index "domains", ["name"], :name => "index_domains_on_name", :unique => true
@@ -151,6 +155,13 @@ ActiveRecord::Schema.define(:version => 20131129122554) do
   end
 
   add_index "locations", ["label_0", "label_1", "label_2", "label_3", "label_4", "label_5", "label_6", "label_7", "label_8", "label_9"], :name => "index_location_on_labels", :unique => true
+
+  create_table "origins", :force => true do |t|
+    t.integer "domain_id", :null => false
+    t.string  "host",      :null => false
+  end
+
+  add_index "origins", ["domain_id"], :name => "index_origins_on_domain_id"
 
   create_table "realms", :force => true do |t|
     t.string   "title"

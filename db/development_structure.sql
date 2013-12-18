@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: checkpoint_development
 -- ------------------------------------------------------
--- Server version	5.5.34-0ubuntu0.12.04.1
+-- Server version	5.5.34-0ubuntu0.12.04.1-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -144,6 +144,21 @@ CREATE TABLE `callbacks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `domain_origins`
+--
+
+DROP TABLE IF EXISTS `domain_origins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `domain_origins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain_id` int(11) NOT NULL,
+  `host` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `domains`
 --
 
@@ -156,7 +171,6 @@ CREATE TABLE `domains` (
   `realm_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `origins` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_domains_on_name` (`name`),
   KEY `index_domains_on_realm_id` (`realm_id`)
@@ -263,6 +277,22 @@ CREATE TABLE `locations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `origins`
+--
+
+DROP TABLE IF EXISTS `origins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `origins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain_id` int(11) NOT NULL,
+  `host` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_origins_on_domain_id` (`domain_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `realms`
 --
 
@@ -324,4 +354,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-06 14:34:10
+-- Dump completed on 2013-12-18  9:30:08

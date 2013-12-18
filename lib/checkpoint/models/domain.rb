@@ -11,6 +11,7 @@ class Domain < ActiveRecord::Base
     :class_name => 'Realm',
     :foreign_key => :primary_domain_id,
     :dependent => :nullify
+  has_many :origins
 
   after_save :ensure_primary_domain
 
@@ -24,21 +25,13 @@ class Domain < ActiveRecord::Base
     end
   end
 
-  def origins
-    (read_attribute(:origins) || "").split(",")
-  end
-
-  def origins=(array = [])
-    write_attribute(:origins, array.join(","))
-  end
-
   def allow_origin?(origin)
     origin = canonical_domain(origin)
     # First check if the origin resolves to same realm as self
     origin_domain = Domain.resolve_from_host_name(origin)
     return true if origin_domain && origin_domain.realm == self.realm
     # Did not, then check if it is explicitly listed as a valid origin
-    all_hosts =  (realm.domains.map(&:name) << origins).compact.flatten.uniq
+    all_hosts = (realm.domains.map(&:name) + origins.map(&:host)).uniq
     all_hosts.include?(SimpleIDN.to_ascii(origin))
   end
 
@@ -52,18 +45,12 @@ class Domain < ActiveRecord::Base
 
   def add_origin(origin)
     raise "Invalid origin #{origin}" unless Domain.valid_name?(origin)
-    self.origins = origins << SimpleIDN.to_ascii(origin)
-    save!
+    self.origins.create host: SimpleIDN.to_ascii(origin)
   end
 
   def remove_origin(origin)
     origin_host = SimpleIDN.to_ascii(origin)
-    if origins.include?(origin_host)
-      self.origins = origins.select { |d| d != origin_host }
-      save
-    else
-      raise "Not found"
-    end
+    origins.find_by_host(origin_host).destroy
   end
 
   class << self
