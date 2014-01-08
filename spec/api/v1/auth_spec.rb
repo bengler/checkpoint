@@ -101,7 +101,7 @@ describe "Authorizations" do
         get "/login/anonymous"
         get "/identities/me"
         first_response_body = last_response.body
-        get "/logout"
+        post "/logout"
         last_response.status.should eq 500
         get "/identities/me"
         last_response.body.should == first_response_body

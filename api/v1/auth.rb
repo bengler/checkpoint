@@ -74,11 +74,10 @@ class CheckpointV1 < Sinatra::Base
     redirect_to_path = ensure_valid_redirect_path || '/'
     anonymous_identity ||= Identity.create!(:realm => current_realm)
     log_in(anonymous_identity)
-    if request.xhr?
-      halt 200, {status: "Logged in"}.to_json
-    else
-      redirect redirect_to_path
+    if request.xhr? || request.preferred_type.to_s == 'application/json' && !params.has_key?(:redirect_to)
+      halt 200, '{"status": "Logged in"}'
     end
+    redirect redirect_to_path
   end
 
   # @apidoc
