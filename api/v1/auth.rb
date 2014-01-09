@@ -5,7 +5,7 @@ class CheckpointV1 < Sinatra::Base
     begin
       uri = URI(params[:redirect_to])
     rescue => e
-      halt 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
+      halt 400, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
     end
     uri.host ||= request.host
     uri.scheme ||= request.scheme
@@ -42,9 +42,6 @@ class CheckpointV1 < Sinatra::Base
   # @apidoc
   # Log in anonymously.
   #
-  # @note If a large number of anonymous identities have been created from a single ip-address
-  #   the user will be asked to solve a captcha.
-  #
   # @description Some applications require the user to perform actions that need an identity,
   #   but still do not require any authenitcation. Redirect the users browser here to get an
   #   anonymous user session. The identity will be a valid checkpoint identity with no accounts
@@ -60,24 +57,19 @@ class CheckpointV1 < Sinatra::Base
   # @status 409 (if xhr request) Logged in already
 
   get '/login/anonymous' do
-    halt 500, "No registered realm for #{request.host}" unless current_realm
+    halt 400, "No registered realm for #{request.host}" unless current_realm
 
     anonymous_identity = Identity.find_by_session_key(current_session_key)
 
-    # If this ip is hot we need to perform a captcha-test first.
-    if !anonymous_identity && IdentityIp.hot?(request_ip) && !passed_captcha?
-      return halt 403, "IP-address is hot. Please redirect user to location 'login/anonymous'" if request.xhr?
-      return redirect url_with_params("/auth/captcha", :continue_to => request.url)
-    end
-    clear_captcha!
-    return halt 409, "Logged in already" if current_identity and request.xhr?
-    redirect_to_path = ensure_valid_redirect_path || '/'
+    halt 409, "Logged in already" if current_identity
+
     anonymous_identity ||= Identity.create!(:realm => current_realm)
+
     log_in(anonymous_identity)
-    if request.xhr? || request.preferred_type.to_s == 'application/json' && !params.has_key?(:redirect_to)
-      halt 200, '{"status": "Logged in"}'
-    end
-    redirect redirect_to_path
+
+    halt 200, '{"status": "success"}' if xhr_request?
+
+    redirect ensure_valid_redirect_path || '/'
   end
 
   # @apidoc
@@ -202,7 +194,7 @@ class CheckpointV1 < Sinatra::Base
 
   # FIXME: Should not offer this as GET.
   get '/logout' do
-    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    halt 403, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
     redirect params[:redirect_to] || request.referer
   end
@@ -219,7 +211,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 301 Redirect to target address.
 
   post '/logout' do
-    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    halt 403, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     log_out
     if request.xhr? || request.preferred_type.to_s == 'application/json' && !params.has_key?(:redirect_to)
       halt 200, '{"status": "Logged out"}'

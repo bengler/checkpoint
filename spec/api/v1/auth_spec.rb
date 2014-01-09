@@ -102,7 +102,7 @@ describe "Authorizations" do
         get "/identities/me"
         first_response_body = last_response.body
         post "/logout"
-        last_response.status.should eq 500
+        last_response.status.should eq 403
         get "/identities/me"
         last_response.body.should == first_response_body
       end
@@ -110,21 +110,6 @@ describe "Authorizations" do
       it "logs the ip when new anonymous sessions are created" do
         get "/login/anonymous"
         IdentityIp.where(:address => '127.0.0.1').count.should eq 1
-      end
-
-      it "redirects to captcha when the ip is hot" do
-        rack_mock_session.clear_cookies
-        get "/login/anonymous"
-        IdentityIp.count.should eq 1
-        last_response.location.should_not =~ /captcha/
-          rack_mock_session.clear_cookies
-        get "/login/anonymous"
-        IdentityIp.count.should eq 2
-        last_response.location.should_not =~ /captcha/
-          rack_mock_session.clear_cookies
-        get "/login/anonymous"
-        IdentityIp.count.should eq 2
-        last_response.location.should =~ /captcha/
       end
 
       it "redirects to the client after logging in" do
@@ -143,7 +128,7 @@ describe "Authorizations" do
       end
       it "fails if parameter is not a valid url path" do
         get "/login/anonymous", :redirect_to => "\\:/\\some:\\invalid/chars"
-        last_response.status.should eq 500
+        last_response.status.should eq 400
       end
 
       describe "requested with xhr" do
@@ -154,18 +139,6 @@ describe "Authorizations" do
           get "/identities/me"
           JSON.parse(last_response.body)['identity']['id'].should_not be_nil
           JSON.parse(last_response.body)['identity']['primary_account'].should be_nil
-        end
-
-        it "gets a 403 error if the ip is hot" do
-          rack_mock_session.clear_cookies
-          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
-          last_response.status.should eq 200
-          rack_mock_session.clear_cookies
-          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
-          last_response.status.should eq 200
-          rack_mock_session.clear_cookies
-          get "/login/anonymous", nil, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
-          last_response.status.should eq 403
         end
 
         it "gets a 409 error if the user is logged in already" do

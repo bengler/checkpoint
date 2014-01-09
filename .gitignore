@@ -14,7 +14,6 @@ config/site.rb
 config/strategies.rb
 config/database.yml
 config/overrides.yml
-config/recaptcha.yml
 
 # ignore results of bundling with --binstubs
 bin/autospec

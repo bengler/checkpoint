@@ -101,6 +101,10 @@ class CheckpointV1 < Sinatra::Base
       current_session  # Forces a session
     end
 
+    def xhr_request?
+      request.xhr? || request.preferred_type.to_s == 'application/json'
+    end
+
     # Determine the current request ip
     def request_ip
       ip = request.env['HTTP_X_FORWARDED_FOR'] || request.ip
