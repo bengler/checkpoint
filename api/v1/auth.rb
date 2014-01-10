@@ -58,11 +58,9 @@ class CheckpointV1 < Sinatra::Base
 
   get '/login/anonymous' do
     halt 400, "No registered realm for #{request.host}" unless current_realm
-
-    anonymous_identity = Identity.find_by_session_key(current_session_key)
-
     halt 409, "Logged in already" if current_identity
 
+    anonymous_identity = Identity.find_by_session_key(current_session_key)
     anonymous_identity ||= Identity.create!(:realm => current_realm)
 
     log_in(anonymous_identity)
