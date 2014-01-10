@@ -40,6 +40,19 @@ class CheckpointV1 < Sinatra::Base
     headers('P3P' => 'CP="DSP IDC CUR ADM DELi STP NAV COM UNI INT PHY DEM"')
   end
 
+  # Safari/iOS7 refuses to send cookies to "thirdparty" domains (A "thirdparty" domain in this  context means a 
+  # domain *never visited* before)
+  # Yeah, cookies for thirdparty domains are blocked even for CORS requests with `withCredentials=true`
+  # This endpoint offers a workaround to clients by returning a flag that indicates whether the session cookie is set,
+  # and providing an endpoint the client can "visit" in order to clear the domain's status as a thirdparty domain before
+  # redirecting back to the client.
+  get '/check-session' do
+    if xhr_request?
+      halt 200, { :ok => request.cookies.has_key?('checkpoint.session') }.to_json
+    end
+    redirect params[:redirect_to] || http.referer
+  end
+
   after do
     current_identity.mark_as_seen if current_identity
     log_ip
