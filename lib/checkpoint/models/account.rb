@@ -36,9 +36,9 @@ class Account < ActiveRecord::Base
       identity = attributes[:identity]
 
       account = Account.where(
-        :realm_id => attributes[:realm_id],
-        :provider => attributes[:provider],
-        :uid => attributes[:uid]).first
+        realm_id: attributes[:realm_id],
+        provider: attributes[:provider],
+        uid: attributes[:uid].to_s).first
 
       if identity && account && account.identity_id != identity.id
         # Oh noes! A real, unresolvable conflict!
