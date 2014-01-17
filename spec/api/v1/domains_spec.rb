@@ -68,15 +68,24 @@ describe "Domains" do
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
     post "/realms/area51/domains/mystuff.com/origins", :origin => "pinshing.com", :session => somegod_session
-    last_response.status.should == 201
+    last_response.status.should eq 201
     get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq true
     delete "/realms/area51/domains/mystuff.com/origins/pinshing.com", :session => somegod_session
-    last_response.status.should == 204
+    last_response.status.should eq 204
     get "/domains/mystuff.com/allows/pinshing.com"
     result = JSON.parse(last_response.body)
     result['allowed'].should eq false
+  end
+
+  it "checks against canonical domain for amedia realm" do
+    amedia_realm = Realm.create!(:label => "amedia")
+    domain = Domain.create!(:realm => amedia_realm, :name => 'www.gd.no')
+    domain.add_origin 'www.bt.no'
+    get "/domains/www.gd.no/allows/bt.no.test.api.no"
+    result = JSON.parse(last_response.body)
+    result['allowed'].should be_true
   end
 
   it "lets gods attach a new domain to a realm, but not reattach it to another realm" do
