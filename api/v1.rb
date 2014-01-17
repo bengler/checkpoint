@@ -22,7 +22,9 @@ class CheckpointV1 < Sinatra::Base
     raise e unless request.post? or request.put?
     halt 400, "Invalid attribute: #{e.name || e.message}"
   end
-
+  error Pebblebed::InvalidUid do |e|
+    halt 400, e.message
+  end
   error Sinatra::NotFound do
     'Not found'
   end
