@@ -24,7 +24,7 @@ class CheckpointV1 < Sinatra::Base
       uri.to_s
     end
 
-    def url_for_failure(params = {}, url)
+    def url_for_failure(params = {})
       params = {:status => 'failed'}.merge(params)
       if (return_url = session[:redirect_to])
         if return_url =~ /_completion/
@@ -32,8 +32,10 @@ class CheckpointV1 < Sinatra::Base
           #   but we do this to avoid breaking existing apps.
           return url_with_params(return_url, params)
         end
+      elsif params[:path]
+        return_url = "http://#{request.host}#{path}"
       else
-        return_url = url ? "http://#{request.host}#{url}" : "http://#{request.host}/login/failed"
+        return_url = "http://#{request.host}/login/failed"
       end
       return url_with_params(return_url, params)
     end
