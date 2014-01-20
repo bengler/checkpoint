@@ -64,7 +64,7 @@ class Realm < ActiveRecord::Base
   end
 
   def god_sessions
-    Session.where("sessions.identity_id in (select id from identities where god and realm_id = ?)", id)
+    Session.where("sessions.identity_id in (select id from identities where god = 't' and realm_id = ?)", id)
   end
 
   def external_service_keys
