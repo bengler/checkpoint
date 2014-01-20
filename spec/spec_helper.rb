@@ -1,9 +1,14 @@
-require 'simplecov'
 require 'memcache_mock'
 
-SimpleCov.add_filter 'spec'
-SimpleCov.add_filter 'config'
-SimpleCov.start
+# Code coverage only when requested
+if ENV['COVERAGE']
+  require 'simplecov'
+  require 'simplecov-rcov'
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+  SimpleCov.add_filter 'spec'
+  SimpleCov.add_filter 'config'
+  SimpleCov.start
+end
 
 $:.unshift(File.dirname(File.dirname(__FILE__)))
 
@@ -16,6 +21,10 @@ require 'rack/test'
 require 'webmock/rspec'
 require 'vcr'
 require 'timecop'
+
+# Setup in-memory database
+require 'sinatra/activerecord/rake'
+silence_stream(STDOUT) { Rake::Task['db:schema:load'].invoke }
 
 keys = Realm.environment_overrides['valid_realm']
 

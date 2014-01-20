@@ -39,7 +39,8 @@ gem 'curb', '>= 0.7.14'
 
 group :development, :test do
   gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
-  gem 'simplecov'
+  gem 'simplecov', :require => false
+  gem 'simplecov-rcov', :require => false
   gem 'rspec', '~> 2.8'
   gem 'webmock', '~> 1.8.11'
   gem 'vcr'
@@ -48,6 +49,7 @@ group :development, :test do
   gem 'memcache_mock'
   gem 'pry'
   gem 'awesome_print'
+  gem 'sqlite3'
 end
 
 group :production do

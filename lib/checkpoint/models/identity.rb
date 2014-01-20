@@ -22,9 +22,11 @@ class Identity < ActiveRecord::Base
   scope :having_realm, lambda { |realm|
     where(:realm_id => realm.id)
   }
+
   scope :anonymous, where("primary_account_id is null")
+
   scope :not_seen_for_more_than_days, lambda { |days|
-    where("last_seen_on is not null and datediff(current_date, last_seen_on) > ?", days)
+    where("last_seen_on is not null and last_seen_on < ?", Date.today - days)
   }
 
   def root?

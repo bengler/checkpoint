@@ -18,7 +18,7 @@ development:
   <<: *common
 
 test:
-  database: checkpoint_test
-  password: 
-  min_messages: WARNING
-  <<: *common
+  adapter: sqlite3
+  database: ":memory:"
+  pool: 5
+  verbosity: quiet

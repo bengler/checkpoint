@@ -238,6 +238,8 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
+    simplecov-rcov (0.2.3)
+      simplecov (>= 0.4.1)
     simpleidn (0.0.4)
     sinatra (1.4.4)
       rack (~> 1.4)
@@ -254,6 +256,7 @@ GEM
       sinatra (~> 1.4.0)
       tilt (~> 1.3)
     slop (3.4.7)
+    sqlite3 (1.3.8)
     thor (0.18.1)
     tilt (1.4.1)
     timecop (0.3.5)
@@ -310,12 +313,14 @@ DEPENDENCIES
   rest-client
   rspec (~> 2.8)
   simplecov
+  simplecov-rcov
   simpleidn (~> 0.0.4)
   sinatra
   sinatra-activerecord
   sinatra-contrib
   sinatra-ping!
   sinatra-restful!
+  sqlite3
   thor
   timecop (~> 0.3.5)
   unicorn (~> 4.1.1)
