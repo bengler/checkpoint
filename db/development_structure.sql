@@ -259,16 +259,16 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `locations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label_0` varchar(255) DEFAULT NULL,
-  `label_1` varchar(255) DEFAULT NULL,
-  `label_2` varchar(255) DEFAULT NULL,
-  `label_3` varchar(255) DEFAULT NULL,
-  `label_4` varchar(255) DEFAULT NULL,
-  `label_5` varchar(255) DEFAULT NULL,
-  `label_6` varchar(255) DEFAULT NULL,
-  `label_7` varchar(255) DEFAULT NULL,
-  `label_8` varchar(255) DEFAULT NULL,
-  `label_9` varchar(255) DEFAULT NULL,
+  `label_0` varchar(100) DEFAULT NULL,
+  `label_1` varchar(100) DEFAULT NULL,
+  `label_2` varchar(100) DEFAULT NULL,
+  `label_3` varchar(100) DEFAULT NULL,
+  `label_4` varchar(100) DEFAULT NULL,
+  `label_5` varchar(100) DEFAULT NULL,
+  `label_6` varchar(100) DEFAULT NULL,
+  `label_7` varchar(100) DEFAULT NULL,
+  `label_8` varchar(100) DEFAULT NULL,
+  `label_9` varchar(100) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -354,4 +354,4 @@ CREATE TABLE `sessions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-18  9:30:08
+-- Dump completed on 2014-01-20 10:03:47

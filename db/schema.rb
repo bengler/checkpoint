@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218090819) do
+ActiveRecord::Schema.define(:version => 20140120093822) do
 
   create_table "access_group_memberships", :force => true do |t|
     t.integer  "access_group_id", :null => false
@@ -140,18 +140,18 @@ ActiveRecord::Schema.define(:version => 20131218090819) do
   add_index "identity_tags", ["tag"], :name => "index_identity_tags_on_tag"
 
   create_table "locations", :force => true do |t|
-    t.string   "label_0"
-    t.string   "label_1"
-    t.string   "label_2"
-    t.string   "label_3"
-    t.string   "label_4"
-    t.string   "label_5"
-    t.string   "label_6"
-    t.string   "label_7"
-    t.string   "label_8"
-    t.string   "label_9"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "label_0",    :limit => 100
+    t.string   "label_1",    :limit => 100
+    t.string   "label_2",    :limit => 100
+    t.string   "label_3",    :limit => 100
+    t.string   "label_4",    :limit => 100
+    t.string   "label_5",    :limit => 100
+    t.string   "label_6",    :limit => 100
+    t.string   "label_7",    :limit => 100
+    t.string   "label_8",    :limit => 100
+    t.string   "label_9",    :limit => 100
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   add_index "locations", ["label_0", "label_1", "label_2", "label_3", "label_4", "label_5", "label_6", "label_7", "label_8", "label_9"], :name => "index_location_on_labels", :unique => true
