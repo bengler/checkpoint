@@ -32,6 +32,8 @@ class CheckpointV1 < Sinatra::Base
           #   but we do this to avoid breaking existing apps.
           return url_with_params(return_url, params)
         end
+      elsif params[:url]
+        return_url = params[:url]
       elsif params[:path]
         return_url = "http://#{request.host}#{params[:path]}"
       else
@@ -135,14 +137,14 @@ class CheckpointV1 < Sinatra::Base
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
-      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message, :path => params[:failure_url]})
+      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message, :url => params[:failure_url]})
     end
 
     attributes[:realm_id] = current_realm.id
     account = begin
       Account.declare!(attributes)
     rescue Account::InUseError => e
-      redirect url_for_failure({:message => :account_in_use, :path => params[:failure_url]})
+      redirect url_for_failure({:message => :account_in_use, :url => params[:failure_url]})
     end
 
     log_in(account.identity)
