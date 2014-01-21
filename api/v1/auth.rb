@@ -135,14 +135,14 @@ class CheckpointV1 < Sinatra::Base
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
-      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message}, params[:failure_url])
+      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message, :path => params[:failure_url]})
     end
 
     attributes[:realm_id] = current_realm.id
     account = begin
       Account.declare!(attributes)
     rescue Account::InUseError => e
-      redirect url_for_failure({:message => :account_in_use}, params[:failure_url])
+      redirect url_for_failure({:message => :account_in_use, :path => params[:failure_url]})
     end
 
     log_in(account.identity)
