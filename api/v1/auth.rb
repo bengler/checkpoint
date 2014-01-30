@@ -124,8 +124,8 @@ class CheckpointV1 < Sinatra::Base
   end
 
   post '/login/:provider' do
-    strategy = Checkpoint.strategies.find do |strategy|
-      strategy if strategy.supports? params[:provider]
+    strategy = Checkpoint.strategies.find do |strat|
+      strat if strat.supports? params[:provider]
     end
 
     halt 400, "No strategy can handle the \"#{params[:provider]}\" provider" unless strategy
@@ -137,14 +137,18 @@ class CheckpointV1 < Sinatra::Base
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
-      redirect url_for_failure({:message => :invalid_credentials, :text => ex.message, :url => params[:failure_url]})
+      url_or_path = (params[:failure_url][0] == '/' ? :path : :url)
+      redirect url_for_failure({:message => :invalid_credentials,
+        :text => ex.message, url_or_path => params[:failure_url]})
     end
 
     attributes[:realm_id] = current_realm.id
     account = begin
       Account.declare!(attributes)
-    rescue Account::InUseError => e
-      redirect url_for_failure({:message => :account_in_use, :url => params[:failure_url]})
+    rescue Account::InUseError => ex
+      url_or_path = (params[:failure_url][0] == '/' ? :path : :url)
+      redirect url_for_failure({:message => :account_in_use,
+        :text => ex.message, url_or_path => params[:failure_url]})
     end
 
     log_in(account.identity)
