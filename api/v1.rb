@@ -8,7 +8,7 @@ Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 class CheckpointV1 < Sinatra::Base
 
   def self.api_path
-    '/api/aid/v1'
+    '/api/checkpoint/v1'
   end
 
   set :root, "#{File.dirname(__FILE__)}/v1"

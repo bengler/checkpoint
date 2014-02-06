@@ -7,7 +7,7 @@ require 'rack/contrib'
 ENV['RACK_ENV'] ||= 'development'
 set :environment, ENV['RACK_ENV'].to_sym
 
-map '/api/aid/v1' do
+map '/api/checkpoint/v1' do
   use Rack::PostBodyContentTypeParser
   use Rack::MethodOverride
   use Rack::Session::Cookie, :key => 'checkpoint.cookie'
