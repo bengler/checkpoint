@@ -34,9 +34,9 @@ GIT
 
 GIT
   remote: git://github.com/bengler/pebbles-cors.git
-  revision: f54656f482b1229bfe11da4c7e0f97421d92c2ab
+  revision: b6f4820f2633ddecda25ea287923233db2f8119e
   specs:
-    pebbles-cors (0.1.0)
+    pebbles-cors (0.1.1)
       dalli
       pebblebed
       rack
@@ -102,17 +102,19 @@ GEM
     futurevalue (0.0.2)
     hashie (2.0.5)
     httpauth (0.2.0)
-    i18n (0.6.5)
+    i18n (0.6.9)
     json (1.8.1)
     jwt (0.1.8)
       multi_json (>= 1.5)
     kgio (2.8.1)
     memcache_mock (0.0.13)
     mime-types (1.25)
-    multi_json (1.8.2)
+    mini_portile (0.5.2)
+    multi_json (1.8.4)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
-    nokogiri (1.5.10)
+    nokogiri (1.6.1)
+      mini_portile (~> 0.5.0)
     oauth (0.4.7)
     oauth2 (0.9.2)
       faraday (~> 0.8)
@@ -203,7 +205,7 @@ GEM
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    yajl-ruby (1.1.0)
+    yajl-ruby (1.2.0)
 
 PLATFORMS
   ruby
