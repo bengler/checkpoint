@@ -40,7 +40,7 @@ class CheckpointV1 < Sinatra::Base
     headers 'Pragma' => 'no-cache'
     headers 'Expires' => '-1'
 
-    cache_control :private, :no_cache, :no_store, :must_revalidate
+    @disable_caching = true # Tell sinatra-restful to disable caching
 
     # IE compatibility to allow cookies to be saved across domains
     headers('P3P' => 'CP="DSP IDC CUR ADM DELi STP NAV COM UNI INT PHY DEM"')
