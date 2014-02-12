@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/amedia/amedia-properties-ruby.git
-  revision: 5ca1013ff22d8159e6049dc0e9c8712c43fb300e
+  revision: 6e9d4852dcfd17c84ac0e0008e931de9ebae501f
   specs:
     amedia-properties (0.0.2)
 
