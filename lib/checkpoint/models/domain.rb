@@ -57,6 +57,10 @@ class Domain < ActiveRecord::Base
     # Finds domain matching a host name.
     def resolve_from_host_name(host_name)
       domain = Domain.where(:name => host_name).first
+      if not domain
+        production_hostname = Amedia::Properties.publications_service.get_production_hostname host_name
+        domain = Domain.where(:name => production_hostname).first
+      end
       if not domain and not ip_address?(host_name)
         begin
           timeout(4) do
