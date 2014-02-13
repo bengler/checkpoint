@@ -170,6 +170,7 @@ class CheckpointV1 < Sinatra::Base
       target_url.query ||= ''
       target_url.query += "session=#{current_session.key}"
       response = get_request(target_url.to_s)
+      content_type response.content_type
       halt response.code.to_i, response.body
     end
   end
