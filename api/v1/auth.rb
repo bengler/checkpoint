@@ -41,6 +41,15 @@ class CheckpointV1 < Sinatra::Base
       end
       return url_with_params(return_url, params)
     end
+
+    def get_request(url)
+      uri = URI.parse(url)
+      response = nil
+      Net::HTTP.start(uri.host) do |http|
+        response = http.get(uri.request_uri)
+      end
+      response
+    end
   end
 
   # @apidoc
@@ -124,15 +133,15 @@ class CheckpointV1 < Sinatra::Base
   end
 
   post '/login/:provider' do
-    strategy = Checkpoint.strategies.find do |strat|
-      strat if strat.supports? params[:provider]
-    end
-
-    halt 400, "No strategy can handle the \"#{params[:provider]}\" provider" unless strategy
+    strategy = Checkpoint.strategies.find {|s| s.supports? params[:provider] } or
+      halt 400, "No strategy can handle the \"#{params[:provider]}\" provider"
 
     provider = strategy.get_provider(params[:provider])
+    provider.mode == 'direct' or
+      halt 400, 'Requested provider does not support the direct authentication mode'
 
-    halt 400, 'Requested provider does not support the direct authentication mode' unless provider.mode == 'direct'
+    params[:failure_url] or
+      halt 400, 'Missing required parameter: failure_url'
 
     attributes = begin
       provider.authenticate(params)
@@ -160,7 +169,8 @@ class CheckpointV1 < Sinatra::Base
       target_url.scheme ||= request.scheme
       target_url.query ||= ''
       target_url.query += "session=#{current_session.key}"
-      redirect target_url
+      response = get_request(target_url.to_s)
+      halt response.code.to_i, response.body
     end
   end
 
