@@ -92,7 +92,8 @@ class CheckpointV1 < Sinatra::Base
 
     # Is the current host the realm's primary domain?
     def on_primary_domain?
-      current_realm && request.host == current_realm.primary_domain_name
+      current_realm && (request.host == current_realm.primary_domain_name ||
+                        Amedia::Properties.publications_service.get_production_hostname(request.host) == current_realm.primary_domain_name)
     end
 
     def current_session_key
@@ -168,6 +169,7 @@ class CheckpointV1 < Sinatra::Base
         end
       end
       @current_identity = nil
+      response.delete_cookie(Session::COOKIE_NAME)
     end
 
     def check_god_credentials(realm_id = current_realm.try(:id))
