@@ -66,6 +66,13 @@ GIT
       oauth2 (~> 0.9.0)
       omniauth (~> 1.0)
 
+GIT
+  remote: git://github.com/rkh/rack-protection.git
+  revision: 6d953d2379be3eb0576d5e1e1d6abbb74bd9c745
+  specs:
+    rack-protection (1.5.2)
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -157,8 +164,6 @@ GEM
     rack (1.5.2)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
-    rack-protection (1.5.2)
-      rack
     rack-test (0.6.2)
       rack (>= 1.0)
     raindrops (0.12.0)
@@ -237,6 +242,7 @@ DEPENDENCIES
   pg
   queryparams
   rack-contrib
+  rack-protection!
   rack-test
   rake
   rest-client

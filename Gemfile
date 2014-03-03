@@ -5,6 +5,9 @@ gem 'sinatra-contrib'
 gem 'sinatra-activerecord'
 gem 'rack-contrib'
 
+# Remove this git reference after version > 1.5.2 is released
+gem 'rack-protection', :git => 'git://github.com/rkh/rack-protection.git'
+
 gem 'activerecord', '~> 3.2', :require => 'active_record'
 gem 'activesupport', '~> 3.2'
 gem 'pg'
