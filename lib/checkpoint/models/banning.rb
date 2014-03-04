@@ -9,7 +9,12 @@ class Banning < ActiveRecord::Base
   before_save :assign_location, :assign_realm
 
   scope :by_path, lambda { |path|
-    joins(:location).where(:locations => Pebbles::Path.to_conditions(path)) unless path == '*'
+    if path == '*'
+      nil
+    else
+      joins(:location).where(:locations => Pebbles::Path.to_conditions(path)).
+        readonly(false)
+    end
   }
 
   # Create a ban, unless a more general ban is currently in effect. If this ban shadows another ban, delete it

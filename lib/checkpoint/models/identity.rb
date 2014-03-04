@@ -27,7 +27,8 @@ class Identity < ActiveRecord::Base
     where("primary_account_id is null")
   }
   scope :not_seen_for_more_than_days, lambda { |days|
-    where("last_seen_on is not null and (current_date - last_seen_on) > ?", days)
+    # FIXME: We should store time zone in database to avoid UTC conversion
+    where("last_seen_on is not null and last_seen_on < ?", Time.now.days_ago(days).utc)
   }
 
   def root?

@@ -1,7 +1,6 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'sinatra/activerecord/rake'
-require 'bengler_test_helper/tasks' if ['development', 'test'].include?(ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development')
 
 task :environment do
   require 'config/environment'
@@ -27,6 +26,12 @@ namespace :db do
     `createdb -O #{name} #{name}_development`
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
+  end
+
+  namespace :test do
+    task :purge => :environment
+    task :load => :environment
+    task :prepare => :environment
   end
 end
 

@@ -2,7 +2,11 @@ require File.expand_path('config/site.rb') if File.exists?('config/site.rb')
 
 require "bundler"
 Bundler.require
+
 require 'active_support/all'
+
+require 'rails/observers/activerecord/base'
+require 'rails/observers/activerecord/observer'
 
 unless defined?(LOGGER)
   require 'logger'
