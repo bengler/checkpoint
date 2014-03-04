@@ -7,6 +7,8 @@ class Realm < ActiveRecord::Base
   has_many :domains
   belongs_to :primary_domain, :class_name => "Domain"
 
+  serialize :service_keys
+
   validates_uniqueness_of :label, :allow_nil => false
   validates_each :label do |record, attr, value|
     record.errors.add(attr, "Realm name 'current' is reserved") if value == 'current'

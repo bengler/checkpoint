@@ -74,7 +74,8 @@ describe Identity do
 
     it "can find identities not seen for a while" do
       (0..9).each do |age|
-        Identity.create!(:realm => realm, :last_seen_on => Time.now.to_date - age)
+        # FIXME: We should store time zone in database to avoid UTC conversion
+        Identity.create!(:realm => realm, :last_seen_on => (Time.now - age.days).utc)
       end
       Identity.not_seen_for_more_than_days(20).size.should eq 0
       Identity.not_seen_for_more_than_days(9).size.should eq 0
@@ -104,22 +105,22 @@ describe Identity do
       end
 
       it 'collects fingerprints from all accounts (when adding accounts directly)' do
-        identity.accounts << Account.new(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
-        identity.accounts << Account.new(:identity => identity, :uid => 234, :provider => 'twitter', :realm => realm)
+        identity.accounts << Account.new(:identity => identity, :uid => '123', :provider => 'facebook', :realm => realm)
+        identity.accounts << Account.new(:identity => identity, :uid => '234', :provider => 'twitter', :realm => realm)
         identity.fingerprints.length.should >= identity.accounts.length
         identity.fingerprints.sort.should == identity.accounts.map { |a| a.fingerprints }.flatten.sort
       end
 
       it 'collects fingerprints from all accounts (when creating accounts independently)' do
-        Account.create!(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
-        Account.create!(:identity => identity, :uid => 234, :provider => 'twitter', :realm => realm)
+        Account.create!(:identity => identity, :uid => '123', :provider => 'facebook', :realm => realm)
+        Account.create!(:identity => identity, :uid => '234', :provider => 'twitter', :realm => realm)
         identity.reload
         identity.fingerprints.length.should >= identity.accounts.length
         identity.fingerprints.sort.should == identity.accounts.map { |a| a.fingerprints }.flatten.sort
       end
 
       it 'preserves fingerprint after account is deleted' do
-        account = Account.create!(:identity => identity, :uid => 123, :provider => 'facebook', :realm => realm)
+        account = Account.create!(:identity => identity, :uid => '123', :provider => 'facebook', :realm => realm)
         identity.reload
         old_fingerprints = identity.fingerprints.dup
         account.destroy

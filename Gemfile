@@ -2,15 +2,16 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'sinatra-activerecord'
+gem 'sinatra-activerecord', '~> 1.4'
 gem 'rack-contrib'
 
 # Remove this git reference after version > 1.5.2 is released
 gem 'rack-protection', :git => 'git://github.com/rkh/rack-protection.git'
 
-gem 'activerecord', '~> 3.2', :require => 'active_record'
-gem 'activesupport', '~> 3.2'
-gem 'pg'
+gem 'activerecord', '~> 4.0', :require => 'active_record'
+gem 'activesupport', '~> 4.0'
+gem 'rails-observers', '~> 0.1', require: false
+gem 'pg', '~> 0.17'
 gem 'omniauth', '~> 1.1.4'
 gem 'omniauth-twitter', :git => 'git://github.com/arunagw/omniauth-twitter.git'
 gem 'omniauth-facebook', '~> 1.4.1'
@@ -37,7 +38,6 @@ gem 'ar-tsvectors', '~> 1.0', :require => 'activerecord_tsvectors'
 gem 'curb', '>= 0.7.14'
 
 group :development, :test do
-  gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
   gem 'simplecov'
   gem 'rspec', '~> 2.8'
   gem 'webmock', '~> 1.8.11'
