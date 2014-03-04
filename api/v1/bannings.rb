@@ -56,8 +56,9 @@ class CheckpointV1 < Sinatra::Base
     require_action_allowed(:moderate, "post.any:#{path}", :default => false)
     identity = Identity.find_by_id(identity)
     halt 404, "No such identity" unless identity
+
     bannings = Banning.where("fingerprint in (?)", identity.fingerprints).by_path("^#{path}")
-    bannings.map(&:destroy)
+    bannings.destroy_all
 
     pg :bannings, :locals => {:bannings => bannings}
   end
