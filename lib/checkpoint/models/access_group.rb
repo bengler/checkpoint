@@ -1,7 +1,9 @@
 # Part of Pebbles Security Model. Implements access groups.
 
 class AccessGroup < ActiveRecord::Base
-  LABEL_VALIDATOR = /^[a-zA-Z_-][a-zA-Z0-9_-]*$/
+
+  LABEL_VALIDATOR = /\A[a-zA-Z_-][a-zA-Z0-9_-]*\z/
+
   belongs_to :realm
   has_many :memberships, :class_name => "AccessGroupMembership", :dependent => :destroy
   has_many :subtrees, :class_name => "AccessGroupSubtree", :dependent => :destroy
