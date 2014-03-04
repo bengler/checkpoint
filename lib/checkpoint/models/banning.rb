@@ -21,11 +21,14 @@ class Banning < ActiveRecord::Base
   def self.declare!(attributes)
     # Check if there is an equivalent or more general ban in effect
     banning = Banning.where(:fingerprint => attributes[:fingerprint]).by_path("^#{attributes[:path]}").first
-    return banning if banning
-    # Delete any bans shadowed by this ban
-    Banning.where(:fingerprint => attributes[:fingerprint]).by_path("#{attributes[:path]}.*").each(&:destroy)
-    # Create the ban
-    Banning.create!(attributes)
+    unless banning
+      # Delete any bans shadowed by this ban
+      Banning.where(fingerprint: attributes[:fingerprint]).
+        by_path("#{attributes[:path]}.*").destroy_all
+
+      banning = Banning.create!(attributes)
+    end
+    banning
   end
 
   # Takes an :uid and :identity. If a ban is in effect, the path of the ban is returned. If
