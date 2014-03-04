@@ -5,6 +5,7 @@ gem 'sinatra-contrib'
 gem 'sinatra-activerecord'
 gem 'sinatra-ping', git: 'git://github.com/amedia/sinatra-ping'
 gem 'sinatra-restful', git: 'git://github.com/amedia/sinatra-restful'
+gem 'sinatra-amedia', :git => 'git://github.com/amedia/sinatra-amedia'
 gem 'rack-contrib'
 
 gem 'activerecord', '~> 3.2', :require => 'active_record'

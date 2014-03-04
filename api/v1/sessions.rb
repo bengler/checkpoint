@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   # @apidoc
   # Get metadata for a session.

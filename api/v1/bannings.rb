@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   # @apidoc
   # Get all effective bans for a given path

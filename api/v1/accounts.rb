@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   # @apidoc
   # Get all accounts for an identity. Requires god permissions or that the

@@ -5,7 +5,7 @@ require 'sinatra/petroglyph'
 
 Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   def self.api_path
     '/api/checkpoint/v1'

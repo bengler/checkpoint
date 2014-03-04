@@ -1,6 +1,6 @@
 require 'uri'
 
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   helpers do
     def parse_url(url)

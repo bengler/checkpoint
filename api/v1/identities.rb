@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   error Account::InUseError do |e|
     halt 409,

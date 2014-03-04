@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   helpers do
     def find_group_and_check_god_credentials(identifier)

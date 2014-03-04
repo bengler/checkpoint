@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   # @apidoc
   # Perform all relevant callbacks checking if the provided action is allowed for the current

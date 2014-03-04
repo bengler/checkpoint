@@ -1,6 +1,6 @@
 require 'erb'
 
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   helpers do
 

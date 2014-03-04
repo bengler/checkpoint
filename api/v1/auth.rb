@@ -1,4 +1,4 @@
-class CheckpointV1 < Sinatra::Base
+class CheckpointV1 < Sinatra::Amedia::Base
 
   def ensure_valid_redirect_path
     return nil unless params[:redirect_to]
