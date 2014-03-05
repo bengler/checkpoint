@@ -4,6 +4,7 @@ require_relative 'models/access_group_subtree'
 require_relative 'models/access_group_membership'
 
 class RiverNotifications < ActiveRecord::Observer
+
   observe :access_group, :access_group_subtree, :access_group_membership
 
   def self.river
@@ -11,20 +12,31 @@ class RiverNotifications < ActiveRecord::Observer
   end
 
   def after_create(record)
-    publish(record, :create)
+    case record
+      when AccessGroup, AccessGroupSubtree, AccessGroupMembership
+        publish(record, :create)
+    end
   end
 
   def after_update(record)
-    publish(record, :update)
+    case record
+      when AccessGroup, AccessGroupSubtree, AccessGroupMembership
+        publish(record, :update)
+    end
   end
 
   def after_destroy(record)
-    publish(record, :delete)
+    case record
+      when AccessGroup, AccessGroupSubtree, AccessGroupMembership
+        publish(record, :delete)
+    end
   end
 
-  def publish(record, event)
-    return if ENV['RACK_ENV'] == 'test'
-    self.class.river.publish(:event => event, :uid => record.uid, :attributes => record.attributes)
-  end
+  private
+
+    def publish(record, event)
+      return if ENV['RACK_ENV'] == 'test'
+      self.class.river.publish(:event => event, :uid => record.uid, :attributes => record.attributes)
+    end
 
 end
