@@ -2,8 +2,12 @@ $app_name = 'checkpoint'
 
 require File.expand_path('config/site.rb') if File.exists?('config/site.rb')
 
+require 'bundler'
+Bundler.require
+
 require 'pebblebed/sinatra'
 require 'active_support/all'
+require 'yaml'
 
 Dir.glob('./lib/checkpoint/**/*.rb').each{ |lib| require lib }
 
