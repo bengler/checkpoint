@@ -14,6 +14,12 @@ require File.expand_path('config/site.rb') if File.exists?('config/site.rb')
 require 'bundler'
 Bundler.require
 
+# Default logger unless setup by site.rb
+if !defined?(LOGGER)
+  require 'logger'
+  LOGGER = Logger.new(File.join($app_config['log_path'], 'common.log'))
+end
+
 Dir.glob('./lib/checkpoint/**/*.rb').each { |lib| require lib }
 
 ActiveRecord::Base.add_observer RiverNotifications.instance
