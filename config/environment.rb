@@ -16,13 +16,16 @@ end
 
 Dir.glob('./lib/checkpoint/**/*.rb').each{ |lib| require lib }
 
-$config = YAML::load(File.open("config/database.yml"))
 ENV['RACK_ENV'] ||= "development"
 environment = ENV['RACK_ENV']
 
-ActiveRecord::Base.add_observer RiverNotifications.instance
+ActiveRecord::Base.add_observer RiverNotifications.instance unless environment == 'test'
+ActiveRecord::Base.logger = LOGGER
+ActiveRecord::Base.configurations = YAML.load(
+  ERB.new(File.read(File.expand_path("../database.yml", __FILE__))).result)
+ActiveRecord::Base.include_root_in_json = true
+ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[environment])
 
-ActiveRecord::Base.establish_connection($config[environment])
 $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
 
 require File.expand_path('config/strategies.rb') if File.exists?('config/strategies.rb')
