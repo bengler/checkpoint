@@ -1,5 +1,13 @@
 $app_name = 'checkpoint'
 
+# Determine environment
+ENV['RACK_ENV'] ||= "development"
+$environment = ENV['RACK_ENV']
+
+# Load application configuration for environment
+$app_config = YAML::load(File.open("config/config.yml"))[$environment]
+
+# Load site specific setup
 require File.expand_path('config/site.rb') if File.exists?('config/site.rb')
 
 require 'bundler'
