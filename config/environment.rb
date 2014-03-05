@@ -5,6 +5,7 @@ ENV['RACK_ENV'] ||= "development"
 $environment = ENV['RACK_ENV']
 
 # Load application configuration for environment
+require 'yaml'
 $app_config = YAML::load(File.open("config/config.yml"))[$environment]
 
 # Load site specific setup
@@ -13,11 +14,7 @@ require File.expand_path('config/site.rb') if File.exists?('config/site.rb')
 require 'bundler'
 Bundler.require
 
-require 'pebblebed/sinatra'
-require 'active_support/all'
-require 'yaml'
-
-Dir.glob('./lib/checkpoint/**/*.rb').each{ |lib| require lib }
+Dir.glob('./lib/checkpoint/**/*.rb').each { |lib| require lib }
 
 ActiveRecord::Base.add_observer RiverNotifications.instance
 
