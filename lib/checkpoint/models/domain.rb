@@ -27,6 +27,10 @@ class Domain < ActiveRecord::Base
 
   def allow_origin?(origin)
     origin = canonical_domain(origin)
+
+    # If we're in the Amedia Realm, check if the origin is an amedia publication
+    return true if self.realm.label == 'amedia' && Amedia::Properties.publications_service.get_by_domain(origin)
+
     # First check if the origin resolves to same realm as self
     origin_domain = Domain.resolve_from_host_name(origin)
     return true if origin_domain && origin_domain.realm == self.realm

@@ -39,6 +39,32 @@ describe "Domains" do
     Session.create!(:identity => false_god).key
   end
 
+  let :publications_service do
+    double(:amedia_properties_publications_service)
+  end
+
+  before do
+    Amedia::Properties.stub(:publications_service) { publications_service }
+    publications_service.stub(:get_by_domain) do |domain|
+      if domain == "www.gd.no"
+        double(:publication, id: 123)
+      else
+        nil
+      end
+    end
+    publications_service.stub(:get_production_hostname) do |hostname|
+      hostname
+    end
+    publications_service.stub(:get_www_domain) do |domain|
+      if domain == 'gd.no.test.api.no'
+        'www.gd.no'
+      else
+        domain
+      end
+    end
+
+  end
+
   it "provides details for a specific domain" do
     realm = Realm.create!(:label => 'area51')
     Domain.create!(:name => 'example.org', :realm => realm)
@@ -81,9 +107,8 @@ describe "Domains" do
 
   it "checks against canonical domain for amedia realm" do
     amedia_realm = Realm.create!(:label => "amedia")
-    domain = Domain.create!(:realm => amedia_realm, :name => 'www.gd.no')
-    domain.add_origin 'www.bt.no'
-    get "/domains/www.gd.no/allows/bt.no.test.api.no"
+    domain = Domain.create!(:realm => amedia_realm, :name => 'bed.api.no')
+    get "/domains/bed.api.no/allows/gd.no.test.api.no"
     result = JSON.parse(last_response.body)
     result['allowed'].should be_true
   end
