@@ -28,9 +28,9 @@ map "/api/checkpoint/v1" do
     end
   end
 
-  use Pebbles::Cors do |domain|
-    domain = Domain.resolve_from_host_name(domain)
-    domain ? domain.realm.domains.map(&:name) : []
+  use Pebbles::Cors do |domain_name, origin|
+    domain = Domain.resolve_from_host_name(domain_name)
+    domain.allow_origin?(origin)
   end
 
   run CheckpointV1
