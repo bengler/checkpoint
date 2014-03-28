@@ -22,8 +22,6 @@ end
 
 Dir.glob('./lib/checkpoint/**/*.rb').each { |lib| require lib }
 
-ActiveRecord::Base.add_observer RiverNotifications.instance
-
 db_config = YAML::load(File.open("config/database.yml"))[$environment]
 ActiveRecord::Base.establish_connection(db_config)
 $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
