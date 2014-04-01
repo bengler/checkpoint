@@ -39,7 +39,6 @@ gem 'rest-client', :require => false  # Used by origo.thor
 gem 'curb', '>= 0.7.14'
 
 group :development, :test do
-  gem 'bengler_test_helper', :git => 'git://github.com/bengler/bengler_test_helper.git', :require => false
   gem 'simplecov', :require => false
   gem 'simplecov-rcov', :require => false
   gem 'rspec', '~> 2.8'

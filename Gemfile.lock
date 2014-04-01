@@ -42,12 +42,6 @@ GIT
       omniauth-oauth (~> 1.0)
 
 GIT
-  remote: git://github.com/bengler/bengler_test_helper.git
-  revision: c8e61a9247c07c2edeeb99718dfcd9f8d6e75722
-  specs:
-    bengler_test_helper (0.0.5)
-
-GIT
   remote: git://github.com/bengler/checkpoint-strategy.git
   revision: e19bde6e78b65e69705ec4920ef8f3ce88fe1dc8
   specs:
@@ -290,7 +284,6 @@ DEPENDENCIES
   airbrake (~> 3.1.4)
   amedia-properties!
   awesome_print
-  bengler_test_helper!
   checkpoint-strategy!
   curb (>= 0.7.14)
   dalli (~> 2.1.0)
