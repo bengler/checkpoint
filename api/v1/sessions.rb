@@ -20,6 +20,11 @@ class CheckpointV1 < Sinatra::Amedia::Base
     pg :session, :locals => {:session => @session}
   end
 
+  get '/session/' do
+    halt 200, {'Content-Type' => 'application/json'},
+        current_session.to_json
+  end
+
   post '/sessions/:key' do |id|
     check_god_credentials(current_identity.try(:realm_id))
     @session = Session.find_by_key(id)

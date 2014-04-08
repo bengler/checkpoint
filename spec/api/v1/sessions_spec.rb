@@ -59,6 +59,12 @@ describe "Sessions" do
     last_response.status.should eq 403
   end
 
+  it "lets me inspect my own session" do
+    get "/session/", :session => someone_session
+    last_response.status.should eq 200
+    JSON.parse(last_response.body)['session']['key'].should eq someone_session
+  end
+
   it "lets me create a session for another user" do
     post "/sessions", :identity_id => someone.id, :session => somegod_session
     last_response.status.should eq 200
