@@ -37,5 +37,5 @@ map '/api/checkpoint/v1' do
 end
 
 map '/checkpoint' do
-  run Sinatra::Ping::Controller
+  run Sinatra::Apiadmin::Controller
 end
