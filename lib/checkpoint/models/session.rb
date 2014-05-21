@@ -13,7 +13,10 @@ class Session < ActiveRecord::Base
 
   def key
     key = read_attribute(:key)
-    key ||= self.key = Session.random_key
+    if key.nil? || key == ""
+      key = self.key = Session.random_key
+    end
+    key
   end
 
   # Sessions need not be persisted if they are new and never have been assign an
