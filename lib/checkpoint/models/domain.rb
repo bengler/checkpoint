@@ -16,15 +16,8 @@ class Domain < ActiveRecord::Base
 
   ts_vector :origins
 
+  validates_with DomainNameValidator
   validates :name, :presence => {}, :uniqueness => {}
-  validates_each :name do |record, attr, name|
-    unless Domain.valid_name?(name)
-      record.errors.add(attr, :invalid_name)
-    end
-    if SimpleIDN.to_ascii(name) != name
-      record.errors.add(attr, :must_be_idn)
-    end
-  end
 
   def allow_origin?(origin)
     # First check if the origin resolves to same realm as self
@@ -36,7 +29,7 @@ class Domain < ActiveRecord::Base
   end
 
   def add_origin(origin)
-    raise "Invalid origin #{origin}" unless Domain.valid_name?(origin)
+    raise "Invalid origin #{origin}" unless DomainNameValidator.valid_name_or_ip?(origin)
     self.origins = self.origins << SimpleIDN.to_ascii(origin)
     save!
   end
@@ -52,16 +45,37 @@ class Domain < ActiveRecord::Base
   end
 
   class << self
-    # Finds domain matching a host name.
+
+    # Finds domain matching a host name or its IP address.
     def resolve_from_host_name(host_name)
-      domain = Domain.where(:name => host_name).first
-      if not domain and not ip_address?(host_name)
+      if DomainNameValidator.ip_address?(host_name)
+        domain = where(name: host_name).first
+      else
+        domain = where(%{
+          case
+            when name like '%*%' then
+              (name = :name or :name like regexp_replace(name, E'\\\\*', '%', 'g'))
+            else
+              name = :name
+          end
+        }, {name: host_name}).first
+
+        if not domain and (ips = resolve_name_to_ips(host_name))
+          domain ||= where(name: ips).first
+        end
+      end
+      domain
+    end
+
+    private
+
+      def resolve_name_to_ips(host_name)
         begin
           timeout(4) do
             begin
               ips = TCPSocket.gethostbyname(SimpleIDN.to_ascii(host_name))
-              ips.select! { |s| s.is_a?(String) && ip_address?(s) }
-              domain = Domain.where(:name => ips).first if ips.any?
+              ips.select! { |s| s.is_a?(String) && DomainNameValidator.ip_address?(s) }
+              return ips if ips.any?
             rescue SocketError => e
               logger.error("Socket error resolving #{host_name}")
             end
@@ -69,23 +83,9 @@ class Domain < ActiveRecord::Base
         rescue Timeout::Error => e
           logger.error("Timeout resolving #{host_name} via DNS")
         end
+        nil
       end
-      domain
-    end
 
-    # Check that name is RFC-compliant with regard to length and permitted characters.
-    def valid_name?(name)
-      name &&
-        (ip_address?(name) ||
-          (name.length <= RFC_NAME_LIMIT &&
-          name.split('.').map(&:length).max <= RFC_NAME_LABEL_LIMIT &&
-          SimpleIDN.to_ascii(name) =~ RFC_NAME_PATTERN))
-    end
-
-    # Is this an IPv4 address?
-    def ip_address?(string)
-      string =~ IP_ADDRESS_PATTERN
-    end
   end
 
   def name=(name)
@@ -97,12 +97,6 @@ class Domain < ActiveRecord::Base
   end
 
   private
-
-    IP_ADDRESS_PATTERN = /\A\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/
-
-    RFC_NAME_PATTERN = /\A[a-z0-9][a-z\.0-9-]+\z/ui.freeze
-    RFC_NAME_LIMIT = 253
-    RFC_NAME_LABEL_LIMIT = 63
 
     def ensure_primary_domain
       if self.realm and not self.realm.primary_domain
