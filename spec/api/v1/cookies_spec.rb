@@ -60,6 +60,5 @@ describe "Session cookies" do
     last_response.status.should eq 200
     last_response.headers.should include('Set-Cookie')
     rack_mock_session.cookie_jar['checkpoint.session'].should_not == ''
-    rack_mock_session.cookie_jar['checkpoint.session'].length 
   end
 end
