@@ -104,8 +104,13 @@ class CheckpointV1 < Sinatra::Base
       current_realm && request.host == current_realm.primary_domain_name
     end
 
+    def valid_session?(session)
+      !session.nil? && !session.empty?
+    end
+
     def current_session_key
-      params[:session] || request.cookies[Session::COOKIE_NAME]
+      session = params[:session] || request.cookies[Session::COOKIE_NAME]
+      valid_session?(session) and session
     end
 
     def current_session
