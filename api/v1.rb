@@ -105,12 +105,12 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def valid_session?(session)
-      !session.nil? && !session.empty?
+      !session.blank?
     end
 
     def current_session_key
       session = params[:session] || request.cookies[Session::COOKIE_NAME]
-      valid_session?(session) and session
+      session if valid_session?(session)
     end
 
     def current_session
