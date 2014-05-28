@@ -97,8 +97,13 @@ class CheckpointV1 < Sinatra::Amedia::Base
                         Amedia::Properties.publications_service.get_production_hostname(request.host) == current_realm.primary_domain_name)
     end
 
+    def valid_session?(session)
+      !session.blank?
+    end
+
     def current_session_key
-      params[:session] || request.cookies[Session::COOKIE_NAME]
+      session = params[:session] || request.cookies[Session::COOKIE_NAME]
+      session if valid_session?(session)
     end
 
     def current_session
