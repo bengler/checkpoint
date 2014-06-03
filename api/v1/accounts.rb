@@ -61,6 +61,7 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON]
   # @status 404 No such account.
   get '/accounts/:provider/:uid' do |provider, uid|
+    halt 404 unless current_identity
     account = Account.where(
       :realm_id => current_identity.realm_id,
       :provider => provider,
