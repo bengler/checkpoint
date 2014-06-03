@@ -52,7 +52,7 @@ class CheckpointV1 < Sinatra::Base
     if xhr_request?
       halt 200, { :ok => request.cookies.has_key?('checkpoint.session') }.to_json
     end
-    redirect params[:redirect_to] || http.referer
+    redirect(params[:redirect_to] || request.env['HTTP_REFERER'])
   end
 
   after do
