@@ -29,6 +29,6 @@ describe AccessGroup do
     friend = Identity.create!(:realm => realm)
     AccessGroupMembership.create!(:access_group => access_group, :identity => friend)
 
-    AccessGroup.paths_for_identity(friend.id).should eq(['area51.a.b.c', 'area51.x.y.z'])
+    AccessGroup.paths_for_identity(friend.id).sort.should eq(['area51.a.b.c', 'area51.x.y.z'])
   end
 end

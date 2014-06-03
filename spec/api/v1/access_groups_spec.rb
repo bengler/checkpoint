@@ -324,7 +324,8 @@ describe "Identities" do
       AccessGroupMembership.create!(:access_group => access_group, :identity => me)
 
       get "/identities/#{me.id}/access_to/#{realm.label}.a.b.c.d.e"
-      AccessGroup.paths_for_identity(me.id).should eq(["#{realm.label}.a.b.c", "#{realm.label}.x.y.z"])
+      AccessGroup.paths_for_identity(me.id).sort.should eq(
+        ["#{realm.label}.a.b.c", "#{realm.label}.x.y.z"])
 
       json_output['access']['granted'].should == true
     end
