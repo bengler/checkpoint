@@ -91,17 +91,19 @@ GEM
     airbrake (3.1.14)
       builder
       json
+    amq-protocol (1.9.2)
     ar-tsvectors (1.0.0)
       activerecord (>= 3.0)
     arel (3.0.2)
     backports (3.3.4)
     builder (3.0.4)
-    bunny (0.8.0)
+    bunny (1.2.2)
+      amq-protocol (>= 1.9.2)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     curb (0.8.5)
     dalli (2.1.0)
-    deepstruct (0.0.5)
+    deepstruct (0.0.7)
     diff-lcs (1.2.4)
     evernote-thrift (1.25.0)
     faraday (0.8.8)
@@ -116,12 +118,12 @@ GEM
     kgio (2.8.1)
     memcache_mock (0.0.13)
     mime-types (1.25)
-    mini_portile (0.5.2)
-    multi_json (1.8.4)
+    mini_portile (0.6.0)
+    multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
-    nokogiri (1.6.1)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.6.2.1)
+      mini_portile (= 0.6.0)
     oauth (0.4.7)
     oauth2 (0.9.2)
       faraday (~> 0.8)
@@ -143,13 +145,12 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth2
     pathbuilder (0.0.2)
-    pebblebed (0.1.3)
+    pebblebed (0.2)
       activesupport
-      bunny (~> 0.8.0)
+      bunny (~> 1.2.2)
       curb (>= 0.8.4)
       deepstruct (>= 0.0.4)
       futurevalue
-      i18n
       nokogiri
       pathbuilder
       queryparams
@@ -210,7 +211,7 @@ GEM
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    yajl-ruby (1.2.0)
+    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
@@ -234,7 +235,7 @@ DEPENDENCIES
   omniauth-origo (~> 1.0.0.rc3)!
   omniauth-twitter!
   omniauth-vanilla!
-  pebblebed (>= 0.1.0)
+  pebblebed (>= 0.2.0)
   pebbles-cors!
   pebbles-path (>= 0.0.3)
   pebbles-uid
