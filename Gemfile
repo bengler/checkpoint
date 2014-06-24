@@ -49,5 +49,5 @@ end
 
 group :production do
   gem 'airbrake', '~> 3.1.4', :require => false
-  gem 'unicorn', '~> 4.1.1'
+  gem 'unicorn'
 end
