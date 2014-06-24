@@ -97,7 +97,7 @@ GEM
     arel (3.0.2)
     backports (3.3.4)
     builder (3.0.4)
-    bunny (1.2.2)
+    bunny (1.3.1)
       amq-protocol (>= 1.9.2)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
@@ -145,9 +145,9 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth2
     pathbuilder (0.0.2)
-    pebblebed (0.2)
+    pebblebed (0.2.1)
       activesupport
-      bunny (~> 1.2.2)
+      bunny (~> 1.3.1)
       curb (>= 0.8.4)
       deepstruct (>= 0.0.4)
       futurevalue
