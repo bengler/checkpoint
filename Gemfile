@@ -21,7 +21,7 @@ gem 'omniauth-origo', '~> 1.0.0.rc3', :git => 'git://github.com/bengler/omniauth
 gem 'omniauth-vanilla', :git => 'git://github.com/bengler/omniauth-vanilla.git'
 gem 'omniauth-evernote'
 gem 'omniauth-google-oauth2', '~> 0.1.10'
-gem 'pebblebed', ">=0.1.0"
+gem 'pebblebed', ">=0.2.0"
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'git://github.com/bengler/pebbles-cors.git'
 gem 'pebbles-path', '>=0.0.3'
@@ -49,5 +49,5 @@ end
 
 group :production do
   gem 'airbrake', '~> 3.1.4', :require => false
-  gem 'unicorn', '~> 4.1.1'
+  gem 'unicorn'
 end
