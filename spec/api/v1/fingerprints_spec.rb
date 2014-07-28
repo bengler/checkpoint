@@ -15,6 +15,12 @@ describe "Fingerprints" do
     realm
   end
 
+  let :other_realm do
+    realm = Realm.create!(:label => "area54")
+    Domain.create!(:realm => realm, :name => 'example2.org')
+    realm
+  end
+
   let :somegod do
     Identity.create!(:god => true, :realm => realm)
   end
@@ -56,6 +62,16 @@ describe "Fingerprints" do
         last_response.status.should eq 403
       end
     end
+
+    context "when user is god, but in another realm than the target identity" do
+      it "is *not* allowed to add new fingerprints" do
+        identity = Identity.new(:realm => other_realm)
+        identity.save!
+        post "identities/#{identity.id}/fingerprints", fingerprints: ['23foo', '42bar'], :session => somegod_session
+        last_response.status.should eq 403
+      end
+    end
+
     context "when user is god" do
       it "is allowed to add fingerprints to an existing identity" do
         identity = Identity.new(:realm => realm)

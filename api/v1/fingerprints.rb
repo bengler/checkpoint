@@ -28,7 +28,13 @@ class CheckpointV1 < Sinatra::Base
 
   post '/identities/:identity_id/fingerprints' do |identity_id|
     require_god
+
     identity = Identity.find(identity_id)
+
+    unless current_identity.realm.id == identity.realm.id
+      halt 403, 'You must be god in the same realm as the identity you are adding fingerprints to' 
+    end  
+
     identity.add_fingerprints!(request['fingerprints'])
     pg :identity, :locals => { :identity => identity }
   end
