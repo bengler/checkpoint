@@ -15,4 +15,21 @@ class CheckpointV1 < Sinatra::Base
       where(["fingerprints @@ ?", fingerprints.split(',').join('|')])
     pg :identities, :locals => { :identities => identities }
   end
+  
+  # @apidoc
+  # Post a new fingerprint to an identity
+  #
+  # @category Checkpoint/Fingerprints
+  # @path /api/checkpoint/v1/fingerprints/:fingerprints/identities
+  # @example /api/checkpoint/v1/fingerprints/3eww7uspsy770ohuzoui9wb038up99ci79jz94dpsi6263xi1b/identities
+  # @http GET
+  # @required [String] fingerprints A comma-separated list of fingerprints
+  # @status 200 [JSON] A collection of identities
+
+  post '/identities/:identity_id/fingerprints' do |identity_id|
+    require_god
+    identity = Identity.find(identity_id)
+    identity.add_fingerprints!(request['fingerprints'])
+    pg :identity, :locals => { :identity => identity }
+  end
 end
