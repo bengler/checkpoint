@@ -112,10 +112,14 @@ class Identity < ActiveRecord::Base
     $memcached.delete(self.cache_key)
   end
 
+  def add_fingerprints!(fingerprints)
+    self.send(:fingerprints=, self.fingerprints | fingerprints)
+    save(validate: false) unless new_record?
+  end
+  
   def update_fingerprints_from_account!(account)
     if account and (fingerprints = account.fingerprints)
-      self.send(:fingerprints=, fingerprints | self.fingerprints)
-      save(validate: false) unless new_record?
+      self.add_fingerprints!(fingerprints)
     end
   end
 

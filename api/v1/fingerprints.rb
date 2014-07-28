@@ -15,4 +15,27 @@ class CheckpointV1 < Sinatra::Base
       where(["fingerprints @@ ?", fingerprints.split(',').join('|')])
     pg :identities, :locals => { :identities => identities }
   end
+  
+  # @apidoc
+  # Post a new fingerprint to an identity
+  #
+  # @category Checkpoint/Fingerprints
+  # @path /api/checkpoint/v1/identities/:identity_id/fingerprints
+  # @example /api/checkpoint/v1/identities/1337/fingerprints
+  # @http POST
+  # @required [Array] fingerprints An array of strings to add as fingerprints
+  # @status 200 [JSON] The identity object containing the complete list of fingerprints, including the newly added ones
+
+  post '/identities/:identity_id/fingerprints' do |identity_id|
+    require_god
+
+    identity = Identity.find(identity_id)
+
+    unless current_identity.realm.id == identity.realm.id
+      halt 403, 'You must be god in the same realm as the identity you are adding fingerprints to' 
+    end  
+
+    identity.add_fingerprints!(request['fingerprints'])
+    pg :identity, :locals => { :identity => identity }
+  end
 end
