@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'sinatra-contrib'
-gem 'sinatra-activerecord', '~> 1.4'
+gem 'sinatra-contrib', require: false
+gem 'sinatra-activerecord', '~> 2.0'
 gem 'rack-contrib'
 
 # Remove this git reference after version > 1.5.2 is released

@@ -13,6 +13,7 @@ class CheckpointV1 < Sinatra::Base
     config.set :show_exceptions, false
   end
 
+  register Sinatra::ActiveRecordExtension
   register Sinatra::Pebblebed
 
   error ActiveRecord::RecordNotFound do
