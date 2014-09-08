@@ -3,13 +3,18 @@ $:.unshift(File.dirname(__FILE__))
 require "sinatra/activerecord/rake"
 require_relative 'config/environment'
 
-task :environment do
-  require 'config/environment'
+# TODO: This exists only so CI server will find the task. Change CI
+#   script so we don't need it.
+namespace :db do
+  namespace :test do
+    desc "Prepare test database."
+    task :prepare
+  end
 end
 
 namespace :maintenance do
   desc "delete anonymous identities that have not been seen for a month"
-  task :delete_inactive_anonymous_identities => :environment do    
+  task :delete_inactive_anonymous_identities do
     Identity.anonymous.not_seen_for_more_than_days(30).find_in_batches(:batch_size => 300) do |identities|
       print '.'
       Identity.connection.transaction do
