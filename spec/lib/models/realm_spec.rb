@@ -8,14 +8,24 @@ describe Realm do
     realm.errors[:label].should_not == nil
   end
 
-  it "grabs all the keys" do
-    keys = {
-      :twitter => {:consumer_key => 'twitter_key', :consumer_secret => 'twitter_secret'},
-      :facebook => {:client_id => 'facebook_id', :client_secret => 'facebook_secret'}
-    }.with_indifferent_access
+  describe '#external_service_keys' do
+    let :keys do
+      {
+        twitter: {consumer_key: 'twitter_key', consumer_secret: 'twitter_secret'},
+        facebook: {client_id: 'facebook_id', client_secret: 'facebook_secret'}
+      }.with_indifferent_access
+    end
 
-    realm = Realm.create!(:label => 'realm', :service_keys => keys.to_yaml)
-    realm.external_service_keys.should eq(keys)
+    it "grabs all the keys" do
+      realm = Realm.create!(label: 'realm', service_keys: keys.to_yaml)
+      expect(realm.external_service_keys).to eq keys
+    end
+
+    it 'serializes and deserializes keys' do
+      realm = Realm.create!(label: 'realm', service_keys: keys)
+      realm.reload
+      expect(realm.external_service_keys).to eq keys
+    end
   end
 
   it "delivers api keys for twitter" do

@@ -58,10 +58,14 @@ class Realm < ActiveRecord::Base
   def external_service_keys
     keys = HashWithIndifferentAccess.new
     if self.service_keys.present?
-      if (yaml = YAML.load(self.service_keys))
-        keys.merge!(yaml)
+      if self.service_keys.is_a?(String)
+        if (yaml = YAML.load(self.service_keys))
+          keys.merge!(yaml)
+        else
+          raise "Missing or malformed configuration for #<Realm:#{id} #{label}>"
+        end
       else
-        raise "Missing or malformed configuration for #<Realm:#{id} #{label}>"
+        keys.merge!(self.service_keys)
       end
     end
     keys.merge!(self.class.environment_overrides.fetch(self.label, {}).fetch(:services, {}))
