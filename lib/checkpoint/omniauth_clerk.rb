@@ -11,11 +11,6 @@ class OmniauthClerk
     elsif auth_data['extra']['raw_info']
       profile_url = auth_data['extra']['raw_info']['link']
     end
-
-    # Quickfix to deal with origo returning :location as a lat, lon hash. In these cases we want to convert it to json
-    location = auth_data['info']['location']
-    location = location.to_json unless location.is_a?(String) or location.nil?
-
     attributes = {
       :provider =>     auth_data['provider'],
       :uid =>          auth_data['uid'],
@@ -23,7 +18,7 @@ class OmniauthClerk
       :secret =>       auth_data['credentials']['secret'],
       :nickname =>     auth_data['info']['nickname'],
       :name =>         auth_data['info']['name'],
-      :location =>     location.to_s,
+      :location =>     auth_data['info']['location'],
       :image_url =>    auth_data['info']['image'],
       :description =>  auth_data['info']['description'],
       :email =>        auth_data['info']['email'],
