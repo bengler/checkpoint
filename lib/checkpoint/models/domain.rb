@@ -3,6 +3,8 @@ require 'simpleidn'
 require 'timeout'
 require 'socket'
 
+require_relative '../domain_name_validator'
+
 # Represents either a DNS domain name or an IP address.
 class Domain < ActiveRecord::Base
 
@@ -16,7 +18,7 @@ class Domain < ActiveRecord::Base
 
   ts_vector :origins
 
-  validates_with DomainNameValidator
+  validates_with ::DomainNameValidator
   validates :name, :presence => {}, :uniqueness => {}
 
   def allow_origin?(origin)
