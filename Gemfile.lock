@@ -113,7 +113,7 @@ GEM
     builder (3.0.4)
     bunny (0.8.0)
     coderay (1.1.0)
-    contextual_logger (0.2.1)
+    contextual_logger (1.0.1)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     curb (0.8.5)
