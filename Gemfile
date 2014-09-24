@@ -7,6 +7,8 @@ gem 'sinatra-activerecord'
 gem 'sinatra-apiadmin'
 gem 'sinatra-restful'
 gem 'sinatra-amedia'
+gem 'contextual_logger'
+gem 'logstash-logger'
 gem 'rack-contrib'
 
 gem 'activerecord', '~> 3.2', :require => 'active_record'
