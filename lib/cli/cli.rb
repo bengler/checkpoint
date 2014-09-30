@@ -46,7 +46,9 @@ module Checkpoint
 
         # rewrite callback urls
         Callback.all.each do |cb|
-          cb.url = cb.url.sub('.o5.no', primary_domain)
+          new_url = cb.url.sub('.o5.no', primary_domain)
+          puts "#{cb.url} --> #{new_url}"
+          cb.url = new_url
           cb.save!
         end
 
