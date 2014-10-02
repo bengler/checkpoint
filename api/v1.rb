@@ -51,6 +51,7 @@ class CheckpointV1 < Sinatra::Base
   # redirecting back to the client.
   get '/check-session' do
     if xhr_request?
+      content_type :json
       halt 200, { :ok => request.cookies.has_key?('checkpoint.session') }.to_json
     end
     redirect(params[:redirect_to] || request.env['HTTP_REFERER'])
