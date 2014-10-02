@@ -64,6 +64,7 @@ module Checkpoint
         end
       end
 
+      private
 
       def create_domain!(domain_name, realm)
         begin

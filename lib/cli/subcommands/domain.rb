@@ -4,7 +4,6 @@ module Checkpoint
 
       desc "add DOMAIN", "Add a domain to realm"
       method_option :realm, :type => :string, :aliases => "-r", :required => true, :desc => "the realm to which this domain should be added"
-
       def add(domain)
 
         realm = ::Realm.find_by_label(options["realm"])
