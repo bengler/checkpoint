@@ -231,8 +231,8 @@ class CheckpointV1 < Sinatra::Amedia::Base
   get '/logout' do
     abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     uid = current_identity.primary_account.uid if current_identity.primary_account
-    logger.info "Logging out identity with primary account user id #{uid}", user_id: uid
     log_out
+    logger.info "Logged out identity with primary account user id #{uid}", user_id: uid
     redirect params[:redirect_to] || request.referer
   end
 
@@ -250,8 +250,8 @@ class CheckpointV1 < Sinatra::Amedia::Base
   post '/logout' do
     abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
     uid = current_identity.primary_account.uid if current_identity.primary_account
-    logger.info "Logging out identity with primary account user id #{uid}", user_id: uid
     log_out
+    logger.info "Logged out identity with primary account user id #{uid}", user_id: uid
     halt 200, {status: "Logged out"}.to_json if request.xhr?
     redirect params[:redirect_to] || request.referer
   end
