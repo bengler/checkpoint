@@ -165,7 +165,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
     end
 
     log_in(account.identity)
-    logger.info("Logged successful through #{params[:provider]} as user_id=#{account.uid}.",
+    logger.info("Logged in successfully through #{params[:provider]} as user_id=#{account.uid}.",
       user_id: account.uid)
 
     unless request.xhr?
