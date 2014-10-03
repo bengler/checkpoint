@@ -87,10 +87,6 @@ class CheckpointV1 < Sinatra::Amedia::Base
   end
 
   helpers do
-    def logger
-      LOGGER
-    end
-
     # Is the current host the realm's primary domain?
     def on_primary_domain?
       current_realm && (request.host == current_realm.primary_domain_name ||
@@ -180,18 +176,18 @@ class CheckpointV1 < Sinatra::Amedia::Base
 
     def check_god_credentials(realm_id = current_realm.try(:id))
       unless realm_id
-        halt 403, "Unknown realm"
+        abort 403, "Unknown realm"
       end
       on_same_realm = current_identity.try(:realm_id) == realm_id
       return if current_identity.try(:root?)
       unless current_identity.try(:god?) and on_same_realm
-        halt 403, "You must be a god of the '#{Realm.find_by_id(realm_id).label}'-realm"
+        abort 403, "You must be a god of the '#{Realm.find_by_id(realm_id).label}'-realm"
       end
     end
 
     def check_root_credentials
       unless current_identity && current_identity.root?
-        halt 403, "You must be a god of the root realm"
+        abort 403, "You must be a god of the root realm"
       end
     end
 
