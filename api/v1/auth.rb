@@ -156,15 +156,16 @@ class CheckpointV1 < Sinatra::Amedia::Base
     account = begin
       Account.declare!(attributes)
     rescue Account::InUseError => ex
-      logger.info("Login failed due to account being in use: #{ex.message}",
-        user_id: attributes[:uid])
+      user_id = attributes[:uid]
+      logger.info("Login failed due to account being in use for user_id=#{user_id}: #{ex.message}",
+        user_id: user_id)
       url_or_path = (params[:failure_url][0] == '/' ? :path : :url)
       redirect url_for_failure({:message => :account_in_use,
         :text => ex.message, url_or_path => params[:failure_url]})
     end
 
     log_in(account.identity)
-    logger.info("Logged successful through #{params[:provider]} as user id #{account.uid}.",
+    logger.info("Logged successful through #{params[:provider]} as user_id=#{account.uid}.",
       user_id: account.uid)
 
     unless request.xhr?
@@ -230,9 +231,11 @@ class CheckpointV1 < Sinatra::Amedia::Base
   # FIXME: Should not offer this as GET.
   get '/logout' do
     abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
-    uid = current_identity.primary_account.uid if current_identity.primary_account
+    if current_identity && current_identity.primary_account
+      user_id = current_identity.primary_account.uid
+    end
     log_out
-    logger.info "Logged out identity with primary account user id #{uid}", user_id: uid
+    logger.info "Logged out identity with primary account user_id=#{user_id}", user_id: user_id
     redirect params[:redirect_to] || request.referer
   end
 
@@ -249,9 +252,11 @@ class CheckpointV1 < Sinatra::Amedia::Base
 
   post '/logout' do
     abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
-    uid = current_identity.primary_account.uid if current_identity.primary_account
+    if current_identity && current_identity.primary_account
+      user_id = current_identity.primary_account.uid
+    end
     log_out
-    logger.info "Logged out identity with primary account user id #{uid}", user_id: uid
+    logger.info "Logged out identity with primary account user_id=#{user_id}", user_id: user_id
     halt 200, {status: "Logged out"}.to_json if request.xhr?
     redirect params[:redirect_to] || request.referer
   end
