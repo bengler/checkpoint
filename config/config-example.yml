@@ -1,3 +1,4 @@
+---
 development:
   gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
   log_path: log

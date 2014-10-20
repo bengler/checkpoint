@@ -6,5 +6,4 @@ require 'thor'
 require_relative '../config/environment'
 require 'cli'
 
-ActiveRecord::Base.logger.level = Logger::INFO
 Checkpoint::CLI::Checkpoint.start

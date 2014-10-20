@@ -5,7 +5,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
     begin
       uri = URI(params[:redirect_to])
     rescue => e
-      halt 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page)."
+      abort 500, "Malformed value for redirect_to: '#{params[:redirect_to]}'. Please specify a valid path (i.e. /path/to/landing-page).", e
     end
     uri.host ||= request.host
     uri.scheme ||= request.scheme
@@ -73,7 +73,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
   # @status 409 (if xhr request) Logged in already
 
   get '/login/anonymous' do
-    halt 500, "No registered realm for #{request.host}" unless current_realm
+    abort 500, "No registered realm for #{request.host}" unless current_realm
 
     anonymous_identity = Identity.find_by_session_key(current_session_key)
 
@@ -110,7 +110,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
   # @status 301 Redirect to target address.
 
   get '/login/:provider' do
-    halt 500, "No registered realm for #{request.host}" unless current_realm
+    abort 500, "No registered realm for #{request.host}" unless current_realm
 
     # Make sure the target URL is fully qualified with domain.
     target_url = URI.parse(params[:redirect_to] || "/login/succeeded")
@@ -134,18 +134,19 @@ class CheckpointV1 < Sinatra::Amedia::Base
 
   post '/login/:provider' do
     strategy = Checkpoint.strategies.find {|s| s.supports? params[:provider] } or
-      halt 400, "No strategy can handle the \"#{params[:provider]}\" provider"
+      abort 400, "No strategy can handle the \"#{params[:provider]}\" provider"
 
     provider = strategy.get_provider(params[:provider])
     provider.mode == 'direct' or
-      halt 400, 'Requested provider does not support the direct authentication mode'
+      abort 400, 'Requested provider does not support the direct authentication mode'
 
     params[:failure_url] or
-      halt 400, 'Missing required parameter: failure_url'
+      abort 400, 'Missing required parameter: failure_url'
 
     attributes = begin
       provider.authenticate(params)
     rescue Checkpoint::Strategy::InvalidCredentialsError => ex
+      logger.info "Login failed due to invalid credentials: #{ex.message}"
       url_or_path = (params[:failure_url][0] == '/' ? :path : :url)
       redirect url_for_failure({:message => :invalid_credentials,
         :text => ex.message, url_or_path => params[:failure_url]})
@@ -155,12 +156,17 @@ class CheckpointV1 < Sinatra::Amedia::Base
     account = begin
       Account.declare!(attributes)
     rescue Account::InUseError => ex
+      user_id = attributes[:uid]
+      logger.info("Login failed due to account being in use for user_id=#{user_id}: #{ex.message}",
+        user_id: user_id)
       url_or_path = (params[:failure_url][0] == '/' ? :path : :url)
       redirect url_for_failure({:message => :account_in_use,
         :text => ex.message, url_or_path => params[:failure_url]})
     end
 
     log_in(account.identity)
+    logger.info("Logged in successfully through #{params[:provider]} as user_id=#{account.uid}.",
+      user_id: account.uid)
 
     unless request.xhr?
       # Make sure the target URL is fully qualified with domain.
@@ -194,14 +200,14 @@ class CheckpointV1 < Sinatra::Amedia::Base
       strategy.options.client_id = service_keys.client_id
       strategy.options.client_secret = service_keys.client_secret
     else
-      halt 500, "Invalid strategy for provider: #{params[:provider]}"
+      abort 500, "Invalid strategy for provider: #{params[:provider]}"
     end
     strategy.options[:scope] = service_keys.scope if service_keys.scope
     strategy.options[:client_options].site = service_keys.site if service_keys.site
   end
 
   get '/auth/:provider/callback' do
-    halt 500, "No registered realm for #{request.host}" unless current_realm
+    abort 500, "No registered realm for #{request.host}" unless current_realm
 
     begin
       account = Account.declare_with_omniauth!(request.env['omniauth.auth'], current_realm)
@@ -214,7 +220,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
     if (url = session[:redirect_to])
       transfer(url)
     else
-      halt 500, "Your browser has issues with cookies, which are required to log in."
+      abort 500, "Your browser has issues with cookies, which are required to log in."
     end
   end
 
@@ -224,8 +230,12 @@ class CheckpointV1 < Sinatra::Amedia::Base
 
   # FIXME: Should not offer this as GET.
   get '/logout' do
-    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    if current_identity && current_identity.primary_account
+      user_id = current_identity.primary_account.uid
+    end
     log_out
+    logger.info "Logged out identity with primary account user_id=#{user_id}", user_id: user_id
     redirect params[:redirect_to] || request.referer
   end
 
@@ -241,8 +251,12 @@ class CheckpointV1 < Sinatra::Amedia::Base
   # @status 301 Redirect to target address.
 
   post '/logout' do
-    halt 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    abort 500, "Not allowed to log out provisional identity" if current_identity.try :provisional?
+    if current_identity && current_identity.primary_account
+      user_id = current_identity.primary_account.uid
+    end
     log_out
+    logger.info "Logged out identity with primary account user_id=#{user_id}", user_id: user_id
     halt 200, {status: "Logged out"}.to_json if request.xhr?
     redirect params[:redirect_to] || request.referer
   end

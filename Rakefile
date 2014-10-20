@@ -4,7 +4,6 @@ require 'sinatra/activerecord/rake'
 
 task :environment do
   require 'config/environment'
-  ActiveRecord::Base.logger.level = Logger::INFO if ActiveRecord::Base.logger
 end
 
 namespace :db do
