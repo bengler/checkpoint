@@ -32,3 +32,21 @@ namespace :maintenance do
     Identity.connection.execute("delete from identity_ips where created_at < now() - interval '30 days'")
   end
 end
+
+desc "Setup required config files and directories."
+task :development_setup do
+  require 'yaml'
+
+  ['config.yml', 'site.rb'].each do |filename|
+    unless File.exists?("config/#{filename}")
+      name, ext = filename.split('.')
+      FileUtils.cp "config/#{name}-example.#{ext}", "config/#{filename}", verbose: true
+    end
+  end
+
+  config = YAML::load(File.open("config/config.yml"))['development']
+
+  unless File.exists?(config['log_path'])
+    FileUtils.mkdir_p config['log_path'], verbose: true
+  end
+end

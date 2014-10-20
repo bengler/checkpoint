@@ -1,20 +1,15 @@
 development:
   gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/common_development.log
   log_path: log
-
-staging:
-  gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/common_staging.log
-  log_path: log
-
-production:
-  gaia_endpoint_base: http://admin.test.api.no/gaia/api/public/v1/
-  logfile: log/common.log
-  log_path: log
+  logstash:
+    :type: :file
+    :path: log/jsonevent.logz
+    :sync: true
 
 test:
   gaia_endpoint_base: http://example.org/this_should_be_stubbed/
-  logfile: log/common.log
   log_path: log
-
+  logstash:
+    :type: :file
+    :path: log/jsonevent_test.logz
+    :sync: true
