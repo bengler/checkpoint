@@ -48,7 +48,7 @@ describe Session do
     Session.create!(:identity => identity, :key => "abcde")
     lambda {
       Session.create!(:identity => identity, :key => "abcde")
-    }.should raise_error ActiveRecord::RecordNotUnique
+    }.should raise_error ActiveRecord::StatementInvalid
   end
 
 end
