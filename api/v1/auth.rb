@@ -171,13 +171,7 @@ class CheckpointV1 < Sinatra::Amedia::Base
     unless request.xhr?
       # Make sure the target URL is fully qualified with domain.
       target_url = URI.parse(params[:redirect_to] || '/login/succeeded')
-      target_url.host ||= request.host
-      target_url.scheme ||= request.scheme
-      target_url.query ||= ''
-      target_url.query += "session=#{current_session.key}"
-      response = get_request(target_url.to_s)
-      content_type response.content_type
-      halt response.code.to_i, response.body
+      redirect to(target_url.to_s)
     end
   end
 
