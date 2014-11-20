@@ -164,6 +164,7 @@ class CheckpointV1 < Sinatra::Base
       end
     end
 
+    strategy.options[:prompt] = 'select_account' if params[:provider] == 'google_oauth2'
     strategy.options[:scope] = service_keys.scope if service_keys.scope
     strategy.options[:client_options].site = service_keys.site if service_keys.site
   end
