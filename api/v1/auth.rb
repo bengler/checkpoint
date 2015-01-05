@@ -195,7 +195,7 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/failure' do
-    redirect url_for_failure(:message => params[:message] || 'unknown')
+    redirect url_for_failure(:message => params[:message] || 'unknown', :error => params[:error])
   end
 
   # FIXME: Should not offer this as GET.
