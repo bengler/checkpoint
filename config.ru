@@ -22,8 +22,20 @@ map "/api/checkpoint/v1" do
     provider :evernote, nil, nil, :setup => true
 
     on_failure do |env|
-      message_key = env['omniauth.error.type']
-      new_path = "/api/checkpoint/v1/auth/failure?message=#{message_key}"
+      message_key = env['omniauth.error.type'] # Generic omniauth error, i.e. 'invalid_credentials'
+
+      # Pass through the original strategy callback error for easier debugging and error handling
+      query_hash = env['rack.request.query_hash']
+      strategy_error = nil
+      if query_hash and query_hash['error']
+        error_hash = {
+          'error' => query_hash['error'],
+          'error_reason' => query_hash['error_reason'],
+          'error_description' => query_hash['error_description']
+        }
+        strategy_error = "&#{error_hash.to_param}"
+      end
+      new_path = "/api/checkpoint/v1/auth/failure?message=#{message_key}#{strategy_error}"
       [302, {'Location' => new_path, 'Content-Type'=> 'text/html'}, []]
     end
   end

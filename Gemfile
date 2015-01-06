@@ -14,7 +14,7 @@ gem 'rails-observers', '~> 0.1', require: false
 gem 'pg', '~> 0.17'
 gem 'omniauth', '~> 1.1.4'
 gem 'omniauth-twitter', :git => 'git://github.com/arunagw/omniauth-twitter.git'
-gem 'omniauth-facebook', '~> 1.4.1'
+gem 'omniauth-facebook', '~> 1.6'
 gem 'omniauth-contrib', '~> 1.0.0', :git => 'git://github.com/intridea/omniauth-contrib.git'
 gem 'omniauth-oauth', '~> 1.0.1', :git => 'git://github.com/intridea/omniauth-oauth.git'
 gem 'omniauth-oauth2', '~> 1.1.0', :git => 'git://github.com/intridea/omniauth-oauth2.git'

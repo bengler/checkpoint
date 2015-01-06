@@ -143,7 +143,14 @@ class CheckpointV1 < Sinatra::Base
     service_keys = current_realm.keys_for(params[:provider].to_sym)
 
     strategy.options[:force_dialog] = session[:force_dialog]
-    strategy.options[:display] = session[:display] if params[:provider] == 'facebook'
+    if params[:provider] ==  'facebook'
+      strategy.options[:display] = session[:display]
+      strategy.options[:client_options] ||= {}
+      strategy.options[:client_options] = strategy.options[:client_options].merge({
+        :site => 'https://graph.facebook.com/v2.0',
+        :authorize_url => "https://www.facebook.com/v2.0/dialog/oauth"
+      })
+    end
     strategy.options[:target_url] = session[:redirect_to]
 
     if strategy.options.respond_to?(:consumer_key)
@@ -188,7 +195,8 @@ class CheckpointV1 < Sinatra::Base
   end
 
   get '/auth/failure' do
-    redirect url_for_failure(:message => params[:message] || 'unknown')
+    params[:message] ||= 'unknown'
+    redirect url_for_failure(params)
   end
 
   # FIXME: Should not offer this as GET.
