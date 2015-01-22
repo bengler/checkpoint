@@ -110,17 +110,12 @@ class CheckpointV1 < Sinatra::Base
     if id =~ /\,/
       # Retrieve a list of identities
       ids = id.split(/\s*,\s*/).compact
-      identities = Identity.cached_find_all_by_id(ids).map do |identity|
-        next nil if identity.nil?
-        next identity if identity.realm.id == current_realm.id
-      end
+      identities = Identity.cached_find_all_by_id(ids)
       pg :identities, :locals => {:identities => identities}
     else
       # Retrieve a single identity.
       identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
-      if identity.nil? or identity.realm.id != current_realm.id
-        halt 200, {'Content-Type' => 'application/json'}, "{}"
-      end
+      halt 200, {'Content-Type' => 'application/json'}, "{}" unless identity
       pg :identity, :locals => {:identity => identity}
     end
   end
