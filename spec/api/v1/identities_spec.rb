@@ -15,8 +15,31 @@ describe "Identities" do
     realm
   end
 
+  let :another_realm do
+    realm = Realm.create!(:label => "another")
+    Domain.create!(:realm => realm, :name => 'another.org')
+    realm
+  end
+
   let :me do
     identity = Identity.create!(:realm => realm)
+    account = Account.create!(:identity => identity,
+      :realm => realm,
+      :provider => 'twitter',
+      :uid => '1',
+      :token => 'token',
+      :secret => 'secret',
+      :nickname => 'nickname',
+      :name => 'name',
+      :profile_url => 'profile_url',
+      :image_url => 'image_url')
+    identity.primary_account = account
+    identity.save!
+    identity
+  end
+
+  let :someone_from_another_realm do
+    identity = Identity.create!(:realm => another_realm)
     account = Account.create!(:identity => identity,
       :realm => realm,
       :provider => 'twitter',
@@ -100,6 +123,12 @@ describe "Identities" do
       JSON.parse(last_response.body)['identity']['id'].should eq god.id
     end
 
+    it "will not return identities from other realms" do
+      get "/identities/#{someone_from_another_realm.id}", :session => me_session
+      last_response.status.should eq 200
+      last_response.body.should eq "{}"
+    end
+
     it "returns multiple identities" do
       get "/identities/#{god.id},#{me.id}", :session => me_session
       result = JSON.parse(last_response.body)['identities']
@@ -110,6 +139,15 @@ describe "Identities" do
       result.last['identity']['id'].should eq me.id
       result.last['accounts'].should eq(['twitter'])
       result.last['profile']['provider'].should eq('twitter')
+    end
+
+    it "if requesting mulitple identities, it will only return identities from same domain" do
+      get "/identities/#{god.id},#{someone_from_another_realm.id},#{me.id}", :session => me_session
+      last_response.status.should eq 200
+      result = JSON.parse(last_response.body)['identities']
+      result.first['identity']['id'].should eq god.id
+      result[1]['identity'].should be_empty
+      result.last['identity']['id'].should eq me.id
     end
 
     it "returns empty identities if requested ids do not exist" do
