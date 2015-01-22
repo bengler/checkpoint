@@ -110,14 +110,28 @@ class CheckpointV1 < Sinatra::Base
     if id =~ /\,/
       # Retrieve a list of identities
       ids = id.split(/\s*,\s*/).compact
-      identities = Identity.cached_find_all_by_id(ids)
+      identities = Identity.cached_find_all_by_id(ids).map do |identity|
+        next nil if identity.nil?
+        warn_cross_realm_identity_req(identity) if identity.realm.id != current_realm.id
+        identity
+      end
       pg :identities, :locals => {:identities => identities}
     else
       # Retrieve a single identity.
       identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
-      halt 200, {'Content-Type' => 'application/json'}, "{}" unless identity
+
+      if identity.nil?
+        halt 200, {'Content-Type' => 'application/json'}, "{}"
+      end
+
+      warn_cross_realm_identity_req(identity) if identity.realm.id != current_realm.id
+
       pg :identity, :locals => {:identity => identity}
     end
   end
 
+  private
+  def warn_cross_realm_identity_req(identity)
+    LOGGER.warn("cross-realm-identity-request: Domain of #{request.url} is not in realm (#{identity.realm.label}) of requested identity (#{identity.id}). Referrer: #{request.referrer}")
+  end
 end
