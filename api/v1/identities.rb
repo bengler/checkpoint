@@ -107,12 +107,13 @@ class CheckpointV1 < Sinatra::Base
   # @status 200 [JSON]
 
   get '/identities/:id' do |id|
+    warn_no_realm_for_domain unless current_realm
     if id =~ /\,/
       # Retrieve a list of identities
       ids = id.split(/\s*,\s*/).compact
       identities = Identity.cached_find_all_by_id(ids).map do |identity|
         next nil if identity.nil?
-        warn_cross_realm_identity_req(identity) if identity.realm.id != current_realm.id
+        warn_cross_realm_identity_req(identity) if current_realm && identity.realm.id != current_realm.id
         identity
       end
       pg :identities, :locals => {:identities => identities}
@@ -123,9 +124,7 @@ class CheckpointV1 < Sinatra::Base
       if identity.nil?
         halt 200, {'Content-Type' => 'application/json'}, "{}"
       end
-
-      warn_cross_realm_identity_req(identity) if identity.realm.id != current_realm.id
-
+      warn_cross_realm_identity_req(identity) if current_realm && identity.realm.id != current_realm.id
       pg :identity, :locals => {:identity => identity}
     end
   end
@@ -133,5 +132,9 @@ class CheckpointV1 < Sinatra::Base
   private
   def warn_cross_realm_identity_req(identity)
     LOGGER.warn("cross-realm-identity-request: Domain of #{request.url} is not in realm (#{identity.realm.label}) of requested identity (#{identity.id}). Referrer: #{request.referrer}")
+  end
+
+  def warn_no_realm_for_domain
+    LOGGER.warn("cross-realm-identity-request: No realm for domain of #{request.url}")
   end
 end
