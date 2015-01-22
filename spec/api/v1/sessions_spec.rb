@@ -10,7 +10,9 @@ describe "Sessions" do
   end
 
   let :realm do
-    Realm.create!(:label => "area51")
+    realm = Realm.create!(:label => "area51")
+    Domain.create!(:realm => realm, :name => 'example.org')
+    realm
   end
 
   let :root_realm do
