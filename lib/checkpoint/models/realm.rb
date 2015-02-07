@@ -40,10 +40,22 @@ class Realm < ActiveRecord::Base
   end
 
   def self.find_by_url(url)
-    search_strings_for_url(url) do |domain|
-      result = Domain.resolve_from_host_name(domain).try(:realm)
-      return result if result
+    host = url =~ /:\/\// ? URI.parse(url).host : url
+
+    Domain.search_strings_for_hostname(host) do |host|
+      cache_key = Domain.realm_cache_key_for_host(host)
+      if (cached = $memcached.get(cache_key))
+        return Realm.instantiate(Yajl::Parser.parse(cached))
+      else
+        realm = Domain.resolve_from_host_name(host).try(:realm)
+        if realm
+          $memcached.set(cache_key, realm.attributes.to_json)
+          return realm
+        end
+      end
     end
+
+    nil
   end
 
   def primary_domain_name
@@ -74,24 +86,6 @@ class Realm < ActiveRecord::Base
 
   def keys_for(provider)
     OpenStruct.new(external_service_keys[provider])
-  end
-
-  private
-
-  # Provided a block, this method will yield variations on the host with increasing
-  # specificity: 'foo.bar.example.com' will yield
-  # "foo.bar.example.com", "bar.example.com", "example.com".
-  def self.search_strings_for_url(url, &block)
-    host = url[/(?:https?\:\/\/)?([^\/\:]+)/,1]
-    if host.include?('.')
-      candidate = host.split('.')
-      while candidate.size > 1
-        yield candidate.join('.')
-        candidate.shift
-      end
-    else
-      yield host
-    end
   end
 
 end

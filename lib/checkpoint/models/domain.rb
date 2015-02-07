@@ -15,6 +15,8 @@ class Domain < ActiveRecord::Base
     :dependent => :nullify
 
   after_save :ensure_primary_domain
+  after_save :invalidate_realm_hostname_cache
+  after_destroy :invalidate_realm_hostname_cache
 
   ts_vector :origins
 
@@ -47,6 +49,25 @@ class Domain < ActiveRecord::Base
   end
 
   class << self
+
+    def realm_cache_key_for_host(host)
+      "realm:host:#{host}"
+    end
+
+    # Provided a block, this method will yield variations on the host with increasing
+    # specificity: 'foo.bar.example.com' will yield
+    # "foo.bar.example.com", "bar.example.com", "example.com".
+    def search_strings_for_hostname(host, &block)
+      if host.include?('.')
+        candidate = host.split('.')
+        while candidate.size > 1
+          yield candidate.join('.')
+          candidate.shift
+        end
+      else
+        yield host
+      end
+    end
 
     # Finds domain matching a host name or its IP address.
     def resolve_from_host_name(host_name)
@@ -104,6 +125,13 @@ class Domain < ActiveRecord::Base
       if self.realm and not self.realm.primary_domain
         self.realm.primary_domain = self
         self.realm.save!
+      end
+      nil
+    end
+
+    def invalidate_realm_hostname_cache
+      self.class.search_strings_for_hostname(self.name) do |host|
+        $memcached.delete(self.class.realm_cache_key_for_host(host))
       end
       nil
     end
