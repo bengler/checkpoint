@@ -233,6 +233,8 @@ class CheckpointV1 < Sinatra::Base
   # @required [String] path The path for which access status is being checked
   # @status 200 [JSON]
   get "/identities/:id/access_to/:path" do |id, path|
+    content_type :json
+
     identity = (id == 'me') ? current_identity : Identity.cached_find_by_id(id)
     unless identity && identity.realm_id == current_realm.try(:id)
       halt 200, {:access => {:granted => false, :path => path}}.to_json
