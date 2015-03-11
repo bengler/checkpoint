@@ -7,8 +7,6 @@ Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
 
-  class ConfigurationError < StandardError; end
-
   set :root, "#{File.dirname(__FILE__)}/v1"
   set :protection, :except => :http_origin
 
