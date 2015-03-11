@@ -41,7 +41,7 @@ describe "Realms" do
 
   it "lists the realms" do
     Realm.create!(:label => 'hell')
-    Realm.create!(:label => 'area51')
+    realm
     get "/realms"
     result = JSON.parse(last_response.body)
     result['realms'].sort.should eq ['hell', 'area51'].sort
@@ -87,7 +87,7 @@ describe "Realms" do
 
   it "can tell me which realm I'm on" do
     get "/realms/current"
-    JSON.parse(last_response.body)['realm'].should eq nil
+    last_response.status.should eq 412
     realm = Realm.create!(:label => 'area51')
     Domain.create!(:name => 'example.org', :realm => realm)
     get "/realms/current"

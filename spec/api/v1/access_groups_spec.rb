@@ -110,6 +110,7 @@ describe "Identities" do
     end
 
     it "will not create a group for non-gods" do
+      realm
       post "/access_groups"
       last_response.status.should eq 403
       post "/access_groups", :session => me_session
@@ -143,6 +144,7 @@ describe "Identities" do
     end
 
     it "will not create a group for non-gods" do
+      realm
       post "/access_groups"
       last_response.status.should eq 403
       post "/access_groups", :session => me_session
@@ -164,7 +166,8 @@ describe "Identities" do
     end
 
     it "will not retrieve groups from other realms" do
-      group = AccessGroup.create!(:realm => other_realm, :label => "the_consortium")
+      realm
+      AccessGroup.create!(:realm => other_realm, :label => "the_consortium")
       get "/access_groups/the_consortium"
       last_response.status.should eq 404
     end
@@ -295,6 +298,7 @@ describe "Identities" do
     end
 
     it "will only respond for groups in this realm" do
+      realm
       get "/access_groups/#{other_group.id}/memberships"
       last_response.status.should eq 404
     end
@@ -331,6 +335,7 @@ describe "Identities" do
     end
 
     it "doesn't grant access to unknown persons" do
+      realm
       get "/identities/1/access_to/abc.a.b.c"
       json_output['access']['granted'].should == false
     end
