@@ -6,10 +6,13 @@ require 'sinatra/petroglyph'
 Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
 class CheckpointV1 < Sinatra::Base
+
+  class ConfigurationError < StandardError; end
+
   set :root, "#{File.dirname(__FILE__)}/v1"
   set :protection, :except => :http_origin
 
-  configure :production do |config|
+  configure :test, :production do |config|
     config.set :show_exceptions, false
   end
 
@@ -41,6 +44,15 @@ class CheckpointV1 < Sinatra::Base
 
     # IE compatibility to allow cookies to be saved across domains
     headers('P3P' => 'CP="DSP IDC CUR ADM DELi STP NAV COM UNI INT PHY DEM"')
+  end
+
+  before do
+    next if current_realm
+    # There is a separate root-access check in these endpoints
+    next if request.request_method == 'POST' && request.path_info == '/realms'
+    next if request.request_method == 'POST' && request.path_info == '/sessions'
+
+    halt 412, "No realm is associated with the domain '#{request.host}'"
   end
 
   # Safari/iOS7 refuses to send cookies to "thirdparty" domains (A "thirdparty" domain in this  context means a 

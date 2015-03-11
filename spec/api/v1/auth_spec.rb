@@ -31,11 +31,11 @@ describe "Authorizations" do
     realm
   }
 
-  it "returns a server error when the realm is undefined" do
+  it "returns a 400 (bad request) when the realm is nonexistant" do
     test_realm = Realm.create!(:label => 'the_404_test_realm', :service_keys => {})
     Domain.create!(:realm => test_realm, :name => 'www.unknown.com')
     get "/login/twitter"
-    last_response.status.should eq 500
+    last_response.status.should eq 412
   end
 
   context "with a valid domain" do
@@ -156,7 +156,9 @@ describe "Authorizations" do
 
   context "logging out" do
     let :realm do
-      Realm.create!(:label => "area51")
+      realm = Realm.create!(:label => "area51")
+      Domain.create!(:name => "example.org", :realm => realm)
+      realm
     end
 
     let :identity do
@@ -195,12 +197,14 @@ describe "Authorizations" do
     end
 
     it "respects redirect_to parameter when logging out" do
+      realm
       post "/logout", :redirect_to => "http://wired.com"
       last_response.status.should eq 302
       last_response.location.should eq "http://wired.com"
     end
 
     it "will not redirect to referrer if preferred Accept type is JSON and no redirect_to param is given" do
+      realm
       headers = {
           'HTTP_REFERER' => "http://example.org/very/special/page",
           'HTTP_ACCEPT' => "application/json,text/plain,*/*",
@@ -211,6 +215,7 @@ describe "Authorizations" do
     end
 
     it "redirects to to redirect_to param if it is given, even if preferred Accept type is JSON" do
+      realm
       post "/logout", {:redirect_to => "http://wired.com"}, {'HTTP_REFERER' => "http://example.org/very/special/page"}
       last_response.status.should eq 302
       last_response.location.should eq "http://wired.com"

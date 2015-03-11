@@ -14,7 +14,7 @@ describe "Accounts" do
   end
 
   let! :domain do
-    Domain.create!(:name => 'example.com', :realm => realm)
+    Domain.create!(:name => 'example.org', :realm => realm)
   end
 
   let! :identity do 

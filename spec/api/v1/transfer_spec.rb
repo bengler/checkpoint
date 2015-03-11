@@ -58,6 +58,7 @@ describe "Transfers" do
 
   describe 'GET /transfer' do
     it 'rejects a request to transfer to an unregistered domain' do
+      origin_domain
       get "/transfer", :target => "http://wired.com/bananas"
       last_response.status.should eq 403
     end
