@@ -31,7 +31,7 @@ describe "Authorizations" do
     realm
   }
 
-  it "returns a 412 (precondition failed) when the realm is nonexistant" do
+  it "returns a 412 (precondition failed) when the realm is nonexistent" do
     test_realm = Realm.create!(:label => 'the_404_test_realm', :service_keys => {})
     Domain.create!(:realm => test_realm, :name => 'www.unknown.com')
     get "/login/twitter"
