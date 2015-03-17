@@ -23,6 +23,18 @@ module Checkpoint
         ::Seed.explain(realm)
       end
 
+      desc 'set_services NAME', 'Set realm service configuration from stdin (must be YAML format).'
+      def set_services(label)
+        ActiveRecord::Base.transaction do
+          realm = ::Realm.find_by_label(label)
+          unless realm
+            abort "Realm not found"
+          end
+          realm.service_keys = YAML.load($stdin)
+          realm.save!
+        end
+      end
+
       desc "list", "list all realms and their domains. Shows all god sessions for the realm (one per line)."
       method_option :realm, :type => :string, :aliases => "-r", :desc => "Only list info for this realm."
       def list
