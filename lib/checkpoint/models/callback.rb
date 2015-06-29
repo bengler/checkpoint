@@ -11,6 +11,7 @@ class Callback < ActiveRecord::Base
   validates_presence_of :path, :url
 
   before_save :assign_location
+  after_save :invalidate_cache
 
   scope :of_realm, lambda { |realm|
     realm = realm.label unless realm.is_a?(String)
@@ -74,4 +75,19 @@ class Callback < ActiveRecord::Base
   def assign_location
     self.location = Location.declare!(self.path)
   end
+
+  def invalidate_cache
+    old_path, new_path = changes['path']
+    if old_path
+      $memcached.delete("callbacks_#{old_path}")
+    end
+    if new_path
+      $memcached.delete("callbacks_#{new_path}")
+    end
+    if changes['url']
+      $memcached.delete("callbacks_#{self.path}")
+    end
+    nil
+  end
+
 end
