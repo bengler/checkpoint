@@ -96,54 +96,5 @@ describe Realm do
       end
     end
 
-    context "domain search string factory" do
-      it "handles bare domains" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'example.org') { |variant| variants << variant }
-        variants.should eq(['example.org'])
-      end
-
-      it "strips off http://" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'http://example.org') { |variant| variants << variant }
-        variants.should eq(['example.org'])
-      end
-
-      it "strips off https://" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'https://example.org') { |variant| variants << variant }
-        variants.should eq(['example.org'])
-      end
-
-      it "handles sub domain" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'www.example.org') { |variant| variants << variant }
-        variants.should eq(['www.example.org', 'example.org'])
-      end
-
-      it "handles bare domains with many segments" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'foo.bar.baz.example.org') { |variant| variants << variant }
-        variants.should eq(['foo.bar.baz.example.org', 'bar.baz.example.org', 'baz.example.org', 'example.org'])
-      end
-
-      it "handles domains followed by a path" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'example.org/some/page') { |variant| variants << variant }
-        variants.should eq(['example.org'])
-      end
-
-      it "handles localhost or other 'bare word' domains" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'http://localhost/some/page') { |variant| variants << variant }
-        variants.should eq(['localhost'])
-      end
-
-      it "handles urls that include port numbers" do
-        variants = []
-        Realm.send(:search_strings_for_url, 'example.com:9292/some/page') { |variant| variants << variant }
-        variants.should eq(['example.com'])
-      end
-    end
   end
 end
