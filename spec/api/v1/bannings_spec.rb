@@ -53,8 +53,8 @@ describe "Bannings" do
   end
 
   let(:checkpoint) {
-    checkpoint = stub
-    checkpoint.stub!(:service_url => 'http://example.com')
+    checkpoint = double
+    checkpoint.stub(:service_url => 'http://example.com')
     checkpoint
   }
 
