@@ -65,7 +65,7 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: oauth_token=ew6TxnNbmYE3quIKGT5q6Yg1sorcd0CLyy6SSyG7U&oauth_token_secret=gvY7dts4Ymxgzm5bcidH4X5oL3wXF5V3YlNlCCAiLI&oauth_callback_confirmed=true
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Sep 2012 11:18:34 GMT
 - request:
     method: get
@@ -306,7 +306,7 @@ http_interactions:
         ZXRIZWlnaHQgKyAoYnJvd3NlciAtIHZwaCkgKyBidWZmZXIpOwogICAgICB9
         CiAgICB9KTsKICB9Cn0pOwoKICAgICAgCiAgICA8L3NjcmlwdD4KICAgIAog
         ICAgCgoKICA8L2JvZHk+CjwvaHRtbD4=
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Sep 2012 11:18:37 GMT
 - request:
     method: post
@@ -531,7 +531,7 @@ http_interactions:
         ICQoZG9jdW1lbnQuYm9keSkuYWRkQ2xhc3MoJ3JlZGlyZWN0LXRpbWVvdXQn
         KTsKICB9LCAxMDAwMCk7Cn0pOwoKICAgICAgCiAgICA8L3NjcmlwdD4KICAg
         IAogICAgCgoKICA8L2JvZHk+CjwvaHRtbD4=
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Sep 2012 11:18:39 GMT
 - request:
     method: post
@@ -596,11 +596,11 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: oauth_token=31166162-53o7LgJiFUicUCLnD5utjgSnSMH3hKEGPanCZjBQF&oauth_token_secret=lVCsHrXOehGFzlfrC6by2V4x2k1NQ1HcVwnZoCL4Sk&user_id=31166162&screen_name=tildenielsen
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Sep 2012 11:18:41 GMT
 - request:
     method: get
-    uri: https://api.twitter.com/1.1/account/verify_credentials.json?include_entities=false&skip_status=true
+    uri: https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true&include_entities=false&skip_status=true
     body:
       encoding: US-ASCII
       string: ''
@@ -680,6 +680,6 @@ http_interactions:
         May 18 08:45:30 +0000 2012","retweet_count":0,"possibly_sensitive":false,"in_reply_to_status_id_str":null,"id_str":"203405940878360576","truncated":false,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"coordinates":null,"in_reply_to_screen_name":null,"geo":null,"retweeted":false,"source":"\u003Ca
         href=\"http:\/\/twitter.com\/tweetbutton\" rel=\"nofollow\"\u003ETweet Button\u003C\/a\u003E","possibly_sensitive_editable":true,"in_reply_to_status_id":null,"id":203405940878360576,"text":"H\u00f8r
         denne l\u00e5ta! http:\/\/t.co\/YEFXYFst #BandwagonNorge"},"screen_name":"tildenielsen","is_translator":false,"default_profile":true,"profile_sidebar_border_color":"C0DEED","geo_enabled":false,"follow_request_sent":false}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Sep 2012 11:18:42 GMT
 recorded_with: VCR 2.2.4
