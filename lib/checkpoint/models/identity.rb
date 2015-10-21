@@ -78,7 +78,7 @@ class Identity < ActiveRecord::Base
       end
     ]
     uncached = (ids-result.keys)
-    Identity.find_all_by_id(uncached).each do |identity|
+    Identity.where(:id => uncached).each do |identity|
       $memcached.set(identity.cache_key, identity.attributes.to_json) if identity
       result[identity.id] = identity
     end
@@ -95,7 +95,7 @@ class Identity < ActiveRecord::Base
     else
       query = "%#{query.gsub(/\s+/, '%')}%"
     end
-    Identity.includes(:accounts).where(
+    Identity.includes(:accounts).references(:accounts).where(
       "accounts.name ILIKE ? OR " <<
       "accounts.nickname ILIKE ? OR " <<
       "accounts.email ILIKE ?", query, query, query)
@@ -117,7 +117,7 @@ class Identity < ActiveRecord::Base
     self.send(:fingerprints=, self.fingerprints | fingerprints)
     save(validate: false) unless new_record?
   end
-  
+
   def update_fingerprints_from_account!(account)
     if account and (fingerprints = account.fingerprints)
       self.add_fingerprints!(fingerprints)
