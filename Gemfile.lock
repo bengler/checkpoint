@@ -92,6 +92,8 @@ GEM
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
+    omniauth-aid (1.0.0)
+      omniauth-oauth2 (~> 1.2)
     omniauth-evernote (1.2.1)
       evernote-thrift
       multi_json (~> 1.0)
@@ -208,6 +210,7 @@ DEPENDENCIES
   dalli (~> 2.1.0)
   memcache_mock
   omniauth (~> 1.2.2)
+  omniauth-aid
   omniauth-evernote
   omniauth-facebook
   omniauth-google-oauth2
