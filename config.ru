@@ -9,8 +9,7 @@ set :environment, ENV['RACK_ENV'].to_sym
 
 map "/api/checkpoint/v1" do
 
-  session_secret = (YAML.load(File.open('./config/session-secret.yml', 'r:utf-8')) || {}).fetch(ENV['RACK_ENV'], {})
-
+  session_secret = (YAML.load(File.open('./config/session-secret.yml', 'r:utf-8')) || {}).fetch(ENV['RACK_ENV'], {})["secret"]
   use Rack::PostBodyContentTypeParser
   use Rack::MethodOverride
   use Rack::Session::Cookie, :key => 'checkpoint.cookie', :secret => session_secret
