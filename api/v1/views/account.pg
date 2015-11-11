@@ -1,4 +1,5 @@
 node :account => account do
   attributes :id, :uid, :token, :secret, :identity_id, :provider,
-    :nickname, :name, :location, :description, :profile_url, :image_url, :email
+    :nickname, :name, :location, :description, :profile_url,
+    :image_url, :email, :phone, :updated_at
 end
