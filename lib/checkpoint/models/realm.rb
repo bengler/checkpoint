@@ -45,7 +45,9 @@ class Realm < ActiveRecord::Base
     Domain.search_strings_for_hostname(host) do |host|
       cache_key = Domain.realm_cache_key_for_host(host)
       if (cached = $memcached.get(cache_key))
-        return Realm.instantiate(Yajl::Parser.parse(cached))
+        parsed = Yajl::Parser.parse(cached)
+        parsed['service_keys'] = parsed['service_keys'].to_yaml
+        return Realm.instantiate(parsed)
       else
         realm = Domain.resolve_from_host_name(host).try(:realm)
         if realm
