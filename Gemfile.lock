@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/bengler/omniauth-vanilla.git
+  remote: https://github.com/bengler/omniauth-vanilla.git
   revision: d4e0eeab050cfb52c2a0e4457e82aee50189a81e
   branch: omniauth1.2
   specs:
@@ -8,7 +8,7 @@ GIT
       omniauth-oauth2 (~> 1.2)
 
 GIT
-  remote: git://github.com/bengler/pebbles-cors.git
+  remote: https://github.com/bengler/pebbles-cors.git
   revision: 91f57a06671c1c3a15e50a5c8332f9699dc9bdba
   specs:
     pebbles-cors (0.2.3)
@@ -17,7 +17,7 @@ GIT
       rack
 
 GIT
-  remote: git://github.com/rkh/rack-protection.git
+  remote: https://github.com/rkh/rack-protection.git
   revision: f8d8ee2eb72f707d17b07c48bc55a8906978ea5d
   specs:
     rack-protection (1.5.3)
