@@ -205,7 +205,7 @@ describe "Identities" do
       last_response.status.should eq(201)
       identity = json_output['identity']
       identity['id'].should_not be_nil
-      identity['god'].should be_true
+      identity['god'].should be_truthy
       json_output['profile']["nickname"].should eq('nick')
     end
 
@@ -318,12 +318,12 @@ describe "Identities" do
       identity = Identity.create!(:realm => realm)
       session = Session.create!(:identity => identity)
       get "/identities/me", :session => session.key
-      JSON.parse(last_response.body)["identity"]["provisional"].should be_true
+      JSON.parse(last_response.body)["identity"]["provisional"].should be_truthy
     end
 
     it "is not provisional when account is present" do
       get "/identities/me", :session => me_session
-      JSON.parse(last_response.body)["identity"]["provisional"].should be_false
+      JSON.parse(last_response.body)["identity"]["provisional"].should be_falsey
     end
   end
 

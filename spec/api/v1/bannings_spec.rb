@@ -53,8 +53,8 @@ describe "Bannings" do
   end
 
   let(:checkpoint) {
-    checkpoint = stub
-    checkpoint.stub!(:service_url => 'http://example.com')
+    checkpoint = double
+    checkpoint.stub(:service_url => 'http://example.com')
     checkpoint
   }
 
@@ -185,7 +185,7 @@ describe "Bannings" do
     Banning.declare!(:path => "area51.a", :fingerprint => 'fingerprint1')
     post "/callbacks/allowed/create/post.blog:area51.a.b.c", :identity => crook.id
     response = JSON.parse(last_response.body)
-    response['allowed'].should be_false
+    response['allowed'].should be_falsey
     response['reason'].should_not be_nil
   end
 end

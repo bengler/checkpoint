@@ -93,7 +93,7 @@ describe Account do
       account = Account.find_by_identity_id_and_provider(identity.id, :facebook)
       account.should_not == nil
       account.credentials.should eq({:token => 'token', :secret => 'secret'})
-      account.authorized?.should be_true
+      account.authorized?.should be_truthy
     end
 
     it "ignores keys where token/secret are missing" do
@@ -101,7 +101,7 @@ describe Account do
       account = Account.find_by_identity_id_and_provider(identity.id, :facebook)
       account.should_not == nil
       account.credentials.should be_nil
-      account.authorized?.should be_false
+      account.authorized?.should be_falsey
     end
   end
 

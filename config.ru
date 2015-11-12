@@ -8,9 +8,12 @@ ENV['RACK_ENV'] ||= 'development'
 set :environment, ENV['RACK_ENV'].to_sym
 
 map "/api/checkpoint/v1" do
+
   use Rack::PostBodyContentTypeParser
   use Rack::MethodOverride
-  use Rack::Session::Cookie, :key => 'checkpoint.cookie'
+
+  session_secret = (YAML.load(File.open('./config/session-secret.yml', 'r:utf-8')) || {}).fetch(ENV['RACK_ENV'], {})["secret"]
+  use Rack::Session::Cookie, :key => 'checkpoint.cookie', :secret => session_secret
 
   use OmniAuth::Builder do
     provider :twitter, nil, nil, :setup => true
@@ -20,6 +23,7 @@ map "/api/checkpoint/v1" do
     #provider :openid, nil, :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id'
     provider :google_oauth2, nil, nil, :setup => true
     provider :evernote, nil, nil, :setup => true
+    provider :aid, nil, nil, :setup => true
 
     on_failure do |env|
       message_key = env['omniauth.error.type'] # Generic omniauth error, i.e. 'invalid_credentials'

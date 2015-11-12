@@ -124,7 +124,7 @@ describe "Identities" do
       post "/callbacks/allowed/create/post.blog:area51.b.c.d.e", :identity => 7, :session => stranger_session
       last_response.status.should eq 200
       result = JSON.parse(last_response.body)
-      result['allowed'].should be_false
+      result['allowed'].should be_falsey
       result['url'].should eq "http://nay.org/"
       result['reason'].should eq "You are not worthy"
     end

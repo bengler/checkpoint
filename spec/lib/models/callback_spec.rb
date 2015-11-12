@@ -45,7 +45,7 @@ describe Callback do
       Callback.create!(:path => "a.b.z", :url => "http://nay.org/") # irrelevant, should not trigger
       Callback.create!(:path => "a.b.c", :url => "http://yay.org/")
       allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
-      allowed.should be_true
+      allowed.should be_truthy
       url.should be_nil
       reason.should be_nil
     end
@@ -54,7 +54,7 @@ describe Callback do
       Callback.create!(:path => "a.b.c", :url => "http://nay.org/")
       Callback.create!(:path => "a.b.c.d", :url => "http://yay.org/") # will be overridden
       allowed, url, reason = Callback.allow?(:method => :create, :identity => 7, :uid => "post.blog:a.b.c.d.e")
-      allowed.should be_false
+      allowed.should be_falsey
       url.should eq "http://nay.org/"
       reason.should eq "You are not worthy"
     end

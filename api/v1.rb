@@ -53,7 +53,7 @@ class CheckpointV1 < Sinatra::Base
     halt 412, "No realm is associated with the domain '#{request.host}'"
   end
 
-  # Safari/iOS7 refuses to send cookies to "thirdparty" domains (A "thirdparty" domain in this  context means a 
+  # Safari/iOS7 refuses to send cookies to "thirdparty" domains (A "thirdparty" domain in this  context means a
   # domain *never visited* before)
   # Yeah, cookies for thirdparty domains are blocked even for CORS requests with `withCredentials=true`
   # This endpoint offers a workaround to clients by returning a flag that indicates whether the session cookie is set,
@@ -151,7 +151,7 @@ class CheckpointV1 < Sinatra::Base
 
     def session_from_cookie
       if (key = current_session_key)
-        session = Session.where("key = ?", key).first(:include => :identity)
+        session = Session.where("key = ?", key).includes(:identity).first
         session ||= Session.new(:key => key) if key
         unless session
           # Cookie contains invalid key, so delete cookie

@@ -26,6 +26,8 @@ ActiveRecord::Base.configurations = YAML.load(
 ActiveRecord::Base.include_root_in_json = true
 ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[environment])
 
+OmniAuth.config.logger = LOGGER
+
 $memcached = Dalli::Client.new unless ENV['RACK_ENV'] == 'test'
 
 require File.expand_path('config/strategies.rb') if File.exists?('config/strategies.rb')
