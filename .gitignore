@@ -14,6 +14,7 @@ config/site.rb
 config/strategies.rb
 config/database.yml
 config/overrides.yml
+config/session-secret.yml
 
 # ignore results of bundling with --binstubs
 bin/autospec
