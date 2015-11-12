@@ -107,7 +107,7 @@ describe "Realms" do
       json_output = JSON.parse(last_response.body)
       json_output['realm']['label'].should eq 'rainbows'
       json_output['realm']['domains'].should eq ['magical.org']
-      json_output['identity']['god'].should be_true
+      json_output['identity']['god'].should be_truthy
       json_output['sessions'].first['session']['key'].should_not be_nil
     end
 

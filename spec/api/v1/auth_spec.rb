@@ -94,7 +94,7 @@ describe "Authorizations" do
       it "is not god" do
         get "/login/anonymous"
         get "/identities/me"
-        JSON.parse(last_response.body)['identity']['god'].should be_false
+        JSON.parse(last_response.body)['identity']['god'].should be_falsey
       end
 
       it "cannot log out" do

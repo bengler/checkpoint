@@ -18,7 +18,7 @@ describe Identity do
         :name => "account1")
     end
 
-    let :account2 do 
+    let :account2 do
       Account.create!(:identity => someone,
         :realm => realm,
         :uid => '1',
@@ -34,7 +34,7 @@ describe Identity do
       attributes[:god] = true
       $memcached.set(result.cache_key, attributes.to_json)
       from_cache = Identity.cached_find_by_id(identity.id)
-      from_cache.god?.should be_true
+      from_cache.god?.should be_truthy
     end
 
     it "can read a collection through a cache" do
@@ -43,17 +43,17 @@ describe Identity do
       from_db.map(&:id).should eq from_db[0..10].map(&:id)
       # Spoof all cached identities as gods
       from_db.each do |identity|
-        attributes = identity.attributes.merge({'god' => true})        
+        attributes = identity.attributes.merge({'god' => true})
         $memcached.set(identity.cache_key, attributes.to_json)
       end
       from_db_and_cache = Identity.cached_find_all_by_id(identities[0..20].map(&:id))
       # Check all gods
-      from_db_and_cache[0..10].map(&:god).inject(true){|r, e| r && e}.should be_true
+      from_db_and_cache[0..10].map(&:god).inject(true){|r, e| r && e}.should be_truthy
       # Check all muggles
-      from_db_and_cache[11..19].map(&:god).inject(true){|r, e| r && !e}.should be_true
+      from_db_and_cache[11..19].map(&:god).inject(true){|r, e| r && !e}.should be_truthy
     end
 
-    it "can retrieve a user from a session_key" do 
+    it "can retrieve a user from a session_key" do
       me = someone
       session = Session.create!(:identity => me)
       Identity.find_by_session_key(session.key).should eq me
@@ -84,7 +84,7 @@ describe Identity do
       Identity.not_seen_for_more_than_days(0).size.should eq 9
     end
 
-    it "can find anonymous identities" do 
+    it "can find anonymous identities" do
       someone
       Identity.anonymous.all.first.should eq someone
       account1.identity = someone
