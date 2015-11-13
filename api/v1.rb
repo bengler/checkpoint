@@ -151,7 +151,7 @@ class CheckpointV1 < Sinatra::Base
 
     def session_from_cookie
       if (key = current_session_key)
-        session = Session.where("key = ?", key).includes(:identity).first
+        session = Session.includes(:identity).where("key = ?", key).first
         session ||= Session.new(:key => key) if key
         unless session
           # Cookie contains invalid key, so delete cookie
