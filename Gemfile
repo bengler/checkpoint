@@ -8,8 +8,8 @@ gem 'rack-contrib'
 # Remove this git reference after version > 1.5.2 is released
 gem 'rack-protection', :git => 'https://github.com/rkh/rack-protection.git'
 
-gem 'activerecord', '~> 4.2', :require => 'active_record'
-gem 'activesupport', '~> 4.2'
+gem 'activerecord', '~> 4.2.5', :require => 'active_record'
+gem 'activesupport', '~> 4.2.5'
 gem 'rails-observers', '~> 0.1', require: false
 gem 'pg', '~> 0.17'
 gem 'omniauth', '~> 1.2.2'
