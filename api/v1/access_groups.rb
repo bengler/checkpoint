@@ -113,8 +113,7 @@ class CheckpointV1 < Sinatra::Base
     halt 409, "Identity realm does not match group realm" unless identity.realm_id == group.realm_id
     begin
       group_membership ||= AccessGroupMembership.create!(:access_group_id => group.id, :identity_id => identity_id)
-    rescue PG::Error => e
-      raise unless e.message =~ /violates.*group_membership_identity_uniqueness_index/
+    rescue PG::UniqueViolation => e
       halt 204 # This means someone beat us to it, but that is fine
     end
     [204] # Success. No content.
