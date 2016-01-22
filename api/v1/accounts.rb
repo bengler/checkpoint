@@ -96,7 +96,7 @@ class CheckpointV1 < Sinatra::Base
         :realm_id => current_identity.realm_id
       }.merge(params.slice(
         *%w(token secret nickname
-          name location description profile_url image_url email, phone)))
+          name location description profile_url image_url email phone)))
       account = Account.declare!(attributes)
       [crud_http_status(account), pg(:account, :locals => {:account => account})]
     end
