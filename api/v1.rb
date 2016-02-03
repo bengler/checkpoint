@@ -139,9 +139,11 @@ class CheckpointV1 < Sinatra::Base
 
     # Determine the current request ip
     def request_ip
-      ip = request.env['HTTP_X_FORWARDED_FOR'] || request.ip
-      ip = ip.sub("::ffff:", "") # strip away ipv6 compatible formatting
-      ip
+      forwarded_ip = request.env['HTTP_X_FORWARDED_FOR']
+      # might be a comma-separated list with or without whitespace
+      forwarded_ip = forwarded_ip.split(',').first.strip if forwarded_ip
+      ip = forwarded_ip || request.ip
+      ip.sub("::ffff:", "") # strip away ipv6 compatible formatting
     end
 
     # Logs the current ip and identity_id to help with fraud detection
