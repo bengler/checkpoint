@@ -41,7 +41,7 @@ class CheckpointV1 < Sinatra::Base
     identity = (id == 'me') ? current_identity : Identity.find(id)
     halt 404, "No such identity" unless identity
     check_god_credentials(identity.realm_id) unless identity == current_identity
-    account = identity.accounts.where("provider = ?", params[:provider]).first
+    account = identity.accounts.find_by(provider: params[:provider])
     halt 200, {'Content-Type' => 'application/json'}, "{}" unless account
     pg :account, :locals => {:account => account}
   end
@@ -119,7 +119,7 @@ class CheckpointV1 < Sinatra::Base
     check_god_credentials(current_identity.try(:realm_id))
     transaction do
       identity = (id == 'me') ? current_identity : Identity.find(id)
-      account = identity.accounts.where(:provider => provider, :uid => uid).first
+      account = identity.accounts.find_by(provider: provider, uid: uid)
       halt 404, "No such account" unless account
       account.destroy
       halt 204

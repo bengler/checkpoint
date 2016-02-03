@@ -12,7 +12,7 @@ class CheckpointV1 < Sinatra::Base
     require_action_allowed(:moderate, "post.any:#{path}", :default => false)
     bannings = Banning.by_path("^#{path}")
     if params[:identity_id]
-      identity = Identity.where(id: params[:identity_id]).first
+      identity = Identity.find_by(id: params[:identity_id])
       halt 404, "No such identity" unless identity
       check_path_in_realm(path, identity.realm)
       bannings = bannings.where("fingerprint in (?)", identity.fingerprints)

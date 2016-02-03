@@ -72,7 +72,7 @@ class Domain < ActiveRecord::Base
     # Finds domain matching a host name or its IP address.
     def resolve_from_host_name(host_name)
       if DomainNameValidator.ip_address?(host_name)
-        domain = where(name: host_name).first
+        domain = find_by(name: host_name)
       else
         domain = where(%{
           case
@@ -81,10 +81,10 @@ class Domain < ActiveRecord::Base
             else
               name = :name
           end
-        }, {name: host_name}).first
+        }, {name: host_name}).take
 
         if not domain and (ips = resolve_name_to_ips(host_name))
-          domain ||= where(name: ips).first
+          domain ||= find_by(name: ips)
         end
       end
       domain

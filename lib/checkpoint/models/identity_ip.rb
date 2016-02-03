@@ -5,7 +5,7 @@
 class IdentityIp < ActiveRecord::Base
   def self.declare!(address, identity_id)
     attributes = {:address => address, :identity_id => identity_id}
-    record = self.where(attributes).first
+    record = self.find_by(attributes)
     record ||= self.create!(attributes)
     record
   end

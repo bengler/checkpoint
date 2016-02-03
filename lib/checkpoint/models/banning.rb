@@ -20,7 +20,7 @@ class Banning < ActiveRecord::Base
   # Create a ban, unless a more general ban is currently in effect. If this ban shadows another ban, delete it
   def self.declare!(attributes)
     # Check if there is an equivalent or more general ban in effect
-    banning = Banning.where(:fingerprint => attributes[:fingerprint]).by_path("^#{attributes[:path]}").first
+    banning = Banning.by_path("^#{attributes[:path]}").find_by(fingerprint: attributes[:fingerprint])
     unless banning
       # Delete any bans shadowed by this ban
       Banning.where(fingerprint: attributes[:fingerprint]).

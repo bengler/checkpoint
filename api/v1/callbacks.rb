@@ -100,7 +100,7 @@ class CheckpointV1 < Sinatra::Base
     check_god_credentials(realm.id)
 
     status = 200
-    callback = Callback.where(:path => attributes[:path], :url => attributes[:url]).first
+    callback = Callback.find_by(attributes.slice(:path, :url))
     unless callback
       callback = Callback.create!(
         :path => attributes[:path],
