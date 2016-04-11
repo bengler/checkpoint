@@ -64,6 +64,15 @@ describe "Bannings" do
 
 
   describe 'GET /bannings/am_i_banned/:path' do
+
+    it 'returns not banned for a user not logged in' do
+      realm
+      get '/bannings/mine/area51.a.b.c.d.e'
+      last_response.status.should eq 200
+      JSON.parse(last_response.body).should eq ({
+          "banned" => false
+      })
+    end
     it 'returns true and the banned path for a banned user' do
       crook_session
       banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
