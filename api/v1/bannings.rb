@@ -9,6 +9,7 @@ class CheckpointV1 < Sinatra::Base
   # @path /api/checkpoint/v1/bannings/mine/:path
   # @http GET
   get "/bannings/mine/:path" do |path|
+    content_type :json
     identity_id = current_identity.try(:id)
     unless identity_id
       halt 200, {banned: false}.to_json

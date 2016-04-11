@@ -69,6 +69,7 @@ describe "Bannings" do
       realm
       get '/bannings/mine/area51.a.b.c.d.e'
       last_response.status.should eq 200
+      last_response.content_type.should eq 'application/json'
       JSON.parse(last_response.body).should eq ({
           "banned" => false
       })
@@ -78,6 +79,7 @@ describe "Bannings" do
       banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
       get '/bannings/mine/area51.a.b.c.d.e', :session => crook_session
       last_response.status.should eq 200
+      last_response.content_type.should eq 'application/json'
       JSON.parse(last_response.body).should eq ({
         "banned" => true,
         "path" => 'area51.a.b.c'
@@ -88,6 +90,7 @@ describe "Bannings" do
       banning1 = Banning.declare!(:path => "area51.a.b.c.f", :fingerprint => 'fingerprint1')
       get '/bannings/mine/area51.a.b.c.d.e', :session => crook_session
       last_response.status.should eq 200
+      last_response.content_type.should eq 'application/json'
       JSON.parse(last_response.body).should eq ({
         "banned" => false
       })
@@ -97,6 +100,7 @@ describe "Bannings" do
       banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
       get '/bannings/mine/area51.a.b.c.d.e', :session => someone_session
       last_response.status.should eq 200
+      last_response.content_type.should eq 'application/json'
       JSON.parse(last_response.body).should eq ({
         "banned" => false
       })
