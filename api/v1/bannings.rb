@@ -1,6 +1,23 @@
 class CheckpointV1 < Sinatra::Base
 
   # @apidoc
+  # Check if current session is banned on a given path
+  # Returns a json object with the boolean property `banned`, and if this is true, the `path` property containst the
+  # path the user is banned from
+  # @category Checkpoint/Bannings
+  # @param path the path to check if current session identity is banned from
+  # @path /api/checkpoint/v1/bannings/mine/:path
+  # @http GET
+  get "/bannings/mine/:path" do |path|
+    require_identity
+    banned_path = Banning.banned_path(path: path, identity: current_identity.try(:id))
+
+    result = banned_path ? {banned: true, path: banned_path} : {banned: false}
+
+    [200, result.to_json]
+  end
+
+  # @apidoc
   # Get all effective bans for a given path
   #
   # @category Checkpoint/Bannings

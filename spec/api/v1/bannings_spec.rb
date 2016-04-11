@@ -37,6 +37,10 @@ describe "Bannings" do
     Session.create!(:identity => someone).key
   end
 
+  let :crook_session do
+    Session.create!(:identity => crook).key
+  end
+
   let :somegod_session do
     Session.create!(:identity => somegod).key
   end
@@ -59,6 +63,36 @@ describe "Bannings" do
   }
 
 
+  describe 'GET /bannings/am_i_banned/:path' do
+    it 'returns true and the banned path for a banned user' do
+      crook_session
+      banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
+      get '/bannings/mine/area51.a.b.c.d.e', :session => crook_session
+      last_response.status.should eq 200
+      JSON.parse(last_response.body).should eq ({
+        "banned" => true,
+        "path" => 'area51.a.b.c'
+      })
+    end
+    it 'returns false if the user is banned, but on another path' do
+      crook_session
+      banning1 = Banning.declare!(:path => "area51.a.b.c.f", :fingerprint => 'fingerprint1')
+      get '/bannings/mine/area51.a.b.c.d.e', :session => crook_session
+      last_response.status.should eq 200
+      JSON.parse(last_response.body).should eq ({
+        "banned" => false
+      })
+    end
+    it 'does not return true for a not-banned user' do
+      crook_session
+      banning1 = Banning.declare!(:path => "area51.a.b.c", :fingerprint => 'fingerprint1')
+      get '/bannings/mine/area51.a.b.c.d.e', :session => someone_session
+      last_response.status.should eq 200
+      JSON.parse(last_response.body).should eq ({
+        "banned" => false
+      })
+    end
+  end
   describe 'GET /bannings/:path' do
     context 'when moderator' do
       it "will get a list of relevant bans complete with identities" do

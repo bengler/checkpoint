@@ -31,17 +31,16 @@ class Banning < ActiveRecord::Base
     banning
   end
 
-  # Takes an :uid and :identity. If a ban is in effect, the path of the ban is returned. If
+  # Takes a :path and :identity. If a ban is in effect, the path of the ban is returned. If
   # no ban is in effect, false is returned.
-  def self.banned?(params)
-    require_parameters(params, [:uid, :identity])
+  def self.banned_path(params)
+    require_parameters(params, [:path, :identity])
     return false unless params[:identity] # No identity specified? Skip check.
 
     identity = Identity.find_by_id(params[:identity])
     return false unless identity # No such user, let someone else deal with that fact
 
-    _, subject_path, _ = Pebblebed::Uid.parse(params[:uid])
-    subject_path = subject_path.split('.')
+    subject_path = params[:path].split('.')
 
     banned_paths_for(identity).each do |banned_path|
       banned_path = banned_path.split('.')

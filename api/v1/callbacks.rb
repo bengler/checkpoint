@@ -23,10 +23,11 @@ class CheckpointV1 < Sinatra::Base
       params[:session] ||= current_session.key
       params.delete('splat')
       params.delete('captures')
+      path = Pebblebed::Uid.new(params[:uid]).path
       # Todo: add a test case for this
       if current_identity && current_identity.god && current_identity.realm == current_realm
         pg :callback_result, :locals => {:allowed => true, :url => request.url, :reason => "You are God!"}
-      elsif banned_path = Banning.banned?(params.to_options)
+      elsif (banned_path = Banning.banned_path(identity: params[:identity], path: path))
         pg :callback_result, :locals => {:allowed => false, :url => request.url,
           :reason => "This identity is banned from '#{banned_path}'."}
       else
