@@ -15,6 +15,7 @@ config/strategies.rb
 config/database.yml
 config/overrides.yml
 config/session-secret.yml
+config/jwt_private_keys/*.pem
 
 # ignore results of bundling with --binstubs
 bin/autospec
