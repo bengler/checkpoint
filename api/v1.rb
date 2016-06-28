@@ -2,6 +2,7 @@
 require "json"
 require 'pebblebed/sinatra'
 require 'sinatra/petroglyph'
+require 'json/jwt'
 
 Dir.glob("#{File.dirname(__FILE__)}/v1/**/*.rb").each{ |file| require file }
 
@@ -179,7 +180,7 @@ class CheckpointV1 < Sinatra::Base
     end
 
     def current_identity
-      return @current_identity ||= current_session.identity
+      return @current_identity ||= current_json_web_token ? identity_from_jwt(current_json_web_token) : current_session.identity
     end
 
     def transaction(&block)
