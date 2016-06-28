@@ -13,3 +13,7 @@ if identity.primary_account
     attributes :provider, :nickname, :name, :profile_url, :image_url, :description, :uid
   end
 end
+
+if jwt
+  node :token => jwt
+end
