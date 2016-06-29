@@ -121,15 +121,7 @@ class CheckpointV1 < Sinatra::Base
       if identity.nil? or identity.realm.id != current_realm.id
         halt 200, {'Content-Type' => 'application/json'}, "{}"
       end
-      jwt = nil
-      if params[:include_jwt] === "true"
-        jwt = begin
-          issue_web_token(identity)
-        rescue PrivateKeyNotFoundError
-          halt 500, {:error => {:message => "No private key found for realm '#{identity.realm.label}'. Unable to issue token."}}.to_json
-        end
-      end
-      pg :identity, :locals => {:identity => identity, :jwt => jwt}
+      pg :identity, :locals => {:identity => identity}
     end
   end
 end
