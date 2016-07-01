@@ -48,7 +48,7 @@ class CheckpointV1 < Sinatra::Base
 
     def issue_web_token(identity)
       account = identity.primary_account
-      identity_string = Base64.strict_encode64("#{account.provider}::#{account.uid}::#{identity.id}")
+      identity_string = "#{account.provider}::#{account.uid}::#{identity.id}"
       claim = {
         i: identity_string,
         x: (Time.now+JWT_TTL).to_i
