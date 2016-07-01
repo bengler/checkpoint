@@ -63,7 +63,7 @@ class CheckpointV1 < Sinatra::Base
 
     def identity_from_jwt(token)
       return nil unless token
-      identity_id = Base64.strict_decode64(token['i']).split('::').last
+      identity_id = token['i'].split('::').last
       @identity_from_jwt ||= Identity.find(identity_id)
     end
 
