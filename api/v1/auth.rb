@@ -83,6 +83,7 @@ class CheckpointV1 < Sinatra::Base
   # @required [String] provider The provider to log in via. E.g. twitter, facebook, google.
   # @required [String] redirect_to Where to redirect the user after login.
   # @optional [Boolean] force_dialog Force login dialog with the provider (not supported by all providers).
+  # @optional [String] transfer_path Use another path for the checkpoint transfer session endpoint than the default '/api/checkpoint/v1/transfer'.
   # @status 301 Redirect to target address.
 
   get '/login/:provider' do
@@ -95,6 +96,7 @@ class CheckpointV1 < Sinatra::Base
 
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
     session[:display] = params[:display]
+    session[:transfer_path] = params[:transfer_path]
 
     if on_primary_domain?
       session[:redirect_to] = target_url.to_s

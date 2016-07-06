@@ -29,13 +29,13 @@ class CheckpointV1 < Sinatra::Base
   # @note This is an endpoint for browsers.
   # @description Requires that both the origin domain and target domain is attached to the same
   #   realm. This method falls back to a common redirect if the origin and target domain
-  #   is the same. To transfer session from 'acme.no' to an url on 'acme-other-place.org' you would 
+  #   is the same. To transfer session from 'acme.no' to an url on 'acme-other-place.org' you would
   #   direct the user to an url like this:
-  #   'http://acme.no/api/v1/checkpoint/transfer?target_url=http%3A%2F%2Facme-other-place.org'
+  #   'http://acme.no/api/v1/checkpoint/transfer?target=http%3A%2F%2Facme-other-place.org'
   # @category Checkpoint/Transfer
   # @path /api/checkpoint/v1/transfer
   # @http GET
-  # @required [Integer] target_url The full url (including host name) to redirect the user.
+  # @required [Integer] target The full url (including host name) to redirect the user.
   # @status 301 Redirect.
 
   get '/transfer' do
@@ -47,7 +47,12 @@ class CheckpointV1 < Sinatra::Base
       check_domain_is_within_current_realm(target_url.host)
 
       new_url = target_url.dup
-      new_url.path = '/api/checkpoint/v1/transfer'
+      if session[:transfer_path]
+        new_url.path = session[:transfer_path]
+        session[:transfer_path] = nil
+      else
+        new_url.path = '/api/checkpoint/v1/transfer'
+      end
       redirect url_with_query_params(new_url.to_s,
         :target => target_url.to_s,
         :session => current_session.try(:key))
