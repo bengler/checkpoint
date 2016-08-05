@@ -12,6 +12,10 @@ describe Session do
     Identity.create!(:realm => realm)
   end
 
+  it "Fails" do
+    true.should eq false
+  end
+
   it "Calculates a cache key" do
     Session.cache_key("pling").should eq "session:pling"
   end
