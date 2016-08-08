@@ -27,7 +27,7 @@ VCR.configure do |c|
   c.filter_sensitive_data("REDACTED:TWITTER_OAUTH_SECRET") { if keys then keys['services']['twitter']['consumer_secret'] end }
 end
 
-ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new('/dev/null')
 ActiveRecord::Base.logger.level = Logger::INFO
 
 LOGGER.level = Logger::WARN
