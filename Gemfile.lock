@@ -119,7 +119,7 @@ GEM
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
     pathbuilder (0.0.2)
-    pebblebed (0.3.4)
+    pebblebed (0.3.8)
       activesupport
       bunny
       curb (>= 0.8.4)
