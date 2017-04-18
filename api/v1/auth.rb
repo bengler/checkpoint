@@ -153,10 +153,6 @@ class CheckpointV1 < Sinatra::Base
     end
     strategy.options[:target_url] = session[:redirect_to]
 
-    if params[:provider] ==  'aid'
-      strategy.options[:provider_ignores_state] = true
-    end
-
     if strategy.options.respond_to?(:consumer_key)
       strategy.options.consumer_key = service_keys.consumer_key
       strategy.options.consumer_secret = service_keys.consumer_secret
