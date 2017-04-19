@@ -14,7 +14,7 @@ gem 'rails-observers', '~> 0.1', require: false
 gem 'pg', '~> 0.17'
 gem 'omniauth', '~> 1.2.2'
 gem 'omniauth-twitter'
-gem 'omniauth-facebook'
+gem 'omniauth-facebook', '~> 4.0.0'
 gem 'omniauth-oauth'
 gem 'omniauth-oauth2', '~> 1.3.1'
 gem 'omniauth-origo'

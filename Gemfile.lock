@@ -103,7 +103,7 @@ GEM
       evernote-thrift
       multi_json (~> 1.0)
       omniauth-oauth (~> 1.0)
-    omniauth-facebook (2.0.1)
+    omniauth-facebook (4.0.0)
       omniauth-oauth2 (~> 1.2)
     omniauth-google-oauth2 (0.2.8)
       addressable (~> 2.3)
@@ -217,7 +217,7 @@ DEPENDENCIES
   omniauth (~> 1.2.2)
   omniauth-aid!
   omniauth-evernote
-  omniauth-facebook
+  omniauth-facebook (~> 4.0.0)
   omniauth-google-oauth2
   omniauth-oauth
   omniauth-oauth2 (~> 1.3.1)
