@@ -147,8 +147,8 @@ class CheckpointV1 < Sinatra::Base
       strategy.options[:display] = session[:display]
       strategy.options[:client_options] ||= {}
       strategy.options[:client_options] = strategy.options[:client_options].merge({
-        :site => 'https://graph.facebook.com/v2.0',
-        :authorize_url => "https://www.facebook.com/v2.0/dialog/oauth"
+        :site => 'https://graph.facebook.com/v2.8',
+        :authorize_url => "https://www.facebook.com/v2.8/dialog/oauth"
       })
     end
     strategy.options[:target_url] = session[:redirect_to]
