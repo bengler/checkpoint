@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/bengler/omniauth-aid.git
-  revision: 593bf905cc3a84aa5a1d1dc54e8d4d425a60caf8
-  specs:
-    omniauth-aid (2.0.5)
-      omniauth-oauth2 (~> 1.3.1)
-
-GIT
   remote: https://github.com/bengler/omniauth-vanilla.git
   revision: d4e0eeab050cfb52c2a0e4457e82aee50189a81e
   branch: omniauth1.2
@@ -99,6 +92,8 @@ GEM
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
+    omniauth-aid (2.0.6)
+      omniauth-oauth2 (~> 1.3.1)
     omniauth-evernote (1.2.1)
       evernote-thrift
       multi_json (~> 1.0)
@@ -215,7 +210,7 @@ DEPENDENCIES
   dalli (~> 2.1.0)
   memcache_mock
   omniauth (~> 1.2.2)
-  omniauth-aid!
+  omniauth-aid
   omniauth-evernote
   omniauth-facebook (~> 4.0.0)
   omniauth-google-oauth2
