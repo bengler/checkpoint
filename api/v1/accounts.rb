@@ -76,6 +76,7 @@ class CheckpointV1 < Sinatra::Base
   # If there is no current identity, then a new identity is created, unless
   # `identity_id` is provided. Requires god permissions.
   #
+  # @note Thomax sez: Bug which I don't want to fix: Take care not to wrap account in {account: {uid: 123, etc: ...}}, just put the account object: {uid: 123 etc: ...} on the request body.
   # @category Checkpoint/Accounts
   # @path /api/checkpoint/v1/identities/:id/accounts/:provider/:uid
   # @http POST
