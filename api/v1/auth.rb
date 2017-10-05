@@ -1,3 +1,5 @@
+require 'addressable/uri'
+
 class CheckpointV1 < Sinatra::Base
 
   def ensure_valid_redirect_path
@@ -26,16 +28,15 @@ class CheckpointV1 < Sinatra::Base
 
     def url_for_failure(params = {})
       params = {:status => 'failed'}.merge(params)
-      if (return_url = session[:redirect_to])
-        if return_url =~ /_completion/
-          # FIXME: Exception for Origo. This is supposed to be the correct behaviour,
-          #   but we do this to avoid breaking existing apps.
-          return url_with_params(return_url, params)
-        end
-      else
-        return_url = "http://#{request.host}/login/failed"
+      redirect_to_url = session[:redirect_to] || params[:redirect_to] || request.referer || '/login/failed'
+      if redirect_to_url
+        uri = Addressable::URI.parse(redirect_to_url)
+        redirect_to_params = uri.query_values || {}
+        redirectNr = redirect_to_params["redirectNr"]
+        redirectNr = (redirectNr ? redirectNr.to_i : 0) + 1
+        params = params.merge(redirect_to_params).merge("redirectNr" => redirectNr)
       end
-      return url_with_params(return_url, params)
+      return url_with_params(redirect_to_url, params)
     end
   end
 
@@ -179,7 +180,6 @@ class CheckpointV1 < Sinatra::Base
 
   get '/auth/:provider/callback' do
     halt 500, "No registered realm for #{request.host}" unless current_realm
-
     begin
       account = Account.declare_with_omniauth!(request.env['omniauth.auth'], current_realm)
       log_in(account.identity)
