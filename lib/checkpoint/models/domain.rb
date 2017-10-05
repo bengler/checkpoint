@@ -94,7 +94,7 @@ class Domain < ActiveRecord::Base
 
       def resolve_name_to_ips(host_name)
         begin
-          timeout(4) do
+          Timeout.timeout(4) do
             begin
               ips = TCPSocket.gethostbyname(SimpleIDN.to_ascii(host_name))
               ips.select! { |s| s.is_a?(String) && DomainNameValidator.ip_address?(s) }
