@@ -8,7 +8,7 @@ gem 'rack-contrib'
 # Remove this git reference after version > 1.5.2 is released
 gem 'rack-protection', :git => 'https://github.com/rkh/rack-protection.git'
 gem 'addressable'
-gem 'activerecord', '~> 4.2.5', :require => 'active_record'
+gem 'activerecord', '~> 4.2.7.1', :require => 'active_record'
 gem 'activesupport', '~> 4.2.5'
 gem 'rails-observers', '~> 0.1', require: false
 gem 'pg', '~> 0.17'
@@ -26,7 +26,7 @@ gem 'pebblebed', ">=0.2.0"
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'https://github.com/bengler/pebbles-cors.git'
 gem 'pebbles-path', '>=0.0.3'
-gem 'yajl-ruby', :require => 'yajl'
+gem 'yajl-ruby', '1.3.1', :require => 'yajl'
 gem 'dalli', '~> 2.1.0'
 gem 'thor'
 gem 'petroglyph'
