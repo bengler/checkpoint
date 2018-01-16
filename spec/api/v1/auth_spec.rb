@@ -31,6 +31,10 @@ describe "Authorizations" do
     realm
   }
 
+  let(:target_domain) {
+    Domain.create!(:name => "example.com", :realm => valid_realm)
+  }
+
   it "returns a 412 (precondition failed) when the realm is nonexistent" do
     test_realm = Realm.create!(:label => 'the_404_test_realm', :service_keys => {})
     Domain.create!(:realm => test_realm, :name => 'www.unknown.com')
@@ -40,6 +44,13 @@ describe "Authorizations" do
 
   context "with a valid domain" do
     before(:each) { valid_realm } # trigger
+
+
+    it "redirects to login on primarty domain" do
+      get "/login/twitter", {redirect_to: 'http://example.com/done'}, {'HTTP_HOST' => target_domain.name}
+      last_response.status.should eq 302
+      last_response.header['Location'].should =~ /example\.org\/login\/twitter\?.*/
+    end
 
     it "redirects to '/auth/:provider' if realm exists" do
       get "/login/twitter"
