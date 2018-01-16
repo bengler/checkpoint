@@ -26,6 +26,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    absolute_time (1.0.0)
     activemodel (4.2.7.1)
       activesupport (= 4.2.7.1)
       builder (~> 3.1)
@@ -43,14 +44,14 @@ GEM
     airbrake (3.1.17)
       builder
       multi_json
-    amq-protocol (2.0.0)
+    amq-protocol (2.3.0)
     ar-tsvectors (1.0.0)
       activerecord (>= 3.0)
     arel (6.0.4)
     backports (3.6.6)
     builder (3.2.3)
-    bunny (2.2.0)
-      amq-protocol (>= 2.0.0)
+    bunny (2.9.1)
+      amq-protocol (~> 2.3.0)
     concurrent-ruby (1.0.5)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -121,10 +122,11 @@ GEM
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
     pathbuilder (0.0.2)
-    pebblebed (0.3.8)
+    pebblebed (0.3.25)
+      absolute_time
       activesupport
       bunny
-      curb (>= 0.8.4)
+      curb (>= 0.8.8)
       deepstruct (>= 0.0.4)
       futurevalue
       nokogiri
@@ -222,7 +224,7 @@ DEPENDENCIES
   omniauth-origo
   omniauth-twitter
   omniauth-vanilla!
-  pebblebed (>= 0.2.0)
+  pebblebed (~> 0.3.25)
   pebbles-cors!
   pebbles-path (>= 0.0.3)
   pebbles-uid

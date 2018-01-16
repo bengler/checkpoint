@@ -22,7 +22,7 @@ gem 'omniauth-vanilla', :git => 'https://github.com/bengler/omniauth-vanilla.git
 gem 'omniauth-evernote'
 gem 'omniauth-aid'
 gem 'omniauth-google-oauth2'
-gem 'pebblebed', ">=0.2.0"
+gem 'pebblebed', "~> 0.3.25"
 gem 'pebbles-uid'
 gem 'pebbles-cors', :git => 'https://github.com/bengler/pebbles-cors.git'
 gem 'pebbles-path', '>=0.0.3'
