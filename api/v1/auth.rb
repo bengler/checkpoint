@@ -97,7 +97,7 @@ class CheckpointV1 < Sinatra::Base
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
     session[:display] = params[:display]
 
-    if on_primary_domain?
+    if on_primary_domain? || params[:no_transfer]
       session[:redirect_to] = target_url.to_s
       redirect to("/auth/#{params[:provider]}")
     else
