@@ -94,8 +94,6 @@ class CheckpointV1 < Sinatra::Base
     target_url.host ||= request.host
     target_url.scheme ||= request.scheme
 
-    session.clear
-
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
     session[:display] = params[:display]
 
@@ -106,12 +104,8 @@ class CheckpointV1 < Sinatra::Base
       # Proceed on primary domain rewriting the current URL.
       uri = URI.parse(request.url)
       uri.host = current_realm.primary_domain_name
-      unless params[:redirect_to]
-        redirect url_with_query_params(uri.to_s,
-          :redirect_to => target_url)
-      else
-        redirect uri.to_s
-      end
+      redirect url_with_query_params(uri.to_s,
+        :redirect_to => target_url)
     end
   end
 
