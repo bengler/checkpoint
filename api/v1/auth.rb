@@ -96,6 +96,8 @@ class CheckpointV1 < Sinatra::Base
 
     session[:force_dialog] = params[:force_dialog].to_s == 'true'
     session[:display] = params[:display]
+    session[:site] = params[:site]
+    session[:stealth_mode] = params[:stealth_mode]
 
     if on_primary_domain? || params[:no_transfer]
       session[:redirect_to] = target_url.to_s
@@ -153,6 +155,19 @@ class CheckpointV1 < Sinatra::Base
       })
     end
     strategy.options[:target_url] = session[:redirect_to]
+
+    if params[:provider] == 'aid'
+      if session[:site]
+        strategy.options[:client_options] ||= {}
+        strategy.options[:client_options] = strategy.options[:client_options].merge({
+          :site => session[:site]
+        })
+      end
+      if session[:stealth_mode]
+        strategy.options[:stealth_mode] = true
+      end
+    end
+
 
     if strategy.options.respond_to?(:consumer_key)
       strategy.options.consumer_key = service_keys.consumer_key

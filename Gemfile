@@ -20,7 +20,7 @@ gem 'omniauth-oauth2', '~> 1.3.1'
 gem 'omniauth-origo'
 gem 'omniauth-vanilla', :git => 'https://github.com/bengler/omniauth-vanilla.git', :branch => 'omniauth1.2'
 gem 'omniauth-evernote'
-gem 'omniauth-aid'
+gem 'omniauth-aid', :git => 'https://github.com/bengler/omniauth-aid.git'
 gem 'omniauth-google-oauth2'
 gem 'pebblebed', "~> 0.3.25"
 gem 'pebbles-uid'
