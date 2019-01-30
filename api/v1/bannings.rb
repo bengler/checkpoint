@@ -25,12 +25,14 @@ class CheckpointV1 < Sinatra::Base
   # Get all effective bans for a given path
   #
   # @category Checkpoint/Bannings
-  # @param identity_id Filter list by an identity. This can be used to quickly determine 
+  # @param identity_id Filter list by an identity. This can be used to quickly determine
   #   if an identity is banned for the given path.
   # @path /api/checkpoint/v1/bannings/:path
   # @http GET
   get "/bannings/:path" do |path|
+    LOGGER.info "get bannings on path #{path}"
     require_action_allowed(:moderate, "post.any:#{path}", :default => false)
+    LOGGER.info "require_action_allowed"
     bannings = Banning.by_path("^#{path}")
     if params[:identity_id]
       identity = Identity.find_by(id: params[:identity_id])
@@ -38,7 +40,7 @@ class CheckpointV1 < Sinatra::Base
       check_path_in_realm(path, identity.realm)
       bannings = bannings.where("fingerprint in (?)", identity.fingerprints)
     end
-
+    LOGGER.info "rendering #{bannings.count} bannings"
     pg :bannings, locals: {bannings: bannings}
   end
 
