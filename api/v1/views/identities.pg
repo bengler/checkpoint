@@ -1,6 +1,6 @@
 collection :identities => identities do |identity|
   if identity
-    node :identity => {}
+    partial :identity, :identity => identity
   else
     node :identity => {}
   end
