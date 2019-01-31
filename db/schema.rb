@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190131095104) do
+ActiveRecord::Schema.define(version: 20190131143122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 20190131095104) do
     t.tsvector "tags"
   end
 
-  add_index "identities", ["fingerprints"], name: "index_fingerprints_on_identities", using: :gist
+  add_index "identities", ["fingerprints"], name: "index_fingerprints_on_identities", using: :gin
   add_index "identities", ["primary_account_id"], name: "index_identities_on_primary_account_id", using: :btree
   add_index "identities", ["realm_id"], name: "index_identities_on_realm_id", using: :btree
 

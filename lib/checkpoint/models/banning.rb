@@ -64,16 +64,9 @@ class Banning < ActiveRecord::Base
 
   # The identities affected by this ban
   def identities
-    cache_key = "banning-#{id}"
-    LOGGER.info(cache_key)
-    if $memcached.get(cache_key)
-      LOGGER.info("#{cache_key} --> cache hit")
-      return $memcached.get(cache_key, 600) # 10 minutes TTL
-    end
-    LOGGER.info("#{cache_key} --> cold cache")
+    LOGGER.info("identities1")
     idents = Identity.where(:realm_id => self.realm.id).where(["fingerprints @@ ?", fingerprint])
-    $memcached.set(cache_key, idents)
-    LOGGER.info("#{cache_key} --> #{idents.count}")
+    LOGGER.info("identities2 #{idents.count}")
     return idents
   end
 
