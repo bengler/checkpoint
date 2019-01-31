@@ -1,5 +1,4 @@
 node :banning => banning do
   attributes :fingerprint, :path, :created_at
-  node :realm => banning.realm.try(:label)
   partial :identities, :identities => banning.identities
 end
