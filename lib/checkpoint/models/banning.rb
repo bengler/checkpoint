@@ -64,8 +64,10 @@ class Banning < ActiveRecord::Base
 
   # The identities affected by this ban
   def identities
-    Identity.where(:realm_id => self.realm.id).
-      where(["fingerprints @@ ?", fingerprint])
+    LOGGER.info("identities-1")
+    result = Identity.where(:realm_id => self.realm.id).where(["fingerprints @@ ?", fingerprint])
+    LOGGER.info("identitie-2 #{result.count}")
+    return result
   end
 
   # Returns all identities banned in a given path
