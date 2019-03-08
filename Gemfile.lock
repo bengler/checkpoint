@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bengler/omniauth-aid.git
-  revision: 18f237eb71ad3670f04741ddcd22bfd220fe216c
+  revision: 752509845ebc9e730b9b326f827d94dd72d279c0
   specs:
     omniauth-aid (2.0.6)
       omniauth-oauth2 (>= 1.3.1)
