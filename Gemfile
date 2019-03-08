@@ -4,12 +4,10 @@ gem 'sinatra', '~> 1.4.6'
 gem 'sinatra-contrib', '~> 1.4.6', require: false
 gem 'sinatra-activerecord', '~> 2.0'
 gem 'rack-contrib', '~> 1.4.0'
-
-# Remove this git reference after version > 1.5.2 is released
 gem 'rack-protection', '~> 1.5.3'
 gem 'addressable', '~> 2.3.8'
-gem 'activerecord', '~> 4.2.7.1', :require => 'active_record'
-gem 'activesupport', '~> 4.2.5'
+gem 'activerecord', '~> 4.2.11', :require => 'active_record'
+gem 'activesupport', '~> 4.2.11'
 gem 'rails-observers', '~> 0.1', require: false
 gem 'pg', '~> 0.17'
 gem 'omniauth', '~> 1.7.1'
